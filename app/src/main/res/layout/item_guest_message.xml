@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_6dp"
+        android:layout_marginEnd="@dimen/space_40dp"
+        app:cardBackgroundColor="@color/gray_E4E7EC"
+        app:cardCornerRadius="@dimen/space_12dp"
+        app:cardElevation="@dimen/space_0dp">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvMessage"
+                style="@style/TextMontserratRegular12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="@dimen/space_3dp"
+                android:paddingHorizontal="@dimen/space_14dp"
+                android:paddingVertical="@dimen/space_8dp"
+                tools:text="Hello! My name is James Milner dasd asd asd asd asd as dasd asd a" />
+
+            <TextView
+                android:id="@+id/tvMessageTime"
+                style="@style/TextMontserratMedium8spPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/space_6dp"
+                android:paddingBottom="@dimen/space_3dp"
+                tools:text="12:10" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.google.android.material.card.MaterialCardView>
+</FrameLayout>

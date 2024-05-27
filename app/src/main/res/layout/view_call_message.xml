@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llCallMessageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/space_16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvItemNumber">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCall"
+            style="@style/greenButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_16dp"
+            android:layout_marginEnd="@dimen/space_4dp"
+            android:layout_marginBottom="@dimen/space_16dp"
+            android:layout_weight="1"
+            android:lines="1"
+            android:text="@string/call"
+            app:autoSizeMaxTextSize="@dimen/text_16sp"
+            app:autoSizeMinTextSize="@dimen/text_12sp"
+            app:autoSizeTextType="uniform"
+            app:defaultColor="@color/green"
+            app:icon="@drawable/ic_call"
+            app:iconGravity="textStart"
+            app:loaderColor="@android:color/white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMessage"
+            style="@style/colorAccentButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="@dimen/space_16dp"
+            android:layout_marginBottom="@dimen/space_16dp"
+            android:layout_weight="1"
+            android:lines="1"
+            android:text="@string/message"
+            app:autoSizeMaxTextSize="@dimen/text_16sp"
+            app:autoSizeMinTextSize="@dimen/text_12sp"
+            app:autoSizeTextType="uniform"
+            app:defaultColor="@color/colorAccent"
+            app:icon="@drawable/ic_message"
+            app:loaderColor="@android:color/white" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

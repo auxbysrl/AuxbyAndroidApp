@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/llAuctionOthersContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDate">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/icBid"
+            android:layout_width="@dimen/space_25dp"
+            android:layout_height="@dimen/space_25dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_bid_thin" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNoBids"
+            style="@style/TextMontserratSemiBold14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/space_12dp"
+            android:text="-"
+            android:visibility="gone"
+            tools:ignore="HardcodedText" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivBidder1"
+            android:layout_width="@dimen/space_25dp"
+            android:layout_height="@dimen/space_25dp"
+            android:layout_gravity="end"
+            android:layout_marginStart="@dimen/space_5dp"
+            android:adjustViewBounds="true"
+            android:visibility="gone"
+            tools:src="@drawable/ic_placeholder"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivBidder2"
+            android:layout_width="@dimen/space_25dp"
+            android:layout_height="@dimen/space_25dp"
+            android:layout_gravity="end"
+            android:adjustViewBounds="true"
+            android:translationX="-6dp"
+            android:visibility="gone"
+            tools:src="@drawable/ic_placeholder"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivBidder3"
+            android:layout_width="@dimen/space_25dp"
+            android:layout_height="@dimen/space_25dp"
+            android:layout_gravity="end"
+            android:adjustViewBounds="true"
+            android:translationX="-12dp"
+            android:visibility="gone"
+            tools:src="@drawable/ic_placeholder"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescriptionAuction"
+            style="@style/TextMontserratSemiBold14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDate"
+            tools:text="@string/text_n_others"
+            tools:visibility="visible" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TransitionButton">
+        <attr name="defaultColor" format="string" />
+        <attr name="loaderColor" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="ExpandableTextView">
+        <attr name="animation_duration" format="integer" />
+    </declare-styleable>
+</resources>

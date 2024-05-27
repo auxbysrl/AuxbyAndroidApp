@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="suggestion"
+            type="com.fivedevs.auxby.domain.models.SearchSuggestion" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/space_16dp"
+        android:paddingBottom="0dp">
+
+        <ImageView
+            android:id="@+id/searchLogo"
+            android:layout_width="@dimen/space_28dp"
+            android:layout_height="@dimen/space_28dp"
+            app:imageUrl="@{suggestion.category.getIconUrl()}"
+            app:layout_constraintBottom_toBottomOf="@+id/inCategory"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/wordSearched"
+            tools:src="@drawable/ic_logo" />
+
+        <TextView
+            android:id="@+id/wordSearched"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_10dp"
+            android:fontFamily="@font/montserrat_medium"
+            android:gravity="start"
+            android:includeFontPadding="false"
+            android:text="@{suggestion.searchText}"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_14sp"
+            app:layout_constraintEnd_toStartOf="@+id/hintArrow"
+            app:layout_constraintStart_toEndOf="@+id/searchLogo"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="coup" />
+
+        <TextView
+            android:id="@+id/inCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_10dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:gravity="start"
+            android:includeFontPadding="false"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_11sp"
+            app:layout_constraintEnd_toStartOf="@+id/hintArrow"
+            app:layout_constraintStart_toEndOf="@+id/searchLogo"
+            app:layout_constraintTop_toBottomOf="@+id/wordSearched"
+            tools:text="in Dating" />
+
+        <ImageView
+            android:id="@+id/hintArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_16dp"
+            android:src="@drawable/ic_arrow_hint"
+            app:layout_constraintBottom_toBottomOf="@+id/inCategory"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/wordSearched" />
+
+        <View
+            android:id="@+id/separator1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_1dp"
+            android:layout_marginTop="@dimen/space_16dp"
+            android:background="@color/light_text"
+            app:layout_constraintTop_toBottomOf="@+id/inCategory" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

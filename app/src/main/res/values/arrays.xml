@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cities">
+        <item>Arad</item>
+        <item>Arges</item>
+        <item>Bacau</item>
+        <item>Bihor</item>
+        <item>Bistrita - Nasaud</item>
+        <item>Botosani</item>
+        <item>Braila</item>
+        <item>Brasov</item>
+        <item>Bucuresti</item>
+        <item>Buzau</item>
+        <item>Calarasi</item>
+        <item>Caras - Severin</item>
+        <item>Cluj</item>
+        <item>Constanta</item>
+        <item>Constanta</item>
+        <item>Covasna</item>
+        <item>Dambovita</item>
+        <item>Dolj</item>
+        <item>Galati</item>
+        <item>Giurgiu</item>
+        <item>Gorj</item>
+        <item>Harghita</item>
+        <item>Hunedoara</item>
+        <item>Ialomita</item>
+        <item>Iasi</item>
+        <item>Ilfov</item>
+        <item>Maramures</item>
+        <item>Mehedinti</item>
+        <item>Mures</item>
+        <item>Neamt</item>
+        <item>Olt</item>
+        <item>Prahova</item>
+        <item>Salaj</item>
+        <item>Satu Mare</item>
+        <item>Sibiu</item>
+        <item>Suceava</item>
+        <item>Teleorman</item>
+        <item>Timis</item>
+        <item>Tulcea</item>
+        <item>Valcea</item>
+        <item>Vaslui</item>
+        <item>Vrancea</item>
+    </string-array>
+</resources>

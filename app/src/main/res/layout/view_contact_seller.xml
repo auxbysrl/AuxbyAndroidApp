@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/space_16dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvContactTheSeller"
+            style="@style/TextMontserratSemiBold16spWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/contact_the_seller" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivSellerAvatar"
+            android:layout_width="@dimen/space_45dp"
+            android:layout_height="@dimen/space_45dp"
+            android:layout_marginTop="@dimen/space_16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvContactTheSeller"
+            tools:src="@drawable/ic_share_circle" />
+
+        <TextView
+            android:id="@+id/tvSellerName"
+            style="@style/TextMontserratMedium15spWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_6dp"
+            app:layout_constraintStart_toEndOf="@+id/ivSellerAvatar"
+            app:layout_constraintTop_toTopOf="@+id/ivSellerAvatar"
+            tools:text="Some name" />
+
+        <TextView
+            android:id="@+id/tvSellerActiveTime"
+            style="@style/TextMontserratRegular12spWhiteF9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivSellerAvatar"
+            app:layout_constraintStart_toEndOf="@+id/ivSellerAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/tvSellerName"
+            tools:text="Active today at 12:34" />
+
+        <com.willy.ratingbar.BaseRatingBar
+            android:id="@+id/sellerRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/ivSellerAvatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivSellerAvatar"
+            app:srb_clearRatingEnabled="true"
+            app:srb_clickable="false"
+            app:srb_drawableEmpty="@drawable/ic_star_empty"
+            app:srb_drawableFilled="@drawable/ic_star_selected"
+            app:srb_isIndicator="false"
+            app:srb_minimumStars="0"
+            app:srb_numStars="5"
+            app:srb_rating="5"
+            app:srb_scrollable="false"
+            app:srb_starHeight="@dimen/space_18dp"
+            app:srb_starPadding="@dimen/space_3dp"
+            app:srb_starWidth="@dimen/space_18dp"
+            app:srb_stepSize="1" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/space_16dp"
+            app:layout_constraintTop_toBottomOf="@+id/ivSellerAvatar">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCallSeller"
+                style="@style/greenButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/space_4dp"
+                android:layout_weight="1"
+                android:lines="1"
+                android:text="@string/call"
+                app:autoSizeMaxTextSize="@dimen/text_16sp"
+                app:autoSizeMinTextSize="@dimen/text_12sp"
+                app:autoSizeTextType="uniform"
+                app:defaultColor="@color/green"
+                app:icon="@drawable/ic_call"
+                app:iconGravity="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvItemNumber"
+                app:loaderColor="@android:color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMessageSeller"
+                style="@style/colorAccentButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:lines="1"
+                android:text="@string/message"
+                app:autoSizeMaxTextSize="@dimen/text_16sp"
+                app:autoSizeMinTextSize="@dimen/text_12sp"
+                app:autoSizeTextType="uniform"
+                app:defaultColor="@color/colorAccent"
+                app:icon="@drawable/ic_message"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvItemNumber"
+                app:loaderColor="@android:color/white" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

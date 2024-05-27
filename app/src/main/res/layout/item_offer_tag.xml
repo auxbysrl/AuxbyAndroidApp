@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingVertical="@dimen/space_8dp"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTagTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextMontserratMedium12sp"
+        tools:text="Mileage"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTagValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextMontserratSemiBold12spPrimary"
+        tools:text="28.4 kmpl"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

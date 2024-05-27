@@ -1,0 +1,201 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+    id 'kotlin-parcelize'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+}
+
+apply from: '../jacoco.gradle'
+
+android {
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.fivedevs.auxby"
+        minSdk 28
+        targetSdk 33
+        versionCode 33
+        versionName "1.1.16"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //signingConfig signingConfigs.debug
+        bundle {
+            language {
+                enableSplit = false
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled false
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+        }
+    }
+
+    flavorDimensions "app"
+    productFlavors {
+        prod {
+            buildConfigField 'String', 'AUXBY_PLATFORM', '"https://auxby.ro:8080/"'
+            buildConfigField 'String', 'AUXBY_OFFER_MANAGEMENT', '"https://auxby.ro:8082/"'
+            buildConfigField 'String', 'AUTH_CLIENT_ID', '"156615882044-rdmjaosndk9ovbsno56imkkomgr799bq.apps.googleusercontent.com"'
+            buildConfigField 'Boolean', 'ENABLE_CRASHLITICS', 'true'
+        }
+        develop {
+            buildConfigField 'String', 'AUXBY_PLATFORM', '"https://auxby-platform-2e7885bf6a1b.herokuapp.com/"'
+            buildConfigField 'String', 'AUXBY_OFFER_MANAGEMENT', '"https://auxby-offer-management.herokuapp.com/"'
+            buildConfigField 'String', 'AUTH_CLIENT_ID', '"156615882044-rdmjaosndk9ovbsno56imkkomgr799bq.apps.googleusercontent.com"'
+            buildConfigField 'Boolean', 'ENABLE_CRASHLITICS', 'true'
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "Auxby-${variant.versionName}.apk"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    dataBinding {
+        enabled true
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.fragment:fragment-ktx:1.5.3'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
+
+    //UI
+    implementation 'com.tbuonomo:dotsindicator:4.3'
+    implementation 'com.wang.avi:library:2.1.3'
+    implementation 'br.com.simplepass:loading-button-android:2.2.0'
+
+    // RxJava3
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.13'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
+    // Networking
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.retrofit2:adapter-rxjava3:2.9.0"
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+
+    //FCM
+    implementation(platform("com.google.firebase:firebase-bom:31.0.1+"))
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+
+    // Room
+    kapt "androidx.room:room-compiler:2.4.3"
+    implementation "androidx.room:room-rxjava3:2.4.3"
+    implementation "androidx.room:room-runtime:2.4.3"
+    annotationProcessor "androidx.room:room-compiler:2.4.3"
+
+    // Logging
+    implementation "com.jakewharton.timber:timber:4.7.1"
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.9.1'
+
+    // Dependency Injection
+    implementation 'com.google.dagger:hilt-android:2.44'
+    kapt 'com.google.dagger:hilt-android-compiler:2.44'
+    implementation "androidx.navigation:navigation-compose:2.5.2"
+
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+
+    // Encryption
+    implementation "androidx.security:security-crypto:1.0.0"
+
+    // Lifecycle
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+
+    // Navigation View
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    // Google Sing-In
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+
+    // Alerter
+    implementation 'com.github.tapadoo:alerter:7.2.4'
+
+    // Shimmer animation
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    // Permissions
+    implementation 'com.guolindev.permissionx:permissionx:1.7.1'
+
+    // ViewPager with indicator
+    implementation 'com.tbuonomo:dotsindicator:4.3'
+
+    // Rating bar
+    implementation 'com.github.ome450901:SimpleRatingBar:1.5.1'
+
+    // Status bar
+    implementation('com.github.niorgai:StatusBarCompat:2.3.3', {
+        exclude group: 'androidx.appcompat:appcompat'
+        exclude group: 'com.google.android.material:material'
+    })
+
+    // Multiple Photos
+    implementation 'io.github.sangcomz:fishbun:1.1.1'
+
+    // Zooming images
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
+    // Currency EditText
+    implementation 'com.cottacush:CurrencyEditText:1.0.0'
+
+    // Testing
+    testImplementation "com.google.truth:truth:1.1.3"
+    testImplementation 'org.mockito:mockito-core:4.0.0'
+    testImplementation 'org.mockito:mockito-inline:2.21.0'
+    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
+    testImplementation 'org.robolectric:robolectric:4.5.1'
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
+
+kapt {
+    correctErrorTypes = true
+}

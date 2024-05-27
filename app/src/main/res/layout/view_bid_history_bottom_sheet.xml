@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/clPlaceBid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/bg_rounded_bottom_sheet"
+        android:paddingTop="@dimen/space_9dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_6dp"
+            android:padding="@dimen/space_10dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_close_24" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_1dp"
+            android:layout_marginTop="@dimen/space_2dp"
+            android:background="@color/gray_D0D5DD" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBidHistory"
+            style="@style/TextMontserratSemiBold18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_20dp"
+            android:paddingHorizontal="@dimen/space_16dp"
+            android:text="@string/bid_history" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBidHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:listitem="@layout/item_bid_history"
+            android:layout_marginHorizontal="@dimen/space_16dp"
+            android:layout_marginVertical="@dimen/space_16dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClose"
+            style="@style/primaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/space_16dp"
+            android:layout_marginBottom="@dimen/space_16dp"
+            android:drawablePadding="@dimen/space_12dp"
+            android:layout_gravity="bottom"
+            android:text="@string/close"
+            app:loaderColor="@android:color/white" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    android:fillViewport="true">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_white"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/space_30dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/bg_guest_chat" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/space_70dp"
+            android:layout_height="@dimen/space_70dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/space_30dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_chat_guest_icon" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/TextMontserratSemiBold20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/space_40dp"
+            android:layout_marginTop="@dimen/space_25dp"
+            android:gravity="center_horizontal"
+            android:text="@string/contact_the_seller_agreement" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/TextMontserratMedium14spLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/space_40dp"
+            android:layout_marginTop="@dimen/space_20dp"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="@dimen/space_4dp"
+            android:text="@string/find_desired_offer"
+            android:textColor="@color/gray_D0D5DD" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGetStarted"
+            style="@style/primaryButtonOutlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/space_24dp"
+            android:layout_marginTop="@dimen/space_35dp"
+            android:text="@string/get_started" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_150dp" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</ScrollView>

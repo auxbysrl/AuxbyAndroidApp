@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="parentViewModel"
+            type="com.fivedevs.auxby.screens.addOffer.AddOfferViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_white"
+        android:fillViewport="true">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:background="@color/background_white"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/space_35dp"
+            tools:context=".screens.addOffer.fragments.AddOfferFragment">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/TextMontserratSemiBold18spPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_16dp"
+                android:layout_marginTop="@dimen/space_25dp"
+                android:text="@string/offer_category" />
+
+            <include
+                android:id="@+id/inclOfferCategory"
+                layout="@layout/item_category_all"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_92dp"
+                android:layout_marginStart="@dimen/space_16dp"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:layout_marginEnd="@dimen/space_16dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSubcategory"
+                style="@style/TextMontserratMedium16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_16dp"
+                android:layout_marginTop="@dimen/space_25dp"
+                android:text="@string/subcategory"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSubcategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_4dp"
+                android:clipToPadding="false"
+                android:paddingStart="@dimen/space_16dp"
+                android:paddingEnd="@dimen/space_16dp"
+                android:visibility="gone"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_category" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/space_16dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/TextMontserratSemiBold18spPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_25dp"
+                    android:text="@string/offer_details" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOfferTitle"
+                    style="@style/TextMontserratMedium16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_16dp"
+                    android:text="@string/offer_title" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilOfferTitle"
+                    style="@style/TextInputLayoutOutlinedTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvEmailTitle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etOfferTitle"
+                        style="@style/TextInputEditTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:maxLength="70"
+                        android:hint="@string/offer_title_hint"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:text="@={parentViewModel.offerRequestModel.title}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOfferType"
+                    style="@style/TextMontserratMedium16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_20dp"
+                    android:text="@string/offer_type" />
+
+                <RadioGroup
+                    android:id="@+id/rgOfferType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_0dp">
+
+                    <RadioButton
+                        android:id="@+id/rbFixPrice"
+                        style="@style/TextMontserratMedium14spRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:tag="Fix price"
+                        android:text="@string/fix_price" />
+
+                    <RadioButton
+                        android:id="@+id/rbAuction"
+                        style="@style/TextMontserratMedium14spRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:tag="Auction"
+                        android:text="@string/auction" />
+                </RadioGroup>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOfferEndDate"
+                    style="@style/TextMontserratMedium16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_10dp"
+                    android:text="@string/end_date"
+                    android:visibility="gone" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilOfferEndDate"
+                    style="@style/TextInputLayoutOutlinedTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_4dp"
+                    android:layout_marginBottom="@dimen/space_10dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvEmailTitle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etOfferEndDate"
+                        style="@style/TextInputEditTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="20 january 2030"
+                        android:inputType="none"
+                        tools:ignore="HardcodedText" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOfferPrice"
+                    style="@style/TextMontserratMedium16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_10dp"
+                    android:text="@string/offer_price" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_4dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilEditPrice"
+                        style="@style/TextInputLayoutOutlinedTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/space_10dp"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etOfferPrice"
+                            style="@style/TextInputEditTextTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="2000"
+                            android:maxLines="1"
+                            android:maxLength="8"
+                            android:imeOptions="actionNext"
+                            android:inputType="numberDecimal"
+                            tools:ignore="HardcodedText" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilPriceType"
+                        style="@style/Widget.App.ExposedDropdownMenu.White"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/space_40dp"
+                        android:layout_marginTop="@dimen/space_2dp"
+                        android:layout_marginEnd="@dimen/space_2dp"
+                        android:backgroundTint="@color/white"
+                        app:layout_constraintEnd_toEndOf="@+id/tilEditPrice"
+                        app:layout_constraintTop_toTopOf="@+id/tilEditPrice">
+
+                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                            android:id="@+id/actvPriceCurrency"
+                            style="@style/AutocompleteStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:cursorVisible="false"
+                            android:hint="lei"
+                            android:focusable="false"
+                            android:inputType="none"
+                            android:textIsSelectable="false"
+                            android:padding="@dimen/space_12dp"
+                            android:popupBackground="@color/white"
+                            android:text="lei"
+                            tools:ignore="HardcodedText" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <View
+                        android:id="@+id/separator"
+                        android:layout_width="@dimen/space_1dp"
+                        android:layout_height="@dimen/space_25dp"
+                        android:background="@color/light_text"
+                        android:elevation="@dimen/space_1dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tilPriceType"
+                        app:layout_constraintEnd_toStartOf="@+id/tilPriceType"
+                        app:layout_constraintTop_toTopOf="@+id/tilPriceType" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOfferCondition"
+                    style="@style/TextMontserratMedium16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_20dp"
+                    android:text="@string/condition" />
+
+                <RadioGroup
+                    android:id="@+id/rgCondition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_0dp">
+
+                    <RadioButton
+                        android:id="@+id/rbConditionUsed"
+                        style="@style/TextMontserratMedium14spRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:tag="Used"
+                        android:text="@string/condition_used" />
+
+                    <RadioButton
+                        android:id="@+id/rbConditionNew"
+                        style="@style/TextMontserratMedium14spRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:tag="New"
+                        android:text="@string/condition_new" />
+                </RadioGroup>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOfferPhotos"
+                    style="@style/TextMontserratMedium16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_20dp"
+                    android:text="@string/photos" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvOfferPhotos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_4dp"
+                android:clipToPadding="false"
+                android:paddingStart="@dimen/space_16dp"
+                android:paddingEnd="@dimen/space_16dp"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_add_photo" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/space_16dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOfferDescription"
+                    style="@style/TextMontserratMedium16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_20dp"
+                    android:text="@string/description_mandatory" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilOfferDescription"
+                    style="@style/TextInputLayoutOutlinedTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_4dp"
+                    android:gravity="top"
+                    android:minHeight="@dimen/space_80dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvEmailTitle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etOfferDescription"
+                        style="@style/TextInputEditTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:gravity="top"
+                        android:hint="@string/description_details"
+                        android:imeOptions="actionNext"
+                        android:inputType="textMultiLine"
+                        android:lineSpacingExtra="5dp"
+                        android:maxLines="100"
+                        android:maxLength="5000"
+                        android:minHeight="@dimen/space_80dp"
+                        android:minLines="2"
+                        android:overScrollMode="always"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"
+                        android:text="@={parentViewModel.offerRequestModel.description}"
+                        tools:ignore="HardcodedText" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvSelfExtension"
+                    style="@style/TextMontserratMedium16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_20dp"
+                    android:text="@string/self_extension" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="@dimen/space_30dp"
+                        android:layout_height="@dimen/space_30dp"
+                        android:src="@drawable/ic_self_extension" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvSelfExtDesc"
+                        style="@style/TextMontserratMedium14sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_5dp"
+                        android:layout_weight="1"
+                        android:text="@string/the_offer_expires_in_30_days"
+                        android:textColor="@color/colorPrimary" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/scSelfExtension"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvCategoryDetails"
+                    style="@style/TextMontserratSemiBold18spPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_20dp"
+                    android:text="@string/category_details" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llSubcategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_16dp"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical"
+                    tools:layout_height="@dimen/space_60dp" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llCategoryDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/TextMontserratSemiBold18spPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_5dp"
+                    android:text="@string/contact_info" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOfferLocation"
+                    style="@style/TextMontserratMedium16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_16dp"
+                    android:text="@string/location_mandatory" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:id="@+id/viewOfferLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:clickable="true"
+                        android:elevation="@dimen/space_4dp"
+                        android:focusable="true" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilOfferLocation"
+                        style="@style/TextInputLayoutOutlinedTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_4dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvEmailTitle">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etOfferLocation"
+                            style="@style/TextInputEditTextTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:hint="@string/city"
+                            android:imeOptions="actionNext"
+                            android:inputType="text"
+                            android:padding="@dimen/space_12dp"
+                            tools:text="Suceava" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Spinner
+                        android:id="@+id/spinnerLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space_0dp"
+                        android:background="@android:color/transparent" />
+                </FrameLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOfferPhone"
+                    style="@style/TextMontserratMedium16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_20dp"
+                    android:text="@string/offer_phone_number" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilOfferPhone"
+                    style="@style/TextInputLayoutOutlinedTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvEmailTitle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etOfferPhone"
+                        style="@style/TextInputEditTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="0756xxxxxx"
+                        android:imeOptions="actionNext"
+                        android:inputType="phone"
+                        android:text="@={parentViewModel.offerRequestModel.contactInfo.phoneNumber}"
+                        tools:ignore="HardcodedText" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.fivedevs.auxby.domain.utils.buttonAnimator.TransitionButton
+                android:id="@+id/btnContinue"
+                style="@style/primaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_25dp"
+                android:layout_marginTop="@dimen/space_35dp"
+                android:text="@string/text_continue"
+                app:defaultColor="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnForgotPassword"
+                app:loaderColor="@android:color/white" />
+
+            <com.fivedevs.auxby.domain.utils.buttonAnimator.TransitionButton
+                android:id="@+id/btnConfirm"
+                style="@style/primaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_25dp"
+                android:layout_marginTop="@dimen/space_35dp"
+                android:text="@string/confirm"
+                android:visibility="gone"
+                app:defaultColor="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnForgotPassword"
+                app:loaderColor="@android:color/white" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.core.widget.NestedScrollView>
+</layout>

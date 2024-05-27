@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.dashboard.DashboardViewModel" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_white"
+        android:orientation="vertical"
+        android:paddingVertical="@dimen/space_24dp"
+        android:paddingStart="@dimen/space_25dp"
+        android:paddingEnd="@dimen/space_25dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivCloseDrawerGuest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:onDelayClick="@{viewModel::onCloseDrawerClicked}"
+            android:padding="@dimen/space_12dp"
+            android:src="@drawable/ic_close" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/tvAuxbyBidAndBuy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_15dp"
+            android:fontFamily="@font/montserrat_semibold_italic"
+            android:gravity="center"
+            android:src="@drawable/ic_drawer_guest_logo"
+            android:onDelayClick="@{viewModel::onContactUsClicked}"
+            android:paddingVertical="@dimen/space_10dp"
+            android:text="@string/auxby_bid_and_buy"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_32sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/TextMontserratRegular15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_25dp"
+            android:lineSpacingExtra="@dimen/space_4dp"
+            android:text="@string/see_everything_auxby_has_to_offer" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLoginGuest"
+            style="@style/primaryButtonOutlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_8dp"
+            android:onDelayClick="@{viewModel::onLoginClicked}"
+            android:text="@string/login" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvContactUsGuest"
+            style="@style/TextMontserratMedium12spPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_60dp"
+            android:onDelayClick="@{viewModel::onContactUsClicked}"
+            android:paddingVertical="@dimen/space_10dp"
+            android:text="@string/contact_us" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTermsAndConditions"
+            style="@style/TextMontserratMedium12spPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_6dp"
+            android:onDelayClick="@{viewModel::onTermsConditionsClicked}"
+            android:paddingVertical="@dimen/space_10dp"
+            android:text="@string/terms_and_conditions" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPoliciesAgreementsGuest"
+            style="@style/TextMontserratMedium12spPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_6dp"
+            android:onDelayClick="@{viewModel::onPoliciesAgreementsClicked}"
+            android:paddingVertical="@dimen/space_10dp"
+            android:text="@string/policies_agreements" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvAppVersionGuest"
+                style="@style/TextMontserratSemiBold12spAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="Version 1.0.0" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvAuxbyRoGuest"
+                style="@style/TextMontserratSemiBold12spAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/auxby_ro_title" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

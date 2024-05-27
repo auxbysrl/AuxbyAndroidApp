@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/space_20dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTitle"
+        style="@style/TextMontserratMedium16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Title" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_4dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilValue"
+            style="@style/Widget.App.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/actvValue"
+                style="@style/AutocompleteStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:backgroundTint="@color/white"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:inputType="none"
+                android:padding="@dimen/space_12dp"
+                android:popupBackground="@color/white"
+                android:textColorHint="@color/light_text"
+                android:textIsSelectable="false"
+                tools:hint="2000"
+                tools:ignore="HardcodedText" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="@dimen/space_1dp"
+            android:layout_height="@dimen/space_25dp"
+            android:layout_marginTop="@dimen/space_12dp"
+            android:layout_marginEnd="@dimen/space_44dp"
+            android:background="@color/light_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tilValue" />
+
+        <View
+            android:id="@+id/border"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/space_48dp"
+            android:background="@drawable/border_red_8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tilValue"
+            app:layout_constraintTop_toTopOf="@+id/tilValue" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

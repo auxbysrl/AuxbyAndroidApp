@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/space_16dp"
+    android:paddingEnd="@dimen/space_16dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/imageOfferLayout"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/space_220dp"
+        android:clipToPadding="false"
+        android:elevation="0dp"
+        app:cardCornerRadius="@dimen/space_8dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivOffer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="@color/gray_disabled_transparent"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_onboarding_1" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvOfferTitle"
+            style="@style/TextMontserratSemiBold16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="@dimen/space_12dp"
+            android:layout_marginEnd="@dimen/space_10dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="2"
+            android:paddingTop="@dimen/space_8dp"
+            android:textColor="@color/white"
+            tools:text="OnePlus Watch" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/ivRibbon"
+            style="@style/TextMontserratSemiBold14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_ribbon_promoted"
+            android:elevation="@dimen/space_2dp"
+            android:gravity="center"
+            android:text="@string/promoted"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="italic"
+            android:translationX="@dimen/space_2dp"
+            android:visibility="gone" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvOfferDescription"
+        style="@style/TextMontserratSemiBold14sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/space_16dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/imageOfferLayout"
+        app:layout_constraintEnd_toStartOf="@+id/llPriceContainer"
+        app:layout_constraintStart_toStartOf="@+id/imageOfferLayout"
+        tools:text="Short description Or djalksjd sand asl dasndlkad naslkd naskld asj dklasjd lkajsd lkasjd jaslk djas" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llPriceContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/imageOfferLayout"
+        app:layout_constraintBottom_toBottomOf="@id/imageOfferLayout"
+        android:paddingVertical="@dimen/text_16sp"
+        android:paddingEnd="@dimen/space_16dp"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPriceTitle"
+            style="@style/TextMontserratSemiBold16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/price"
+            android:layout_gravity="end"
+            android:textColor="@color/white"
+            tools:text="Oferta actuala" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPriceValue"
+            style="@style/TextMontserratBold18spWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:textColor="@color/white"
+            tools:text="90.0000lei" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

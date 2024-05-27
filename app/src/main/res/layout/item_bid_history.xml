@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/space_16dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivUserAvatar"
+        android:layout_width="@dimen/space_45dp"
+        android:layout_height="@dimen/space_45dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_profile_placeholder" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvUsername"
+        style="@style/TextMontserratMedium16sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_8dp"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintBottom_toTopOf="@+id/tvBidTime"
+        app:layout_constraintEnd_toStartOf="@+id/tvBidAmount"
+        app:layout_constraintStart_toEndOf="@+id/ivUserAvatar"
+        app:layout_constraintTop_toTopOf="@+id/ivUserAvatar"
+        tools:text="Cornet Castro" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvBidTime"
+        style="@style/TextMontserratRegular12sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintEnd_toStartOf="@+id/tvBidAmount"
+        app:layout_constraintStart_toStartOf="@+id/tvUsername"
+        app:layout_constraintTop_toBottomOf="@+id/tvUsername"
+        tools:text="15 Nov, 2023 at 12:35" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvBidAmount"
+        style="@style/TextMontserratSemiBold16spPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/space_10dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivUserAvatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivUserAvatar"
+        tools:text="$45" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1dp"
+        android:layout_marginTop="@dimen/space_16dp"
+        android:background="@color/gray_BABFCE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivUserAvatar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

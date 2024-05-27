@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#4B86B4</color>
+    <color name="colorPrimaryDark">#2A4D69</color>
+    <color name="colorAccent">#FEB739</color>
+    <color name="colorAccent60Opacity">#99FEB739</color>
+    <color name="dark_text">#3B4B53</color>
+    <color name="light_text">#BABFCE</color>
+    <color name="background_white">#F9F9F9</color>
+    <color name="background_gray">#DADADA</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#1E1E1E</color>
+    <color name="red">#DA1212</color>
+    <color name="green">#19A482</color>
+    <color name="gray_dddddd">#dddddd</color>
+    <color name="gray_73000000">#73000000</color>
+    <color name="gray_D5D5D7">#D5D5D7</color>
+    <color name="gray_606062">#606062</color>
+    <color name="gray_disabled">#80000000</color>
+    <color name="gray_D0D5DD">#D0D5DD</color>
+    <color name="gray_disabled_transparent">#40000000</color>
+    <color name="light_blue_transparent">#19BABFCE</color>
+    <color name="light_blue_994B86B4">#994B86B4</color>
+    <color name="red_interrupted">#CCDA1212</color>
+    <color name="green_finished">#CC19A482</color>
+    <color name="yellow_inactive">#CCFEB739</color>
+    <color name="blue_D6E1F1">#D6E1F1</color>
+    <color name="gray_E4E7EC">#E4E7EC</color>
+    <color name="gray_BABFCE">#4DBABFCE</color>
+</resources>

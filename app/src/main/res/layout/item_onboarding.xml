@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="item"
+            type="com.fivedevs.auxby.screens.onBoarding.onBoardingView.model.OnBoardingElement" />
+
+        <variable
+            name="step"
+            type="String" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/onBoarding_imageView"
+            android:layout_width="@dimen/space_220dp"
+            android:layout_height="0dp"
+            android:imageResource="@{item.onBoardingImage}"
+            app:layout_constraintDimensionRatio="4:4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/onBoarding_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_16dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:text="@{item.onBoardingTitle}"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_22sp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/onBoarding_imageView"
+            app:layout_constraintWidth_percent="0.9"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/onBoarding_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_16dp"
+            android:fontFamily="@font/montserrat_medium"
+            android:gravity="top|center"
+            android:lineSpacingExtra="@dimen/space_3dp"
+            android:text="@{item.onBoardingDescription}"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/onBoarding_title"
+            app:layout_constraintWidth_percent="0.9"
+            tools:text="Text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

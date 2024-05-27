@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.profile.ProfileViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/inclToolbar"
+            layout="@layout/toolbar_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/inclProfileMenu"
+            layout="@layout/profile_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inclToolbar"
+            app:viewModel="@{viewModel}" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inclToolbar">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/flAvatarContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/space_26dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    tools:ignore="SpeakableTextPresentCheck">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivAvatar"
+                        android:layout_width="@dimen/space_103dp"
+                        android:layout_height="@dimen/space_103dp"
+                        android:layout_gravity="center"
+                        tools:srcCompat="@drawable/ic_profile" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/icEditAvatar"
+                        android:layout_width="@dimen/space_32dp"
+                        android:layout_height="@dimen/space_32dp"
+                        android:layout_gravity="bottom|end"
+                        app:srcCompat="@drawable/ic_edit_profile" />
+
+                    <ProgressBar
+                        android:id="@+id/pbAvatarProgress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:elevation="@dimen/space_5dp"
+                        android:indeterminate="true"
+                        android:indeterminateTint="@color/colorPrimary"
+                        android:indeterminateTintMode="src_in"
+                        android:visibility="visible" />
+
+                </FrameLayout>
+
+                <include
+                    android:id="@+id/inclFullName"
+                    layout="@layout/profile_full_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_40dp"
+                    app:viewModel="@{viewModel}" />
+
+                <include
+                    android:id="@+id/inclEmail"
+                    layout="@layout/profile_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:viewModel="@{viewModel}" />
+
+                <include
+                    android:id="@+id/inclPhoneNumber"
+                    layout="@layout/profile_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:viewModel="@{viewModel}" />
+
+                <include
+                    android:id="@+id/inclAddress"
+                    layout="@layout/profile_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:viewModel="@{viewModel}" />
+
+                <include
+                    android:id="@+id/inclPassword"
+                    layout="@layout/profile_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewModel.preferencesService.isGoogleAccount()? View.GONE : View.VISIBLE}"
+                    app:viewModel="@{viewModel}" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.core.widget.NestedScrollView>
+
+        <FrameLayout
+            android:id="@+id/flBgView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_0dp"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="@{viewModel.showMenuPopup? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

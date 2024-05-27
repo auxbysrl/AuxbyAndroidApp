@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.dashboard.DashboardViewModel" />
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerDashboard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:itemIconTint="@color/colorPrimary"
+        tools:context=".MainActivity"
+        tools:openDrawer="start">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_white"
+            tools:context=".MainActivity">
+
+            <include
+                android:id="@+id/inclToolbar"
+                layout="@layout/toolbar_dashboard"
+                app:viewModel="@{viewModel}" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPagerDashboard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottomAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:backgroundTint="@color/colorPrimary"
+                android:paddingTop="@dimen/space_8dp"
+                android:paddingBottom="@dimen/space_8dp"
+                app:fabCradleMargin="12dp"
+                app:fabCradleRoundedCornerRadius="30dp"
+                app:fabCradleVerticalOffset="5dp">
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottomNavigationView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="16dp"
+                    android:background="@android:color/transparent"
+                    app:itemIconTint="@color/white"
+                    app:itemRippleColor="@android:color/transparent"
+                    app:itemTextColor="@color/white"
+                    app:labelVisibilityMode="labeled"
+                    app:menu="@menu/bottom_nav_menu" />
+
+            </com.google.android.material.bottomappbar.BottomAppBar>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabAddOffer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorAccent"
+                android:contentDescription="@string/app_name"
+                android:onDelayClick="@{viewModel::onAddOfferClicked}"
+                android:src="@drawable/ic_plus"
+                app:borderWidth="0dp"
+                app:layout_anchor="@id/bottomAppBar"
+                app:tint="@color/white" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigationViewDrawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:navigationIcon="@drawable/ic_drawer_menu">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/inclDrawerMenu"
+                    layout="@layout/navigation_drawer_menu"
+                    android:visibility="@{viewModel.isUserLoggedIn()? View.VISIBLE : View.GONE}"
+                    app:viewModel="@{viewModel}" />
+
+                <include
+                    android:id="@+id/inclDrawerMenuGuest"
+                    layout="@layout/navigation_drawer_menu_guest"
+                    android:visibility="@{viewModel.isUserLoggedIn()? View.GONE : View.VISIBLE}"
+                    app:viewModel="@{viewModel}" />
+
+            </FrameLayout>
+        </com.google.android.material.navigation.NavigationView>
+    </androidx.drawerlayout.widget.DrawerLayout>
+</layout>

@@ -1,0 +1,107 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency { details ->
+            if ('org.jacoco' == details.requested.group) {
+                details.useVersion "0.8.8"
+            }
+        }
+    }
+}
+
+project.afterEvaluate {
+    // Grab all build types and product flavors
+    def buildTypes = android.buildTypes.collect { type -> type.name }
+    def productFlavors = android.productFlavors.collect { flavor -> flavor.name }
+
+    // When no product flavors defined, use empty
+    if (!productFlavors) productFlavors.add('')
+
+    productFlavors.each { productFlavorName ->
+        buildTypes.each { buildTypeName ->
+            def sourceName
+            if (!productFlavorName) {
+                sourceName = "${buildTypeName}"
+            } else {
+                sourceName = "${productFlavorName}${buildTypeName.capitalize()}"
+            }
+            def testTaskName = "test${sourceName.capitalize()}UnitTest"
+            def variantName = productFlavorName
+
+            // Create coverage task of form 'testFlavorTypeCoverage' depending on 'testFlavorTypeUnitTest'
+            task "${testTaskName}Coverage"(type: JacocoReport, dependsOn: "$testTaskName") {
+                group = "Reporting"
+                description = "Generate Jacoco coverage reports on the ${sourceName.capitalize()} build."
+                def fileFilter = [
+                        '**/R.class',
+                        '**/R$*.class',
+                        '**/BuildConfig.*',
+                        '**/Manifest*.*',
+                        '**/*Test*.*',
+                        '**/com/example/databinding/*',
+                        '**/com/example/generated/callback/*',
+                        '**/android/databinding/*',
+                        '**/androidx/databinding/*',
+                        '**/di/module/*',
+                        '**/*MapperImpl*.*',
+                        '**/*$ViewInjector*.*',
+                        '**/*$ViewBinder*.*',
+                        '**/BuildConfig.*',
+                        '**/*Component*.*',
+                        '**/*BR*.*',
+                        '**/Manifest*.*',
+                        '**/*$Lambda$*.*',
+                        '**/*Companion*.*',
+                        '**/*Module.*',
+                        '**/*Dagger*.*',
+                        '**/*MembersInjector*.*',
+                        '**/*Fragment*.*',
+                        '**/*Activity*.*',
+                        '**/*_Factory*.*',
+                        '**/*_Provide*Factory*.*',
+                        '**/*Extensions*.*',
+                        '**/*$Result.*', /* filtering `sealed` and `data` classes */
+                        '**/*$Result$*.*',/* filtering `sealed` and `data` classes */
+                        '**/application/di/*',
+                        '**/*AndroidInterface.*',
+                        '**/application/*',
+                        '**/models/*',
+                        '**/model/*',
+                        '**/utils/*',
+                        '**/util/*',
+                        '**/enum/*',
+                        '**/adapter/*',
+                        '**/adapters/*',
+                        '**/dialogs/*',
+                        '**/factory/*',
+                        '**/data/*',
+                        '**/screens/dashboard/base/*',
+                ]
+
+
+                classDirectories.setFrom(files([
+                        fileTree(dir: "${buildDir}/tmp/kotlin-classes/${variantName}", exclude: fileFilter)
+                ]))
+
+                def coverageSourceDirs = [
+                        "src/main/java",
+                        "src/$productFlavorName/java",
+                        "src/$buildTypeName/java"
+                ]
+                additionalSourceDirs.from = files(coverageSourceDirs)
+                sourceDirectories.from = files(coverageSourceDirs)
+                executionData.from = files("${project.buildDir}/jacoco/${testTaskName}.exec")
+
+                reports {
+                    xml.enabled = true
+                    html.enabled = true
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/noResultsContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/space_25dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_search_placeholder" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/TextMontserratSemiBold20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_5dp"
+        android:text="@string/opps_no_offers_found" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/noResultsText"
+        style="@style/TextMontserratMedium16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_16dp"
+        android:gravity="center"
+        android:text="@string/no_search_results"
+        android:textColor="@color/light_text" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/TextMontserratMedium16spPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_16dp"
+        android:gravity="center"
+        android:text="@string/try_searching_by_offer_title_check_spelling" />
+</LinearLayout>

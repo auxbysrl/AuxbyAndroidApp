@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.dashboard.offers.details.OfferDetailsViewModel" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/flContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/main_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:background="@android:color/white"
+            android:fitsSystemWindows="true">
+
+            <include
+                android:id="@+id/inclShimmerOffers"
+                layout="@layout/shimmer_offer_details"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{viewModel.showShimmerAnimation? View.VISIBLE : View.GONE}"
+                tools:visibility="visible" />
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/offer_backdrop_height"
+                android:background="@color/gray_BABFCE"
+                android:fitsSystemWindows="true"
+                android:visibility="@{viewModel.showShimmerAnimation? View.INVISIBLE : View.VISIBLE}">
+
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/collapsing_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:contentScrim="@color/white"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                    app:statusBarScrim="@color/white"
+                    app:titleEnabled="false">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/vpOfferImages"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivVpPlaceholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_default_home"
+                        android:visibility="gone" />
+
+                    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                        android:id="@+id/vpDotsIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:layout_marginBottom="@dimen/space_50dp"
+                        app:dotsColor="@color/colorAccent60Opacity"
+                        app:dotsCornerRadius="@dimen/space_8dp"
+                        app:dotsSize="@dimen/space_8dp"
+                        app:dotsSpacing="4dp"
+                        app:dotsWidthFactor="2.5"
+                        app:progressMode="false"
+                        app:selectedDotColor="@color/colorAccent" />
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        app:contentInsetLeft="0dp"
+                        app:contentInsetStart="0dp"
+                        app:layout_collapseMode="pin">
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/space_16dp"
+                            android:paddingEnd="@dimen/space_16dp">
+
+                            <ImageView
+                                android:id="@+id/btnBackArrow"
+                                android:layout_width="@dimen/space_32dp"
+                                android:layout_height="@dimen/space_32dp"
+                                android:src="@drawable/ic_back_arrow_circle" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/toolbarTitle"
+                                style="@style/TextMontserratSemiBold17sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="@dimen/space_12dp"
+                                android:layout_marginEnd="@dimen/space_6dp"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:lines="1"
+                                android:text="@{viewModel.offerDetailsModel.title}"
+                                android:visibility="invisible" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_gravity="end"
+                                android:gravity="end"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/ivPromoteIcon"
+                                    android:layout_width="@dimen/space_32dp"
+                                    android:layout_height="@dimen/space_32dp"
+                                    android:layout_marginEnd="@dimen/space_16dp"
+                                    android:src="@drawable/ic_promote"
+                                    android:visibility="gone" />
+
+                                <ImageView
+                                    android:id="@+id/ivShareIcon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="@dimen/space_16dp"
+                                    android:src="@drawable/ic_share_circle"
+                                    android:visibility="gone" />
+
+                                <ImageView
+                                    android:id="@+id/ivDeleteIcon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="@dimen/space_16dp"
+                                    android:src="@drawable/ic_delete_offer"
+                                    android:visibility="gone" />
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/cvFavorite"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
+                                    app:cardBackgroundColor="@color/white"
+                                    app:cardCornerRadius="@dimen/space_25dp"
+                                    app:cardElevation="@dimen/space_0dp"
+                                    app:rippleColor="@android:color/transparent">
+
+                                    <androidx.appcompat.widget.LinearLayoutCompat
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="@dimen/space_32dp"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="@dimen/space_9dp">
+
+                                        <ImageView
+                                            android:id="@+id/ivFavorite"
+                                            android:layout_width="@dimen/space_18dp"
+                                            android:layout_height="@dimen/space_17dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:src="@drawable/ic_favorite_selector_offer" />
+
+                                        <TextView
+                                            android:id="@+id/tvFavoriteCount"
+                                            style="@style/TextMontserratMedium16sp"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="@dimen/space_6dp"
+                                            android:text="@{String.valueOf(viewModel.offerDetailsModel.setAsFavoriteNumber)}"
+                                            android:visibility="@{viewModel.offerDetailsModel.setAsFavoriteNumber == 0? View.GONE : View.VISIBLE}"
+                                            tools:text="20" />
+
+                                    </androidx.appcompat.widget.LinearLayoutCompat>
+                                </com.google.android.material.card.MaterialCardView>
+
+                            </LinearLayout>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.Toolbar>
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/offer_nestedScrollview_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_rounded_bottom_sheet"
+                android:fillViewport="true"
+                android:visibility="@{viewModel.showShimmerAnimation? View.GONE : View.VISIBLE}"
+                app:behavior_overlapTop="@dimen/space_25dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <include
+                        android:id="@+id/inclOfferStateHeader"
+                        layout="@layout/offer_state_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/nestedScroll_constraintLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="@dimen/space_16dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivHorizontalLine"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_26dp"
+                            android:src="@drawable/ic_horizontal_line_dark"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvOfferTitle"
+                            style="@style/TextMontserratBold18spPrimary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_26dp"
+                            android:text="@{viewModel.offerDetailsModel.title}"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/ivHorizontalLine" />
+
+                        <TextView
+                            android:id="@+id/tvOfferLocation"
+                            style="@style/TextMontserratRegular14sp"
+                            android:layout_width="@dimen/space_0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawablePadding="@dimen/space_6dp"
+                            android:ellipsize="end"
+                            android:gravity="start"
+                            android:lines="1"
+                            android:text='@{viewModel.offerDetailsModel.location != null &amp;&amp; !viewModel.offerDetailsModel.location.isEmpty() ? viewModel.offerDetailsModel.location : "-"}'
+                            app:drawableStartCompat="@drawable/ic_map_pin"
+                            app:layout_constraintBottom_toBottomOf="@id/tvOfferDate"
+                            app:layout_constraintEnd_toStartOf="@+id/viewVerticalDivider1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tvOfferDate"
+                            tools:text="Romania, Suceava" />
+
+                        <View
+                            android:id="@+id/viewVerticalDivider1"
+                            android:layout_width="@dimen/space_1dp"
+                            android:layout_height="@dimen/space_0dp"
+                            android:layout_marginHorizontal="@dimen/space_4dp"
+                            android:layout_marginVertical="@dimen/space_2dp"
+                            android:background="@color/dark_text"
+                            app:layout_constraintBottom_toBottomOf="@id/tvOfferLocation"
+                            app:layout_constraintEnd_toStartOf="@+id/tvOfferDate"
+                            app:layout_constraintStart_toEndOf="@+id/tvOfferLocation"
+                            app:layout_constraintTop_toTopOf="@id/tvOfferDate" />
+
+                        <TextView
+                            android:id="@+id/tvOfferDate"
+                            style="@style/TextMontserratRegular14sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_10dp"
+                            android:layout_weight="1"
+                            android:drawablePadding="@dimen/space_6dp"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            app:drawableStartCompat="@drawable/ic_offer_date"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvOfferTitle"
+                            tools:text="24 september 2022" />
+
+                        <View
+                            android:id="@+id/viewVerticalDivider2"
+                            android:layout_width="@dimen/space_1dp"
+                            android:layout_height="@dimen/space_0dp"
+                            android:layout_marginHorizontal="@dimen/space_4dp"
+                            android:layout_marginVertical="@dimen/space_2dp"
+                            android:layout_weight="1"
+                            android:background="@color/dark_text"
+                            app:layout_constraintBottom_toBottomOf="@id/tvOfferDate"
+                            app:layout_constraintEnd_toStartOf="@+id/tvOfferViews"
+                            app:layout_constraintStart_toEndOf="@+id/tvOfferDate"
+                            app:layout_constraintTop_toTopOf="@id/tvOfferDate" />
+
+                        <TextView
+                            android:id="@+id/tvOfferViews"
+                            style="@style/TextMontserratRegular14sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawablePadding="@dimen/space_6dp"
+                            android:gravity="end"
+                            android:text="@{@string/number_of_views(String.valueOf(viewModel.offerDetailsModel.viewsNumber))}"
+                            app:drawableStartCompat="@drawable/ic_offer_views"
+                            app:layout_constraintBottom_toBottomOf="@id/tvOfferDate"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1"
+                            app:layout_constraintTop_toTopOf="@id/tvOfferDate" />
+
+                        <View
+                            android:id="@+id/horizontalLine1"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/space_1dp"
+                            android:layout_marginTop="@dimen/space_16dp"
+                            android:background="@color/light_text"
+                            app:layout_constraintTop_toBottomOf="@+id/tvOfferDate" />
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/llPriceContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_18dp"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/horizontalLine1">
+
+                            <include
+                                android:id="@+id/viewCurrentYourBid"
+                                layout="@layout/view_current_your_bid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="@{viewModel.offerDetailsModel.onAuction ? View.VISIBLE : View.GONE}" />
+
+                            <include
+                                android:id="@+id/offerPrice"
+                                layout="@layout/view_offer_price"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="@{viewModel.offerDetailsModel.onAuction ? View.GONE : View.VISIBLE}" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/space_1dp"
+                                android:layout_marginTop="@dimen/space_16dp"
+                                android:background="@color/light_text"
+                                android:visibility="@{viewModel.offerDetailsModel.onAuction ? View.VISIBLE : View.GONE}" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvDate"
+                                style="@style/TextMontserratMedium12sp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/space_16dp"
+                                android:layout_marginEnd="@dimen/space_16dp"
+                                android:drawablePadding="@dimen/space_4dp"
+                                android:gravity="center_vertical"
+                                android:visibility="@{viewModel.offerDetailsModel.onAuction? View.VISIBLE : View.GONE}"
+                                app:drawableStartCompat="@drawable/ic_clock"
+                                tools:text="4d 07h | Monday, 4:45am" />
+
+                            <include
+                                android:id="@+id/viewBiddersAndMore"
+                                layout="@layout/view_bidders_and_more"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/space_10dp"
+                                android:visibility="@{viewModel.offerDetailsModel.onAuction? View.VISIBLE : View.GONE}" />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <View
+                            android:id="@+id/horizontalLine2"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/space_1dp"
+                            android:layout_marginTop="@dimen/space_16dp"
+                            android:background="@color/light_text"
+                            app:layout_constraintTop_toBottomOf="@+id/llPriceContainer" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cvTagsContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_16dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/space_8dp"
+                            app:cardElevation="@dimen/space_0dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/horizontalLine2">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rvCategoryTags"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@color/light_blue_transparent"
+                                android:paddingHorizontal="@dimen/space_10dp"
+                                android:paddingVertical="@dimen/space_6dp" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <View
+                            android:id="@+id/horizontalLine3"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/space_1dp"
+                            android:layout_marginTop="@dimen/space_16dp"
+                            android:background="@color/light_text"
+                            app:layout_constraintTop_toBottomOf="@+id/cvTagsContainer" />
+
+                        <TextView
+                            android:id="@+id/tvDescriptionTitle"
+                            style="@style/TextMontserratSemiBold18sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_21dp"
+                            android:text="@string/description"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/horizontalLine3" />
+
+                        <com.fivedevs.auxby.domain.utils.views.ExpandableTextView
+                            android:id="@+id/tvDescription"
+                            style="@style/TextMontserratMedium14sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_8dp"
+                            android:ellipsize="end"
+                            android:lineSpacingExtra="@dimen/space_4dp"
+                            android:maxLines="4"
+                            android:text="@{String.valueOf(viewModel.offerDetailsModel.description)}"
+                            app:animation_duration="600"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvDescriptionTitle" />
+
+                        <TextView
+                            android:id="@+id/btnReadMore"
+                            style="@style/TextMontserratSemiBold14spLight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{() -> viewModel.toggleFullDescription()}"
+                            android:paddingTop="@dimen/space_8dp"
+                            android:paddingEnd="@dimen/space_4dp"
+                            android:text="@string/read_more"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+                        <View
+                            android:id="@+id/horizontalLine4"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/space_1dp"
+                            android:layout_marginTop="@dimen/space_16dp"
+                            android:background="@color/light_text"
+                            app:layout_constraintTop_toBottomOf="@+id/btnReadMore" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivUserAvatar"
+                            android:layout_width="@dimen/space_45dp"
+                            android:layout_height="@dimen/space_45dp"
+                            android:layout_marginTop="@dimen/space_16dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/horizontalLine4"
+                            tools:src="@drawable/ic_placeholder" />
+
+                        <TextView
+                            android:id="@+id/tvUsername"
+                            style="@style/TextMontserratMedium17sp"
+                            android:layout_width="@dimen/space_0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_6dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@{@string/first_and_last_name(viewModel.offerDetailsModel.owner.firstName, viewModel.offerDetailsModel.owner.lastName)}"
+                            app:layout_constraintEnd_toStartOf="@+id/sellerRatingBar"
+                            app:layout_constraintStart_toEndOf="@+id/ivUserAvatar"
+                            app:layout_constraintTop_toTopOf="@+id/ivUserAvatar" />
+
+                        <TextView
+                            android:id="@+id/tvUserActiveTime"
+                            style="@style/TextMontserratRegular12sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_6dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/ivUserAvatar"
+                            app:layout_constraintStart_toEndOf="@+id/ivUserAvatar"
+                            tools:text="Active today at 12:34" />
+
+                        <com.willy.ratingbar.BaseRatingBar
+                            android:id="@+id/sellerRatingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@id/ivUserAvatar"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/ivUserAvatar"
+                            app:srb_clearRatingEnabled="true"
+                            app:srb_clickable="false"
+                            app:srb_drawableEmpty="@drawable/ic_star_empty"
+                            app:srb_drawableFilled="@drawable/ic_star_selected"
+                            app:srb_isIndicator="false"
+                            app:srb_minimumStars="0"
+                            app:srb_numStars="5"
+                            app:srb_rating="5"
+                            app:srb_scrollable="false"
+                            app:srb_starHeight="@dimen/space_18dp"
+                            app:srb_starPadding="@dimen/space_3dp"
+                            app:srb_starWidth="@dimen/space_18dp"
+                            app:srb_stepSize="1" />
+
+                        <View
+                            android:id="@+id/viewRatingBarOverlay"
+                            android:layout_width="@dimen/space_0dp"
+                            android:layout_height="@dimen/space_0dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            app:layout_constraintBottom_toBottomOf="@id/sellerRatingBar"
+                            app:layout_constraintEnd_toEndOf="@id/sellerRatingBar"
+                            app:layout_constraintStart_toStartOf="@id/sellerRatingBar"
+                            app:layout_constraintTop_toTopOf="@+id/sellerRatingBar" />
+
+                        <View
+                            android:id="@+id/horizontalLine5"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/space_3dp"
+                            android:layout_marginTop="@dimen/space_16dp"
+                            android:background="@drawable/line_horizontal_rounded"
+                            app:layout_constraintTop_toBottomOf="@+id/ivUserAvatar" />
+
+                        <TextView
+                            android:id="@+id/tvContactUs"
+                            style="@style/TextMontserratSemiBold16sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_16dp"
+                            android:drawablePadding="@dimen/space_4dp"
+                            android:text="@string/contact_us"
+                            app:drawableEndCompat="@drawable/ic_info_border"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/horizontalLine5" />
+
+                        <TextView
+                            android:id="@+id/tvReportOffer"
+                            style="@style/TextMontserratSemiBold16spPrimary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/report_offer"
+                            android:visibility="visible"
+                            app:layout_constraintBottom_toBottomOf="@id/tvContactUs"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tvContactUs" />
+
+                        <TextView
+                            android:id="@+id/tvContactUsPhoneNumber"
+                            style="@style/TextMontserratMedium14sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_4dp"
+                            android:drawablePadding="@dimen/space_9dp"
+                            android:text="@string/working_hours"
+                            app:drawableStartCompat="@drawable/ic_phone"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvContactUs" />
+
+                        <TextView
+                            android:id="@+id/tvContactUsEmailAddress"
+                            style="@style/TextMontserratMedium14sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_8dp"
+                            android:drawablePadding="@dimen/space_9dp"
+                            android:text="@string/auxby_email_address"
+                            app:drawableStartCompat="@drawable/ic_email"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvContactUsPhoneNumber" />
+
+                        <View
+                            android:id="@+id/horizontalLine6"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/space_1dp"
+                            android:layout_marginTop="@dimen/space_26dp"
+                            android:background="@color/light_text"
+                            app:layout_constraintTop_toBottomOf="@+id/tvContactUsEmailAddress" />
+
+                        <TextView
+                            android:id="@+id/tvFollowUs"
+                            style="@style/TextMontserratSemiBold16sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_18dp"
+                            android:text="@string/follow_us"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/horizontalLine6" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivFacebook"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_18dp"
+                            android:src="@drawable/ic_facebook"
+                            app:layout_constraintBottom_toBottomOf="@id/tvFollowUs"
+                            app:layout_constraintStart_toEndOf="@+id/tvFollowUs"
+                            app:layout_constraintTop_toTopOf="@+id/tvFollowUs" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivInstagram"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_18dp"
+                            android:src="@drawable/ic_instagram"
+                            app:layout_constraintBottom_toBottomOf="@id/tvFollowUs"
+                            app:layout_constraintStart_toEndOf="@+id/ivFacebook"
+                            app:layout_constraintTop_toTopOf="@+id/tvFollowUs" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivTiktok"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_18dp"
+                            android:src="@drawable/ic_tiktok"
+                            app:layout_constraintBottom_toBottomOf="@id/tvFollowUs"
+                            app:layout_constraintStart_toEndOf="@+id/ivInstagram"
+                            app:layout_constraintTop_toTopOf="@+id/tvFollowUs" />
+
+                        <View
+                            android:id="@+id/horizontalLine7"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/space_1dp"
+                            android:layout_marginTop="@dimen/space_22dp"
+                            android:background="@color/light_text"
+                            app:layout_constraintTop_toBottomOf="@+id/tvFollowUs" />
+
+                        <TextView
+                            android:id="@+id/tvItemNumber"
+                            style="@style/TextMontserratRegular12spLight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_16dp"
+                            android:text="@{@string/item_number(viewModel.offerDetailsModel.id)}"
+                            app:layout_constraintBottom_toTopOf="@+id/contactSellerExtraSpace"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/horizontalLine7"
+                            tools:text="12391238" />
+
+                        <Space
+                            android:id="@+id/contactSellerExtraSpace"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/space_120dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvItemNumber" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.core.widget.NestedScrollView>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:visibility="@{viewModel.showShimmerAnimation? View.INVISIBLE : View.VISIBLE}">
+
+                <include
+                    android:id="@+id/inclCallMessageView"
+                    layout="@layout/view_call_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/inclPlaceBidView"
+                    layout="@layout/view_place_bid_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/inclEditOfferView"
+                    layout="@layout/view_edit_offer_buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/inclCloseAuctionView"
+                    layout="@layout/view_close_auction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/inclContactSellerView"
+                    layout="@layout/view_contact_seller"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
+</layout>

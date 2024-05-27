@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clCurrentYourBid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvCurrentBidTitle"
+            style="@style/TextMontserratSemiBold18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/current_bid"
+            app:layout_constraintEnd_toEndOf="@+id/viewVerticalDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCurrentBidValue"
+            style="@style/TextMontserratSemiBold24spPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/tvCurrentBidTitle"
+            app:layout_constraintStart_toStartOf="@id/tvCurrentBidTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvCurrentBidTitle"
+            tools:text="$223" />
+
+        <View
+            android:id="@+id/viewVerticalDivider"
+            android:layout_width="@dimen/space_1dp"
+            android:layout_height="@dimen/space_0dp"
+            android:background="@color/gray_D5D5D7"
+            app:layout_constraintBottom_toBottomOf="@+id/tvCurrentBidValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvCurrentBidTitle" />
+
+        <TextView
+            android:id="@+id/tvYourBidTitle"
+            style="@style/TextMontserratSemiBold18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/your_bid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/viewVerticalDivider"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvYourBidValue"
+            style="@style/TextMontserratSemiBold24spPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/tvYourBidTitle"
+            app:layout_constraintStart_toStartOf="@id/tvYourBidTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvYourBidTitle"
+            tools:text="-" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

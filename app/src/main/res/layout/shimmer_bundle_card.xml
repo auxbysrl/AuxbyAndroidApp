@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/space_210dp"
+    android:layout_marginHorizontal="@dimen/space_16dp"
+    android:layout_marginBottom="@dimen/space_16dp"
+    app:cardBackgroundColor="@color/background_white"
+    app:cardCornerRadius="@dimen/space_16dp">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/space_12dp">
+
+        <View
+            android:layout_width="@dimen/space_120dp"
+            android:layout_height="@dimen/space_22dp"
+            android:layout_weight="1"
+            android:background="@color/gray_dddddd" />
+
+        <View
+            android:layout_width="@dimen/space_120dp"
+            android:layout_height="@dimen/space_22dp"
+            android:layout_weight="1"
+            android:background="@color/background_white" />
+
+        <View
+            android:layout_width="@dimen/space_60dp"
+            android:layout_height="@dimen/space_18dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/gray_dddddd" />
+
+        <View
+            android:layout_width="@dimen/space_120dp"
+            android:layout_height="@dimen/space_22dp"
+            android:layout_weight="1"
+            android:background="@color/background_white" />
+
+        <View
+            android:layout_width="@dimen/space_100dp"
+            android:layout_height="@dimen/space_22dp"
+            android:layout_weight="1"
+            android:background="@color/gray_dddddd" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</com.google.android.material.card.MaterialCardView>

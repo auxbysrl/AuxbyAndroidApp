@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.dashboard.favourite.FavouriteViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_white">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSavedOffers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/space_14dp"
+            android:clipToPadding="false"
+            android:paddingStart="@dimen/space_16dp"
+            android:paddingEnd="@dimen/space_16dp"
+            android:paddingBottom="@dimen/space_100dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <include
+            android:id="@+id/inclNoFavoriteOffers"
+            layout="@layout/no_favorite_offers_view"/>
+
+        <include
+            android:id="@+id/inclGuestFavoriteOffers"
+            layout="@layout/guest_favourite_offers" />
+
+    </FrameLayout>
+</layout>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.profile.ProfileViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/space_16dp"
+        android:paddingTop="@dimen/space_17dp"
+        android:paddingBottom="@dimen/space_14dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAddress"
+            style="@style/TextMontserratMedium14spPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/address"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAddressValue"
+            style="@style/TextMontserratRegular13sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_7dp"
+            android:text="@{@string/full_address(viewModel.user.address.country, viewModel.user.address.city)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAddress" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnEditAddress"
+            style="@style/TextMontserratSemiBold14spPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingHorizontal="@dimen/space_10dp"
+            android:paddingBottom="@dimen/space_10dp"
+            android:text="@string/edit"
+            android:visibility="@{viewModel.showEditAddress? View.GONE : View.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvAddress" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnCancelEditAddress"
+            style="@style/TextMontserratSemiBold14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingHorizontal="@dimen/space_10dp"
+            android:paddingBottom="@dimen/space_10dp"
+            android:text="@string/cancel"
+            android:visibility="@{viewModel.showEditAddress? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvAddress" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llAddressContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.showEditAddress? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAddress">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCountry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="@string/country"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_14sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCountry"
+                style="@style/TextInputLayoutOutlinedTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_4dp"
+                app:helperTextTextColor="@color/light_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCountry"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/country"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapWords"
+                    android:text="@={viewModel.user.address.country}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="@string/city"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_14sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCity"
+                style="@style/TextInputLayoutOutlinedTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_4dp"
+                app:helperTextTextColor="@color/light_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCity"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/city"
+                    android:imeOptions="actionDone"
+                    android:inputType="textCapWords"
+                    android:text="@={viewModel.user.address.city}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.fivedevs.auxby.domain.utils.buttonAnimator.TransitionButton
+                android:id="@+id/btnSaveAddress"
+                style="@style/primaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/space_18dp"
+                android:text="@string/save"
+                app:defaultColor="@color/colorPrimary"
+                app:loaderColor="@android:color/white" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

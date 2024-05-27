@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.authentification.register.RegisterViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:fillViewport="true"
+        android:focusable="true">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            tools:context=".screens.authentification.register.fragments.PersonalDetailsFragment">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLogInTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_50dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:paddingHorizontal="@dimen/space_25dp"
+                android:text="@string/create_account"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_24sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLogInSubTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_semibold"
+                android:paddingHorizontal="@dimen/space_25dp"
+                android:text="@string/sign_up_for_free_and_become_a_member"
+                android:textColor="@color/light_text"
+                android:textSize="@dimen/text_14sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvFirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_24dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:paddingHorizontal="@dimen/space_25dp"
+                android:text="@string/first_name"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_14sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilFirstName"
+                style="@style/TextInputLayoutOutlinedTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_25dp"
+                android:layout_marginTop="@dimen/space_4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFirstName"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/first_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName|textCapWords"
+                    android:text="@={viewModel.userRequest.firstName}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:paddingHorizontal="@dimen/space_25dp"
+                android:text="@string/last_name"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_14sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilLastName"
+                style="@style/TextInputLayoutOutlinedTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_25dp"
+                android:layout_marginTop="@dimen/space_4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etLastName"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/last_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName|textCapWords"
+                    android:text="@={viewModel.userRequest.lastName}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvEmailTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:paddingHorizontal="@dimen/space_25dp"
+                android:text="@string/email"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_14sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEmail"
+                style="@style/TextInputLayoutOutlinedTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_25dp"
+                android:layout_marginTop="@dimen/space_4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:text="@={viewModel.userRequest.email}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:paddingHorizontal="@dimen/space_25dp"
+                android:text="@string/phone"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_14sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPhone"
+                style="@style/TextInputLayoutOutlinedTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_25dp"
+                android:layout_marginTop="@dimen/space_4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPhone"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/phone"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:text="@={viewModel.userRequest.phone}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCountry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:paddingHorizontal="@dimen/space_25dp"
+                android:text="@string/country"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_14sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCountry"
+                style="@style/TextInputLayoutOutlinedTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_25dp"
+                android:layout_marginTop="@dimen/space_4dp"
+                app:helperText="@string/optional"
+                app:helperTextTextColor="@color/light_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCountry"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/country"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapWords"
+                    android:text="@={viewModel.userRequest.address.country}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:paddingHorizontal="@dimen/space_25dp"
+                android:text="@string/city"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_14sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCity"
+                style="@style/TextInputLayoutOutlinedTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_25dp"
+                android:layout_marginTop="@dimen/space_4dp"
+                app:helperText="@string/optional"
+                app:helperTextTextColor="@color/light_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCity"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/city"
+                    android:imeOptions="actionDone"
+                    android:inputType="textCapWords"
+                    android:text="@={viewModel.userRequest.address.city}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.fivedevs.auxby.domain.utils.buttonAnimator.TransitionButton
+                android:id="@+id/btnNext"
+                style="@style/primaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/space_25dp"
+                android:layout_marginTop="@dimen/space_35dp"
+                android:enabled="@{viewModel.enableNextBtn}"
+                android:text="@string/next"
+                app:defaultColor="@color/colorPrimary"
+                app:loaderColor="@android:color/white" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_19dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/space_30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnGoogleLogin">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvAlreadyRegistered"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/already_registered"
+                    android:textColor="@color/dark_text"
+                    android:textSize="@dimen/text_16sp"
+                    app:fontFamily="@font/montserrat_medium" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/btnLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_7dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:onDelayClick="@{viewModel::onLoginClicked}"
+                    android:text="@string/log_in"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/text_16sp" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.core.widget.NestedScrollView>
+</layout>

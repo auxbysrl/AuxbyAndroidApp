@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="bundleModel"
+            type="com.fivedevs.auxby.domain.models.CoinBundle" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_16dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/space_16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivBundleImage"
+                android:layout_width="@dimen/space_0dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_silver_coin"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvBundleTitle"
+                style="@style/TextMontserratSemiBold34spWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_22dp"
+                android:layout_marginTop="@dimen/space_20dp"
+                android:text="@{bundleModel.name}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/bundleCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_9dp"
+                android:layout_marginEnd="@dimen/space_10dp"
+                android:src="@drawable/ic_uncheck"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvCoinsAmount"
+                style="@style/TextMontserratMedium18spWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_22dp"
+                android:layout_marginTop="@dimen/space_20dp"
+                android:text="@{@string/coins_amount(Long.toString(bundleModel.coins))}"
+                app:layout_constraintBottom_toTopOf="@+id/ivAuxbyBundleLogo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvBundleTitle" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivAuxbyBundleLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_13dp"
+                android:layout_marginBottom="@dimen/space_20dp"
+                android:src="@drawable/ic_auxby_bundle_logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tvCoinsValue"
+                style="@style/TextMontserratSemiBold20spWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/space_16dp"
+                android:text="35 lei"
+                app:layout_constraintBottom_toBottomOf="@+id/ivAuxbyBundleLogo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ivAuxbyBundleLogo" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

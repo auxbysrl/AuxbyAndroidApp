@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+    </data>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_white"
+        app:shimmer_auto_start="true">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/space_16dp"
+            android:paddingBottom="@dimen/space_40dp">
+
+            <View
+                android:layout_width="@dimen/space_100dp"
+                android:layout_height="@dimen/space_22dp"
+                android:layout_marginTop="@dimen/space_12dp"
+                android:background="@color/gray_dddddd"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_280dp"
+                android:layout_marginTop="@dimen/space_6dp"
+                android:layout_marginBottom="@dimen/space_16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/space_8dp">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_16dp">
+
+                    <View
+                        android:layout_width="@dimen/space_160dp"
+                        android:layout_height="@dimen/space_28dp"
+                        android:background="@color/gray_dddddd"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space_100dp"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space_100dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="@dimen/space_16dp"
+                        android:background="@color/gray_dddddd" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_280dp"
+                android:layout_marginTop="@dimen/space_6dp"
+                android:layout_marginBottom="@dimen/space_16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/space_8dp">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_16dp">
+
+                    <View
+                        android:layout_width="@dimen/space_160dp"
+                        android:layout_height="@dimen/space_28dp"
+                        android:background="@color/gray_dddddd"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space_100dp"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space_100dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="@dimen/space_16dp"
+                        android:background="@color/gray_dddddd" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_280dp"
+                android:layout_marginTop="@dimen/space_6dp"
+                android:layout_marginBottom="@dimen/space_16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/space_8dp">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_16dp">
+
+                    <View
+                        android:layout_width="@dimen/space_160dp"
+                        android:layout_height="@dimen/space_28dp"
+                        android:background="@color/gray_dddddd"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space_100dp"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space_100dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="@dimen/space_16dp"
+                        android:background="@color/gray_dddddd" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+</layout>

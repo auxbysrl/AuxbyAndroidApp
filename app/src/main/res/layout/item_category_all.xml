@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:rippleColor="@android:color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/space_92dp"
+    android:layout_marginBottom="@dimen/space_6dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/space_8dp"
+    app:strokeColor="@color/white"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/space_18dp"
+        android:paddingVertical="@dimen/space_18dp">
+
+        <View
+            android:id="@+id/viewBlockListener"
+            android:layout_width="@dimen/space_0dp"
+            android:layout_height="@dimen/space_0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:visibility="gone"
+            android:elevation="@dimen/space_10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivCategory"
+            android:layout_width="@dimen/space_40dp"
+            android:layout_height="@dimen/space_40dp"
+            android:src="@drawable/ic_placeholder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCategoryTitle"
+            style="@style/TextMontserratMedium16sp"
+            android:layout_width="@dimen/space_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_12dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvNumberOfCategories"
+            app:layout_constraintStart_toEndOf="@+id/ivCategory"
+            app:layout_constraintTop_toTopOf="parent"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingEnd="@dimen/space_6dp"
+            app:layout_constraintEnd_toStartOf="@+id/ivCategoryArrow"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="All offers adsa sdas da asdas das  dasd as dasdsa " />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNumberOfCategories"
+            style="@style/TextMontserratMedium14spLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_12dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivCategory"
+            app:layout_constraintTop_toBottomOf="@+id/tvCategoryTitle"
+            tools:text="25 offers" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivCategoryArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right_light"
+            android:tint="@color/light_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

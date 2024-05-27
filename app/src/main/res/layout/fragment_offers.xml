@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.dashboard.offers.OffersViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/pullToRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.fivedevs.auxby.domain.utils.pagination.PaginationNestedScrollView
+            android:id="@+id/nestedScroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_white"
+            android:clickable="true"
+            android:fillViewport="true"
+            android:focusable="true">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/space_12dp">
+
+                <include
+                    android:id="@+id/inclShimmerOffers"
+                    layout="@layout/shimmer_offers"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{viewModel.showShimmerAnimation? View.VISIBLE : View.GONE}"
+                    tools:visibility="gone" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_220dp"
+                    android:layout_marginTop="@dimen/space_12dp">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/carouselViewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false"
+                        android:visibility="visible" />
+                </FrameLayout>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="@{viewModel.showShimmerAnimation? View.GONE : View.VISIBLE}">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvOfferTitle"
+                        style="@style/TextMontserratMedium17sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingHorizontal="@dimen/space_16dp"
+                        android:text="@string/categories" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvSeeAllCategories"
+                        style="@style/TextMontserratMedium11sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:drawablePadding="@dimen/space_6dp"
+                        android:focusable="true"
+                        android:onDelayClick="@{viewModel::onSeeAllCategoriesClicked}"
+                        android:paddingHorizontal="@dimen/space_16dp"
+                        android:paddingVertical="@dimen/space_8dp"
+                        android:text="@string/see_all"
+                        android:textAllCaps="true"
+                        app:drawableEndCompat="@drawable/ic_arrow_right" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_6dp"
+                    android:clipToPadding="false"
+                    android:paddingStart="@dimen/space_16dp"
+                    android:paddingEnd="@dimen/space_16dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvNewest"
+                    style="@style/TextMontserratMedium17sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_12dp"
+                    android:paddingHorizontal="@dimen/space_16dp"
+                    android:text="@string/newest" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvOffers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_14dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingStart="@dimen/space_16dp"
+                    android:paddingEnd="@dimen/space_16dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                <androidx.legacy.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_100dp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </com.fivedevs.auxby.domain.utils.pagination.PaginationNestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

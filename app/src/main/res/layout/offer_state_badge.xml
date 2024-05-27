@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cvBadgeContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end"
+    android:layout_marginEnd="@dimen/space_11dp"
+    tools:cardBackgroundColor="@color/red_interrupted"
+    app:cardCornerRadius="@dimen/space_8dp">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/space_10dp"
+        android:paddingVertical="@dimen/space_5dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivBadgeIcon"
+            android:layout_width="@dimen/space_17dp"
+            android:layout_height="@dimen/space_20dp"
+            tools:src="@drawable/ic_interrupted" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBadgeTitle"
+            style="@style/TextMontserratSemiBold12spWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_4dp"
+            tools:text="@string/interrupted" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</com.google.android.material.card.MaterialCardView>

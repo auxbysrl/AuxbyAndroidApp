@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvOfferStatus"
+    style="@style/TextMontserratSemiBold16spWhite"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/space_45dp"
+    android:background="@drawable/bg_rounded_bottom_sheet"
+    android:backgroundTint="@color/light_blue_994B86B4"
+    android:gravity="center"
+    tools:text="@string/this_is_a_preview_of_your_offer" />

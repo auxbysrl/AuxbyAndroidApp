@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.dashboard.DashboardViewModel" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_white"
+        android:orientation="vertical"
+        android:paddingVertical="@dimen/space_24dp"
+        android:paddingStart="@dimen/space_19dp"
+        android:paddingEnd="@dimen/space_30dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivUserAvatar"
+                android:layout_width="@dimen/space_40dp"
+                android:layout_height="@dimen/space_40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvUsername"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvUsername"
+                style="@style/TextMontserratSemiBold12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_10dp"
+                android:text="@{@string/first_and_last_name(viewModel.user.firstName, viewModel.user.lastName)}"
+                app:layout_constraintBottom_toTopOf="@+id/tvUserEmail"
+                app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
+                app:layout_constraintTop_toTopOf="@id/ivUserAvatar" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvUserEmail"
+                style="@style/TextMontserratMedium10spPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_10dp"
+                android:text="@{viewModel.user.email}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
+                app:layout_constraintTop_toBottomOf="@id/tvUsername" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivCloseDrawer"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/space_0dp"
+                android:onDelayClick="@{viewModel::onCloseDrawerClicked}"
+                android:paddingStart="@dimen/space_12dp"
+                android:paddingEnd="@dimen/space_2dp"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_40dp"
+            android:layout_marginTop="@dimen/space_24dp"
+            android:background="@drawable/shape_rounded_corners_8dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingVertical="@dimen/space_10dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvAvailableCoins"
+                style="@style/TextMontserratBold14spAccent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="@string/available_coins" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_8dp"
+                android:layout_gravity="end|center"
+                android:src="@drawable/ic_auxby_coin" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvProfile"
+            style="@style/DrawerTextViewItemStyle"
+            android:onDelayClick="@{viewModel::onProfileClicked}"
+            android:text="@string/profile"
+            app:drawableStartCompat="@drawable/ic_profile" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNotifications"
+            style="@style/DrawerTextViewItemStyle"
+            android:onDelayClick="@{viewModel::onNotificationsClicked}"
+            android:text="@string/notifications"
+            app:drawableStartCompat="@drawable/ic_notifications"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:id="@+id/tvBuyCoins"-->
+<!--            style="@style/DrawerTextViewItemStyle"-->
+<!--            android:onDelayClick="@{viewModel::onBuyCoinsClicked}"-->
+<!--            android:text="@string/buy_coins"-->
+<!--            app:drawableStartCompat="@drawable/ic_buy_coins" />-->
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvYourOffers"
+            style="@style/DrawerTextViewItemStyle"
+            android:onDelayClick="@{viewModel::onYourOffersClicked}"
+            android:text="@string/my_offers"
+            app:drawableStartCompat="@drawable/ic_your_offers" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSettings"
+            style="@style/DrawerTextViewItemStyle"
+            android:onDelayClick="@{viewModel::onSettingsClicked}"
+            android:text="@string/settings"
+            app:drawableStartCompat="@drawable/ic_settings" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvContactUs"
+            style="@style/TextMontserratMedium12spPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_80dp"
+            android:onDelayClick="@{viewModel::onContactUsClicked}"
+            android:paddingVertical="@dimen/space_10dp"
+            android:text="@string/contact_us" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTermsAndConditions"
+            style="@style/TextMontserratMedium12spPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_6dp"
+            android:onDelayClick="@{viewModel::onTermsConditionsClicked}"
+            android:paddingVertical="@dimen/space_10dp"
+            android:text="@string/terms_and_conditions" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPoliciesAgreements"
+            style="@style/TextMontserratMedium12spPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_6dp"
+            android:onDelayClick="@{viewModel::onPoliciesAgreementsClicked}"
+            android:paddingVertical="@dimen/space_10dp"
+            android:text="@string/policies_agreements" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvAppVersion"
+                style="@style/TextMontserratSemiBold12spAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="Version 1.0.0" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvAuxbyRo"
+                style="@style/TextMontserratSemiBold12spAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/auxby_ro_title" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

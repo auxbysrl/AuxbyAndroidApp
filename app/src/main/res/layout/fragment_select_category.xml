@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.addOffer.AddOfferViewModel" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_white"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/space_16dp"
+        tools:context=".screens.addOffer.fragments.AddOfferFragment">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/TextMontserratMedium16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_25dp"
+            android:text="@string/select_category" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAllCategories"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/space_16dp"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/space_1dp"
+            android:paddingBottom="@dimen/space_12dp"
+            tools:listitem="@layout/item_category_all" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

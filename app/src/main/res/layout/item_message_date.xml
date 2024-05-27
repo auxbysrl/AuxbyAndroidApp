@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/space_12dp"
+    android:paddingBottom="@dimen/space_6dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMessageDate"
+        style="@style/TextMontserratMedium12spPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        tools:text="28.06.2022 14:10" />
+
+</FrameLayout>

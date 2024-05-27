@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "156615882044",
+    "project_id": "auxby-367816",
+    "storage_bucket": "auxby-367816.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156615882044:android:f06cb2e108853143589a39",
+        "android_client_info": {
+          "package_name": "com.fivedevs.auxby"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156615882044-7ulni2q0thl3fegjsd2u03vn2a0h8sn9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fivedevs.auxby",
+            "certificate_hash": "08bc4295b9e9fde1f36fcd53308ec02dd82b39b7"
+          }
+        },
+        {
+          "client_id": "156615882044-oasnmmjqnc2alor0ve3c7i4vm7sr1q74.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fivedevs.auxby",
+            "certificate_hash": "abf2cdca334cd78a8829913ba1901aaef603f3bc"
+          }
+        },
+        {
+          "client_id": "156615882044-ttm3n08gnhc14ksuaob4jjks9ost0vfo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fivedevs.auxby",
+            "certificate_hash": "d3d4e1ade2810ee4e3cbaf83b9730701e1f0afd6"
+          }
+        },
+        {
+          "client_id": "156615882044-tr2hqpv8h8ugim0vb8est5mjrto5g62c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtZ87t0oQsFuJy7H8VzxPGYBJ6rORQAU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156615882044-rdmjaosndk9ovbsno56imkkomgr799bq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "156615882044-mk6ccisj7h3k7v0rtogpn8q2i40rbppu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.5devs.Auxby"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

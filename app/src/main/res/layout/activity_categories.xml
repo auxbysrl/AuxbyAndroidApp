@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.dashboard.offers.categories.AllCategoriesViewModel" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_white"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/inclToolbar"
+            layout="@layout/toolbar_generic"
+            app:title="@{@string/categories}" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchViewCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/space_16dp"
+            android:layout_marginTop="@dimen/space_20dp"
+            android:background="@drawable/bg_rounded_search_view"
+            android:textSize="@dimen/text_15sp"
+            app:closeIcon="@drawable/ic_close"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@null"
+            app:queryHint="@string/search_by_category_name"
+            app:searchIcon="@drawable/ic_search" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAllCategories"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/space_16dp"
+            android:layout_marginTop="@dimen/space_20dp"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/space_1dp"
+            android:paddingBottom="@dimen/space_12dp"
+            android:visibility="@{viewModel.showNoSearchResultMessage? View.GONE : View.VISIBLE}" />
+
+        <TextView
+            android:id="@+id/tvNoSearchResults"
+            style="@style/TextMontserratMedium17sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/space_10dp"
+            android:paddingHorizontal="@dimen/space_24dp"
+            app:htmlText="@{@string/search_empty_result_message(viewModel.searchQuery)}"
+            android:visibility="@{viewModel.showNoSearchResultMessage? View.VISIBLE : View.GONE}"
+            tools:text="@string/search_empty_result_message" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

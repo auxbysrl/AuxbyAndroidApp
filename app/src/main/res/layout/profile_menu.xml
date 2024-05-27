@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.profile.ProfileViewModel" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="@dimen/space_5dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/space_16dp"
+        android:paddingVertical="@dimen/space_8dp"
+        android:translationY="-20dp"
+        android:visibility="@{viewModel.showMenuPopup? View.VISIBLE : View.GONE}">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnLogout"
+            style="@style/TextMontserratMedium14spPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/space_8dp"
+            android:text="@string/log_out" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnDeleteAccount"
+            style="@style/TextMontserratMedium14spPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10dp"
+            android:paddingVertical="@dimen/space_8dp"
+            android:text="@string/delete_account"
+            android:textColor="@color/red" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

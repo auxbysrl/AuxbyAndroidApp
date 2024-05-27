@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.dashboard.chat.chatMessages.ChatMessagesViewModel" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/inclToolbar"
+            layout="@layout/toolbar_generic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@{@string/messages}" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clChatHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_E4E7EC"
+            android:paddingHorizontal="@dimen/space_16dp"
+            android:paddingVertical="@dimen/space_16dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivUserAvatar"
+                android:layout_width="@dimen/space_43dp"
+                android:layout_height="@dimen/space_43dp"
+                android:src="@drawable/ic_placeholder"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRoomName"
+                style="@style/TextMontserratMedium15sp"
+                android:layout_width="@dimen/space_0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                app:layout_constraintBottom_toTopOf="@+id/tvHostName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvHostName"
+                tools:text="Luxury House" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvHostName"
+                style="@style/TextMontserratRegular12sp"
+                android:layout_width="@dimen/space_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/space_2dp"
+                app:layout_constraintBottom_toBottomOf="@id/ivUserAvatar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivUserAvatar"
+                app:layout_constraintTop_toTopOf="@id/ivUserAvatar"
+                tools:text="Phil Collins" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvActiveTime"
+                style="@style/TextMontserratRegular12spPrimary"
+                android:layout_width="@dimen/space_0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvHostName"
+                app:layout_constraintTop_toBottomOf="@+id/tvHostName"
+                tools:text="Active 2d ago" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/space_16dp"
+            android:paddingVertical="@dimen/space_12dp"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_host_message" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:gravity="center_vertical"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingHorizontal="@dimen/space_16dp"
+            android:paddingTop="@dimen/space_12dp"
+            android:paddingBottom="@dimen/space_18dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/space_12dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="@dimen/space_20dp"
+                app:strokeColor="@color/colorPrimary"
+                app:strokeWidth="@dimen/space_1dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etChatMessage"
+                    style="@style/TextInputEditTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@null"
+                    android:hint="@string/message_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
+                    android:maxLines="5"
+                    android:paddingHorizontal="@dimen/space_20dp"
+                    android:paddingVertical="@dimen/space_7dp"
+                    android:scrollbars="vertical"
+                    android:text="@={viewModel.message}" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivSendMessage"
+                android:layout_width="@dimen/space_35dp"
+                android:layout_height="@dimen/space_35dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_send_message"
+                android:visibility="@{viewModel.shouldShowSendMsgIcon? View.VISIBLE : View.GONE}" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

@@ -1,11 +1,11 @@
 package com.fivedevs.auxby.screens.dashboard.offers.bottomSheets
 
 import android.content.DialogInterface
-import android.widget.RadioButton
 import androidx.databinding.ViewDataBinding
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.ViewReportOfferBottomSheetBinding
 import com.fivedevs.auxby.domain.models.ReportOfferModel
+import com.fivedevs.auxby.domain.models.enums.ReportTypeEnum
 import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
 import com.fivedevs.auxby.domain.utils.extensions.show
 import com.fivedevs.auxby.screens.base.BaseBottomSheetDialog
@@ -40,12 +40,25 @@ class ReportOfferBottomSheet(private val callback: (ReportOfferModel) -> Unit) :
     }
 
     private fun getReportFeedback() {
-        val selectedRadioButton =
-            root.root.findViewById<RadioButton>(root.rgContainer.checkedRadioButtonId)
         reportOfferModel.apply {
-            type = selectedRadioButton.text.toString()
+            type = getReportType()
             comment = root.etFeedback.text.toString()
             callback(reportOfferModel)
+        }
+    }
+
+    private fun getReportType(): String {
+        val selectedIndex = root.rgContainer.indexOfChild(root.rgContainer.findViewById(root.rgContainer.checkedRadioButtonId))
+        return when (selectedIndex) {
+            0 -> {
+                ReportTypeEnum.ABUSE.value
+            }
+            1 -> {
+                ReportTypeEnum.DECEPTIVE_AD.value
+            }
+            else -> {
+                ReportTypeEnum.DIRTY_LANGUAGE.value
+            }
         }
     }
 

@@ -3,7 +3,7 @@ package com.fivedevs.auxby.domain.utils
 import android.content.Context
 import android.content.ContextWrapper
 import android.os.LocaleList
-import java.util.*
+import java.util.Locale
 
 class LocalizationHandler(base: Context?) : ContextWrapper(base) {
     companion object {

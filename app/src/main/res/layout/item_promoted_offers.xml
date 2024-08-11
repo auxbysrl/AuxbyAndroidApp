@@ -51,6 +51,7 @@
             android:lines="2"
             android:paddingTop="@dimen/space_8dp"
             android:textColor="@color/white"
+            android:textSize="@dimen/text_14sp"
             tools:text="OnePlus Watch" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -80,6 +81,7 @@
         android:ellipsize="end"
         android:maxLines="3"
         android:textColor="@color/white"
+        android:textSize="@dimen/text_12sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageOfferLayout"
         app:layout_constraintEnd_toStartOf="@+id/llPriceContainer"
         app:layout_constraintStart_toStartOf="@+id/imageOfferLayout"
@@ -89,20 +91,21 @@
         android:id="@+id/llPriceContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/imageOfferLayout"
-        app:layout_constraintBottom_toBottomOf="@id/imageOfferLayout"
+        android:orientation="vertical"
         android:paddingVertical="@dimen/text_16sp"
         android:paddingEnd="@dimen/space_16dp"
-        android:orientation="vertical">
+        app:layout_constraintBottom_toBottomOf="@id/imageOfferLayout"
+        app:layout_constraintEnd_toEndOf="@id/imageOfferLayout">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvPriceTitle"
             style="@style/TextMontserratSemiBold16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/price"
             android:layout_gravity="end"
+            android:text="@string/price"
             android:textColor="@color/white"
+            android:textSize="@dimen/text_14sp"
             tools:text="Oferta actuala" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -112,6 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:textColor="@color/white"
+            android:textSize="@dimen/space_16dp"
             tools:text="90.0000lei" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 

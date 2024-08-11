@@ -28,6 +28,8 @@
             android:layout_marginTop="@dimen/space_9dp"
             android:visibility="visible"
             android:paddingHorizontal="@dimen/space_16dp"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/space_110dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="24"
             tools:listitem="@layout/item_room" />

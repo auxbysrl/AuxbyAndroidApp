@@ -8,15 +8,27 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.databinding.DataBindingUtil
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.ActivityLoginBinding
+import com.fivedevs.auxby.domain.utils.Constants
 import com.fivedevs.auxby.domain.utils.Constants.RESPONSE_CODE_400
+import com.fivedevs.auxby.domain.utils.Constants.RESPONSE_CODE_400_GOOGLE
 import com.fivedevs.auxby.domain.utils.Utils
 import com.fivedevs.auxby.domain.utils.Validator.validatePassword
 import com.fivedevs.auxby.domain.utils.buttonAnimator.TransitionButton
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.extensions.hideKeyboard
+import com.fivedevs.auxby.domain.utils.extensions.launchActivity
+import com.fivedevs.auxby.domain.utils.extensions.makeMeShake
+import com.fivedevs.auxby.domain.utils.extensions.replace
+import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
+import com.fivedevs.auxby.domain.utils.extensions.toast
 import com.fivedevs.auxby.domain.utils.views.AlerterUtils
+import com.fivedevs.auxby.domain.utils.views.AlerterUtils.showTokenExpiredAlert
 import com.fivedevs.auxby.screens.authentification.base.CheckEmailFragment
 import com.fivedevs.auxby.screens.authentification.register.RegisterActivity
 import com.fivedevs.auxby.screens.base.BaseActivity
@@ -26,9 +38,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.tapadoo.alerter.Alerter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.security.MessageDigest
+import java.util.UUID
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity() {
@@ -42,6 +61,7 @@ class LoginActivity : BaseActivity() {
         initListeners()
         initObservers()
         initInputFieldListeners()
+        getIntentData()
     }
 
     private fun initBinding() {
@@ -73,11 +93,25 @@ class LoginActivity : BaseActivity() {
         }
 
         viewModel.signUpClickEvent.observe(this) {
-            launchActivity<RegisterActivity>()
+            launchActivity<RegisterActivity> {
+                putExtra(Constants.USER_REFERRAL_ID, viewModel.userReferralId.toString())
+            }
         }
 
         viewModel.checkEmailEvent.observe(this) {
             showCheckEmailFragment()
+        }
+    }
+
+    private fun getIntentData() {
+        intent.getBooleanExtra(Constants.TOKEN_EXPIRED, false).let { isTokenExpired ->
+            if (isTokenExpired) {
+                showTokenExpiredAlert(this, getString(R.string.message_session_expired))
+            }
+        }
+
+        intent.getStringExtra(Constants.USER_REFERRAL_ID)?.toIntOrNull().let { userId ->
+            viewModel.userReferralId = userId
         }
     }
 
@@ -100,16 +134,28 @@ class LoginActivity : BaseActivity() {
 
     private fun showErrorMessage(errorMessage: String) {
         val error =
-            if (errorMessage == RESPONSE_CODE_400.toString()) resources.getString(R.string.wrong_login_credentials) else resources.getString(
-                R.string.something_went_wrong
-            )
+            when (errorMessage) {
+                RESPONSE_CODE_400.toString() -> {
+                    resources.getString(R.string.wrong_login_credentials)
+                }
+
+                RESPONSE_CODE_400_GOOGLE -> {
+                    resources.getString(R.string.wrong_login_credentials_google)
+                }
+
+                else -> {
+                    resources.getString(
+                        R.string.something_went_wrong
+                    )
+                }
+            }
         AlerterUtils.showErrorAlert(this, error)
         binding.btnLogin.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE)
     }
 
     private fun onGoogleAuthClicked() {
         if (binding.checkBoxTermsConditions.isChecked) {
-            signIn()
+            googleSignIn()
         } else {
             binding.checkBoxTermsConditions.buttonDrawable?.setTint(getColor(R.color.red))
             binding.llAgreeTermsConditions.makeMeShake()
@@ -189,9 +235,52 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    private fun signIn() {
+    private fun googleSignIn() {
+        viewModel.googleAuthClient.signOut()
         val signInIntent: Intent = viewModel.googleAuthClient.signInIntent
         resultLauncher.launch(signInIntent)
+    }
+
+    private fun googleSignInBackup() {
+        val credentialManager = CredentialManager.create(this)
+
+        val rawNonce = UUID.randomUUID().toString()
+        val bytes = rawNonce.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        val hashedNonce = digest.fold("") { str, it -> str + "%02x".format(it) }
+
+        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(true)
+            .setServerClientId("156615882044-tmeimfo0dcgu6mp8eqce13e1ovts5au2.apps.googleusercontent.com")
+            .setAutoSelectEnabled(true)
+            .setNonce(hashedNonce)
+            .build()
+
+        val request: GetCredentialRequest = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+
+
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val result = credentialManager.getCredential(
+                    request = request,
+                    context = this@LoginActivity,
+                )
+                handleSignIn(result)
+            } catch (e: GetCredentialException) {
+                Timber.e(e)
+            }
+        }
+    }
+
+    private fun handleSignIn(result: GetCredentialResponse) {
+        val credential = result.credential
+
+        val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+        val googleIdToken = googleIdTokenCredential.idToken
+        toast("GOOGLE SIGN IN $googleIdToken")
     }
 
     private var resultLauncher =
@@ -201,6 +290,8 @@ class LoginActivity : BaseActivity() {
                 val task: Task<GoogleSignInAccount> =
                     GoogleSignIn.getSignedInAccountFromIntent(data)
                 handleSignInResult(task)
+            } else {
+                Timber.e("GoogleAuth Error resultCode : ${result.resultCode}")
             }
         }
 

@@ -4,11 +4,8 @@ import android.os.Handler
 import android.os.Looper
 import com.fivedevs.auxby.data.api.DataApi
 import com.fivedevs.auxby.data.database.repositories.OffersRepository
-import com.fivedevs.auxby.domain.models.OfferModel
-import com.fivedevs.auxby.domain.utils.Constants
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import timber.log.Timber
@@ -41,7 +38,7 @@ class OffersUpdateManager @Inject constructor(
             }
             .observeOn(rxSchedulers.background())
             .subscribe({
-                offersRepository.insertOffers(it)
+                if(it.isNotEmpty()) offersRepository.insertOffers(it)
                 errorTries = 0
                 startUpdateTimer()
             }, {

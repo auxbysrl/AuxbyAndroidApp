@@ -5,7 +5,6 @@ import com.fivedevs.auxby.data.database.entities.Offer
 import com.fivedevs.auxby.domain.models.OfferModel
 import com.fivedevs.auxby.domain.models.enums.OfferStateEnum
 import com.fivedevs.auxby.domain.models.enums.OfferTypeStoredEnum
-import com.fivedevs.auxby.domain.utils.pagination.PaginationConstants.API_PAGE_SIZE
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 
@@ -21,7 +20,7 @@ interface OffersDao {
     @Update
     fun updateOffer(offerModel: Offer)
 
-    @Query("SELECT offer.* FROM offer INNER JOIN offer_type_stored ON offer.id = offer_type_stored.offerId WHERE offer_type_stored.type = :type AND offer.status = :status ORDER BY publishDate DESC")
+    @Query("SELECT offer.* FROM offer INNER JOIN offer_type_stored ON offer.id = offer_type_stored.offerId WHERE offer_type_stored.type = :type AND offer.status = :status")
     fun getActiveOffers(
         status: String = OfferStateEnum.ACTIVE.getStatusName(),
         type: OfferTypeStoredEnum = OfferTypeStoredEnum.OFFERS
@@ -29,8 +28,8 @@ interface OffersDao {
 
     @Query("SELECT offer.* FROM offer INNER JOIN offer_type_stored ON offer.id = offer_type_stored.offerId WHERE offer_type_stored.type = :type ORDER BY publishDate DESC LIMIT 10")
     fun getPromotedOffers(
-        type: OfferTypeStoredEnum = OfferTypeStoredEnum.OFFERS
-    ): Single<List<OfferModel>>
+        type: OfferTypeStoredEnum = OfferTypeStoredEnum.PROMOTED
+    ): Flowable<List<OfferModel>>
 
     @Query("SELECT offer.* FROM offer INNER JOIN offer_type_stored ON offer.id = offer_type_stored.offerId WHERE offer_type_stored.type = :type AND offer.categoryId = :categoryId ORDER BY publishDate DESC LIMIT 10")
     fun getOffersByCategoryId(
@@ -77,4 +76,9 @@ interface OffersDao {
         type: OfferTypeStoredEnum
     )
 
+    @Query("SELECT offer.* FROM offer INNER JOIN offer_type_stored ON offer.id = offer_type_stored.offerId WHERE offer_type_stored.type = :type AND offer.status = :status")
+    fun getSingleActiveOffers(
+        status: String = OfferStateEnum.ACTIVE.getStatusName(),
+        type: OfferTypeStoredEnum = OfferTypeStoredEnum.OFFERS
+    ): Single<List<OfferModel>>
 }

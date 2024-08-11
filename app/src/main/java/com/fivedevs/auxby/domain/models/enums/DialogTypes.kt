@@ -30,6 +30,12 @@ enum class DialogTypes {
     },
     CONTACT_US {
         override fun getType(): Int = 9
+    },
+    SUCCESSFULLY_PROMOTED {
+        override fun getType(): Int = 10
+    },
+    RATE_USER_INFO {
+        override fun getType(): Int = 11
     };
 
     abstract fun getType(): Int

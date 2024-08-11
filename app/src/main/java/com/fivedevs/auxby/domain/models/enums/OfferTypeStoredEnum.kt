@@ -5,4 +5,5 @@ enum class OfferTypeStoredEnum {
     MY_OFFERS,
     MY_BIDS,
     FAVORITE,
+    PROMOTED
 }

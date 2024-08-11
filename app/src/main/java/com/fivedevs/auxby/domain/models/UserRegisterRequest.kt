@@ -8,5 +8,6 @@ data class UserRegisterRequest(
     var password: String = "",
     var email: String = "",
     var address: User.UserAddress = User.UserAddress(),
-    var phone: String = ""
+    var phone: String = "",
+    var userReferralId: Int? = 0
 )

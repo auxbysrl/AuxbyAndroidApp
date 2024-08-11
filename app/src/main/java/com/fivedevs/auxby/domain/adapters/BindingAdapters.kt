@@ -1,6 +1,5 @@
 package com.fivedevs.auxby.domain.adapters
 
-import android.graphics.drawable.Drawable
 import android.text.Html
 import android.transition.TransitionManager
 import android.view.View
@@ -8,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LiveData
 import com.bumptech.glide.Glide
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay

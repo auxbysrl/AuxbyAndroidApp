@@ -5,9 +5,11 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.ActivityRegisterBinding
+import com.fivedevs.auxby.domain.utils.Constants
 import com.fivedevs.auxby.domain.utils.extensions.launchActivityWithFinish
 import com.fivedevs.auxby.domain.utils.extensions.replace
 import com.fivedevs.auxby.domain.utils.extensions.replaceBackStack
+import com.fivedevs.auxby.domain.utils.extensions.toast
 import com.fivedevs.auxby.domain.utils.views.AlerterUtils
 import com.fivedevs.auxby.screens.authentification.base.CheckEmailFragment
 import com.fivedevs.auxby.screens.authentification.login.LoginActivity
@@ -16,6 +18,7 @@ import com.fivedevs.auxby.screens.authentification.register.fragments.PersonalDe
 import com.fivedevs.auxby.screens.base.BaseActivity
 import com.fivedevs.auxby.screens.dashboard.DashboardActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class RegisterActivity : BaseActivity() {
@@ -26,14 +29,9 @@ class RegisterActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
+        getIntentData()
         showAccountDetailsFragment(savedInstanceState)
         initObservers()
-    }
-
-    private fun showAccountDetailsFragment(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            replace(PersonalDetailsFragment(), binding.fragmentContainerView.id)
-        }
     }
 
     private fun initBinding() {
@@ -41,6 +39,18 @@ class RegisterActivity : BaseActivity() {
         binding.apply {
             viewModel = this@RegisterActivity.viewModel
             lifecycleOwner = this@RegisterActivity
+        }
+    }
+
+    private fun getIntentData() {
+        intent.getStringExtra(Constants.USER_REFERRAL_ID)?.toIntOrNull().let { userId ->
+            viewModel.userRequest.value?.userReferralId = userId
+        }
+    }
+
+    private fun showAccountDetailsFragment(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            replace(PersonalDetailsFragment(), binding.fragmentContainerView.id)
         }
     }
 

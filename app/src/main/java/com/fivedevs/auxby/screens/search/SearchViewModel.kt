@@ -21,6 +21,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -28,7 +29,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     userApi: UserApi,
     userRepository: UserRepository,
-    offersRepository: OffersRepository,
+    private val offersRepository: OffersRepository,
     preferencesService: PreferencesService,
     private val dataApi: DataApi,
     private val rxSchedulers: RxSchedulers,
@@ -169,6 +170,8 @@ class SearchViewModel @Inject constructor(
                 searchOffers.value = it
                 if (it.isEmpty()) {
                     showSearchNoResultMessage.value = true
+                } else {
+                    insertOffersInDb(it)
                 }
                 showLoader.value = false
             }, {
@@ -177,6 +180,23 @@ class SearchViewModel @Inject constructor(
                 apiErrorMessage.value = Constants.DEFAULT_ERROR_MSG
             })
             .disposeBy(compositeDisposable)
+    }
+
+    private fun insertOffersInDb(offers: List<OfferModel>) {
+        offers.forEach { _ ->
+            Observable.just(Constants.EMPTY)
+                .doOnNext { offersRepository.insertOffers(offers) }
+                .subscribeOn(rxSchedulers.background())
+                .observeOn(rxSchedulers.androidUI())
+                .doOnError { Timber.e(it) }
+                .subscribe({
+
+                }, {
+                    Timber.e(it)
+                })
+                .disposeBy(compositeDisposable)
+
+        }
     }
 
     private fun handleSearchSuggestionError(it: Throwable) {

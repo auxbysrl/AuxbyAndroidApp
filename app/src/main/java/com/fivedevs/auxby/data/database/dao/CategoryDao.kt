@@ -22,7 +22,7 @@ interface CategoryDao {
 
     // Category Details
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCategoriesDetails(CategoryDetails: List<CategoryDetails>)
+    fun insertCategoriesDetails(categoryDetails: List<CategoryDetails>)
 
     @Query("SELECT * FROM category_details")
     fun getCategoriesDetails(): Single<List<CategoryDetailsModel>>

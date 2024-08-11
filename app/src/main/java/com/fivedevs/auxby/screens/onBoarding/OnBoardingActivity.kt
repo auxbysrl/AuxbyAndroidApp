@@ -9,7 +9,6 @@ import com.fivedevs.auxby.databinding.ActivityOnBoardingBinding
 import com.fivedevs.auxby.domain.utils.extensions.launchActivityWithFinish
 import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
 import com.fivedevs.auxby.screens.authentification.login.LoginActivity
-import com.fivedevs.auxby.screens.authentification.register.RegisterActivity
 import com.fivedevs.auxby.screens.base.BaseActivity
 import com.fivedevs.auxby.screens.dashboard.DashboardActivity
 import com.fivedevs.auxby.screens.onBoarding.onBoardingView.adapter.OnBoardingAdapter

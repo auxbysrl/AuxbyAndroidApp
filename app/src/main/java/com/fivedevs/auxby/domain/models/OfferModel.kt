@@ -1,7 +1,11 @@
 package com.fivedevs.auxby.domain.models
 
 import androidx.room.TypeConverters
-import com.fivedevs.auxby.data.database.converters.*
+import com.fivedevs.auxby.data.database.converters.CategoryFieldsValueConverter
+import com.fivedevs.auxby.data.database.converters.ListPhotosConverter
+import com.fivedevs.auxby.data.database.converters.ListStringConverter
+import com.fivedevs.auxby.data.database.converters.OfferBidValueConverter
+import com.fivedevs.auxby.data.database.converters.OfferOwnerConverter
 import com.fivedevs.auxby.data.database.entities.Offer
 
 @TypeConverters(
@@ -25,6 +29,7 @@ data class OfferModel(
     var bids: MutableList<OfferBid?>? = mutableListOf(),
     var price: Float? = 0f,
     var currencyType: String? = "",
+    var currencySymbol: String? = "",
     var owner: OfferOwner? = OfferOwner(),
     var highestBid: Float? = 0f,
     var photos: List<OfferPhoto> = listOf(),
@@ -36,7 +41,8 @@ data class OfferModel(
     var isPromoted: Boolean = false,
     var autoExtend: Boolean = false,
     var condition: String = "",
-    var phoneNumbers: String = ""
+    var phoneNumbers: String = "",
+    var deepLink: String? = ""
 ) {
     fun toOffer() = Offer(
         id,
@@ -51,7 +57,8 @@ data class OfferModel(
         isOnAuction,
         bids.orEmpty().toList(),
         price,
-        currencyType,
+        currencyType.orEmpty(),
+        currencySymbol,
         owner,
         highestBid,
         photos,
@@ -63,7 +70,8 @@ data class OfferModel(
         isPromoted,
         autoExtend,
         condition,
-        phoneNumbers
+        phoneNumbers,
+        deepLink.orEmpty()
     )
 }
 

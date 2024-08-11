@@ -22,8 +22,13 @@ import com.fivedevs.auxby.domain.models.CategoryFieldsValue
 import com.fivedevs.auxby.domain.models.enums.ConditionTypeEnum
 import com.fivedevs.auxby.domain.models.enums.CurrencyEnum
 import com.fivedevs.auxby.domain.models.enums.OfferTypeEnum
+import com.fivedevs.auxby.domain.utils.Currencies
 import com.fivedevs.auxby.domain.utils.Utils
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.extensions.getDrawableCompat
+import com.fivedevs.auxby.domain.utils.extensions.getName
+import com.fivedevs.auxby.domain.utils.extensions.hide
+import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
+import com.fivedevs.auxby.domain.utils.extensions.show
 import com.fivedevs.auxby.domain.utils.views.CustomArrayAdapter
 import com.fivedevs.auxby.screens.addOffer.factory.DynamicViewsManager
 import com.fivedevs.auxby.screens.base.BaseBottomSheetDialog
@@ -44,7 +49,11 @@ class FilterOffersDialog(
 
     private var categoryAdapter: CategoryAdapter? = null
     private var adapterCategories: AllCategoriesAdapter? = null
-    private val dynamicViewsManager: DynamicViewsManager by lazy { DynamicViewsManager(requireContext()) }
+    private val dynamicViewsManager: DynamicViewsManager by lazy {
+        DynamicViewsManager(
+            requireContext()
+        )
+    }
 
     override fun getContentView(binding: ViewDataBinding) {
         this.binding = binding as DialogFilterOffersBinding
@@ -88,7 +97,8 @@ class FilterOffersDialog(
         binding.inclOfferCategory.root.setOnClickListenerWithDelay {
             with(binding) {
                 rvAllCategories.show()
-                val animation: Animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_from_right)
+                val animation: Animation =
+                    AnimationUtils.loadAnimation(context, R.anim.slide_in_from_right)
                 rvAllCategories.startAnimation(animation)
                 filtersContainer.hide()
                 binding.toolbar.tvClear.hide()
@@ -124,11 +134,13 @@ class FilterOffersDialog(
     private fun initFieldsListener() {
         with(binding) {
             etOfferPrice.doOnTextChanged { text, _, _, _ ->
-                viewModel?.advancedFilterOffers?.priceFilter?.lowestPrice = text.toString().toIntOrNull() ?: 0
+                viewModel?.advancedFilterOffers?.priceFilter?.lowestPrice =
+                    text.toString().toIntOrNull() ?: 0
             }
 
             etOfferEndPrice.doOnTextChanged { text, _, _, _ ->
-                viewModel?.advancedFilterOffers?.priceFilter?.highestPrice = text.toString().toIntOrNull() ?: Int.MAX_VALUE
+                viewModel?.advancedFilterOffers?.priceFilter?.highestPrice =
+                    text.toString().toIntOrNull() ?: Int.MAX_VALUE
             }
 
             actvPriceType.doOnTextChanged { text, _, _, _ ->
@@ -165,7 +177,8 @@ class FilterOffersDialog(
 
             rbConditionUsed.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    viewModel?.advancedFilterOffers?.conditionType = ConditionTypeEnum.USED.getConditionName()
+                    viewModel?.advancedFilterOffers?.conditionType =
+                        ConditionTypeEnum.USED.getConditionName()
                 } else {
                     viewModel?.advancedFilterOffers?.conditionType = null
                 }
@@ -173,7 +186,8 @@ class FilterOffersDialog(
 
             rbConditionNew.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    viewModel?.advancedFilterOffers?.conditionType = ConditionTypeEnum.NEW.getConditionName()
+                    viewModel?.advancedFilterOffers?.conditionType =
+                        ConditionTypeEnum.NEW.getConditionName()
                 } else {
                     viewModel?.advancedFilterOffers?.conditionType = null
                 }
@@ -186,8 +200,13 @@ class FilterOffersDialog(
             spinnerLocation.onItemSelectedListener = object :
                 AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    val position = if (p2 == resources.getStringArray(R.array.cities).size) p2 else p2.inc()
-                    binding.etOfferLocation.setText(binding.spinnerLocation.getItemAtPosition(position).toString())
+                    val position =
+                        if (p2 == resources.getStringArray(R.array.cities).size) p2 else p2.inc()
+                    binding.etOfferLocation.setText(
+                        binding.spinnerLocation.getItemAtPosition(
+                            position
+                        ).toString()
+                    )
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -223,7 +242,9 @@ class FilterOffersDialog(
         if (viewModel.advancedFilterOffers.location.isNullOrEmpty()) {
             binding.spinnerLocation.setSelection(0, false)
         } else {
-            binding.spinnerLocation.setSelection(cities.indexOf(viewModel.advancedFilterOffers.location.orEmpty()).dec())
+            binding.spinnerLocation.setSelection(
+                cities.indexOf(viewModel.advancedFilterOffers.location.orEmpty()).dec()
+            )
         }
     }
 
@@ -239,16 +260,15 @@ class FilterOffersDialog(
             priceFilter.currencyType = getSelectedCurrency()
             advancedFilterOffers.location = binding.etOfferLocation.text.toString()
 
-            applyCallBack(advancedFilterOffers.copy(), viewModel.categoryDetailsResponse.value?.getName(requireContext()).orEmpty())
+            applyCallBack(
+                advancedFilterOffers.copy(),
+                viewModel.categoryDetailsResponse.value?.getName(requireContext()).orEmpty()
+            )
         }
     }
 
     private fun getSelectedCurrency(): String {
-        return if (binding.actvPriceType.text.toString() == CurrencyEnum.RON.short()) {
-            CurrencyEnum.RON.currencyType
-        } else {
-            CurrencyEnum.EURO.currencyType
-        }
+        return Currencies.currenciesList.firstOrNull { it.symbol.equals(binding.actvPriceType.text.toString(), true) }?.name ?: CurrencyEnum.RON.currencyType
     }
 
     private fun clearCategorySelected() {
@@ -266,7 +286,8 @@ class FilterOffersDialog(
 
     private fun populateOfferCategory(category: CategoryDetailsModel? = null) {
         if (category != null) {
-            binding.inclOfferCategory.tvCategoryTitle.text = category.label.getName(requireContext())
+            binding.inclOfferCategory.tvCategoryTitle.text =
+                category.label.getName(requireContext())
             Glide.with(requireContext())
                 .load(Utils.getFullImageUrl(category.icon))
                 .error(requireContext().getDrawableCompat(R.drawable.ic_placeholder))
@@ -302,7 +323,8 @@ class FilterOffersDialog(
     }
 
     private fun initSelectCategoriesRv() {
-        adapterCategories = AllCategoriesAdapter(requireContext(), mutableListOf(), viewModel.onCategorySelected)
+        adapterCategories =
+            AllCategoriesAdapter(requireContext(), mutableListOf(), viewModel.onCategorySelected)
         binding.rvAllCategories.apply {
             layoutManager = LinearLayoutManager(requireActivity())
             adapter = adapterCategories
@@ -351,7 +373,7 @@ class FilterOffersDialog(
         val adapter = ArrayAdapter(
             requireContext(),
             R.layout.item_dropdown,
-            CurrencyEnum.values().map { it.short() })
+            CurrencyEnum.entries.map { it.symbol() })
         binding.actvPriceType.setAdapter(adapter)
         binding.actvPriceType.setDropDownBackgroundResource(R.color.white)
         binding.actvEndPriceType.setAdapter(adapter)
@@ -369,13 +391,7 @@ class FilterOffersDialog(
                 }
 
                 it.currencyType?.let { currency ->
-                    actvPriceType.setText(
-                        if (currency.equals(CurrencyEnum.RON.currencyType, ignoreCase = true)) {
-                            CurrencyEnum.RON.short()
-                        } else {
-                            CurrencyEnum.EURO.short()
-                        }, false
-                    )
+                    actvPriceType.setText(getCurrencySymbol(currency))
                 }
             }
 
@@ -389,6 +405,10 @@ class FilterOffersDialog(
                 rbConditionNew.isChecked = it == ConditionTypeEnum.NEW.getConditionName()
             }
         }
+    }
+
+    private fun getCurrencySymbol(currency: String): String {
+        return Currencies.currenciesList.firstOrNull { it.name.equals(currency, true) }?.symbol ?: CurrencyEnum.RON.symbol()
     }
 
     private fun handleAddCategoryDetailsViews(it: CategoryDetailsModel = CategoryDetailsModel()) {
@@ -407,7 +427,11 @@ class FilterOffersDialog(
                     viewModel.offerRequestModel.categoryDetails
                 )
             }
-            populateCategoryDetailsViews(it.getSortedCategoryDetails(), false, viewModel.offerRequestModel.categoryDetails)
+            populateCategoryDetailsViews(
+                it.getSortedCategoryDetails(),
+                false,
+                viewModel.offerRequestModel.categoryDetails
+            )
         }
     }
 
@@ -419,10 +443,17 @@ class FilterOffersDialog(
         handleCreateViews(categoryDetails, isSubcategory, editCategoryDetails)
     }
 
-    private fun handleCreateViews(categoryDetails: List<CategoryField>, isSubcategory: Boolean, detailsValue: List<CategoryFieldsValue> = listOf()) {
+    private fun handleCreateViews(
+        categoryDetails: List<CategoryField>,
+        isSubcategory: Boolean,
+        detailsValue: List<CategoryFieldsValue> = listOf()
+    ) {
         categoryDetails.forEach { categoryField ->
             dynamicViewsManager.getFieldByType(categoryField.type)
-                ?.createDynamicView(categoryField, dynamicViewsManager.getValueByName(detailsValue, categoryField.name))
+                ?.createDynamicView(
+                    categoryField,
+                    dynamicViewsManager.getValueByName(detailsValue, categoryField.name)
+                )
                 ?.let { categoryFieldView ->
                     if (isSubcategory) {
                         binding.llSubcategory.addView(categoryFieldView)

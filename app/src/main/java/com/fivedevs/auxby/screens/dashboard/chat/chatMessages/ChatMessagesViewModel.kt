@@ -11,7 +11,6 @@ import com.fivedevs.auxby.data.database.repositories.ChatRepository
 import com.fivedevs.auxby.data.database.repositories.OffersRepository
 import com.fivedevs.auxby.data.database.repositories.UserRepository
 import com.fivedevs.auxby.data.prefs.PreferencesService
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.models.ChatMessage
 import com.fivedevs.auxby.domain.models.ChatMessageRequest
 import com.fivedevs.auxby.domain.models.ChatRoomIdRequest
@@ -19,6 +18,7 @@ import com.fivedevs.auxby.domain.utils.Constants
 import com.fivedevs.auxby.domain.utils.Constants.TODAY
 import com.fivedevs.auxby.domain.utils.Constants.YESTERDAY
 import com.fivedevs.auxby.domain.utils.DateUtils
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
 import com.fivedevs.auxby.screens.dashboard.chat.chatMessages.ChatMessagesActivity.Companion.CHAT_DATE_DIVIDER
@@ -48,9 +48,12 @@ class ChatMessagesViewModel @Inject constructor(
 ) {
 
     var chatRoom: ChatRoom = ChatRoom()
-    val messageSentEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
-    val sendMessageErrorEvent: SingleLiveEvent<Any> = SingleLiveEvent()
-    val populateUserDetailEvent: SingleLiveEvent<ChatRoom> = SingleLiveEvent()
+    val messageSentEvent: SingleLiveEvent<Boolean> =
+        SingleLiveEvent()
+    val sendMessageErrorEvent: SingleLiveEvent<Any> =
+        SingleLiveEvent()
+    val populateUserDetailEvent: SingleLiveEvent<ChatRoom> =
+        SingleLiveEvent()
 
     val message = MutableLiveData<String>()
     val user = MutableLiveData<User>().apply { value = User() }

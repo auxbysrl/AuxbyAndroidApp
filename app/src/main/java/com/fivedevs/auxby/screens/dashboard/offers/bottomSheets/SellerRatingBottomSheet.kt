@@ -10,7 +10,7 @@ import com.fivedevs.auxby.domain.utils.extensions.show
 import com.fivedevs.auxby.screens.base.BaseBottomSheetDialog
 
 class SellerRatingBottomSheet(private val callback: (SellerRatingModel) -> Unit) :
-    BaseBottomSheetDialog(R.layout.view_owner_rating_bottom_sheet, true) {
+    BaseBottomSheetDialog(R.layout.view_owner_rating_bottom_sheet, false) {
 
     private lateinit var root: ViewOwnerRatingBottomSheetBinding
     private val sellerRatingModel = SellerRatingModel()
@@ -30,20 +30,18 @@ class SellerRatingBottomSheet(private val callback: (SellerRatingModel) -> Unit)
         }
 
         root.btnSend.setOnClickListenerWithDelay {
+            callback(sellerRatingModel.apply {
+                rate = root.sellerRatingBar.rating.toInt()
+            })
             getRating()
         }
 
         root.inclCongrats.btnClose.setOnClickListenerWithDelay {
-            callback(sellerRatingModel)
             dismiss()
         }
     }
 
     private fun getRating() {
-        sellerRatingModel.apply {
-            starsCount = root.sellerRatingBar.rating.toInt()
-            feedback = root.etFeedback.text.toString()
-        }
         root.inclCongrats.root.show()
     }
 

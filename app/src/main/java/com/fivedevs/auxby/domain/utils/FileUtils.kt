@@ -16,9 +16,9 @@ import com.fivedevs.auxby.domain.utils.PermissionUtils.hasStoragePermission
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.io.InputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 object FileUtils {
 
@@ -102,12 +102,13 @@ object FileUtils {
     }
 
     fun compressImageFile(file: File, context: Context): File {
-        val options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true
+        val options = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
         BitmapFactory.decodeFile(file.absolutePath, options)
 
-        val maxWidth = 1024 // Set your desired maximum width
-        val maxHeight = 1024 // Set your desired maximum height
+        val maxWidth = 800
+        val maxHeight = 800
         options.inSampleSize = calculateInSampleSize(options, maxWidth, maxHeight)
         options.inJustDecodeBounds = false
 
@@ -116,7 +117,8 @@ object FileUtils {
 
         val compressedFile = createTempImageFile(context)
         val outputStream = FileOutputStream(compressedFile)
-        rotatedBitmap.compress(Bitmap.CompressFormat.WEBP, 70, outputStream) // Adjust quality as needed
+
+        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, outputStream)
         outputStream.close()
 
         return compressedFile

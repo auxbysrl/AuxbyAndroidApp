@@ -34,4 +34,18 @@ object AlerterUtils {
             }
             .show()
     }
+
+    fun showTokenExpiredAlert(activity: Activity, message: String, callbackFunction: (() -> Unit?)? = null) {
+        Alerter.create(activity)
+            .setText(message)
+            .setBackgroundColorInt(activity.getColor(R.color.colorAccent))
+            .enableInfiniteDuration(false)
+            .setTitleAppearance(R.style.AlertErrorTitleAppearance)
+            .setTextAppearance(R.style.AlertErrorSubTitleAppearance)
+            .addButton(activity.getString(R.string.ok), R.style.AlertErrorButtonAppearance) {
+                Alerter.hide()
+                callbackFunction?.invoke()
+            }
+            .show()
+    }
 }

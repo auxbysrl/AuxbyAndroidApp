@@ -40,7 +40,7 @@ class CategoryOffersViewModel @Inject constructor(
         this.categoryId = categoryId
         getLocalCategory(categoryId)
         getLocalOffersByCategory()
-        getOffers()
+        loadFirstPage()
     }
 
     private fun getLocalCategory(categoryId: Int) {
@@ -62,7 +62,7 @@ class CategoryOffersViewModel @Inject constructor(
             .subscribeOn(rxSchedulers.background())
             .doOnNext {
                 if (shouldLoadFirstPageAgain(it.size)) {
-                    loadFirstPageAgain()
+                    loadFirstPage()
                 }
             }
             .observeOn(rxSchedulers.androidUI())
@@ -79,8 +79,11 @@ class CategoryOffersViewModel @Inject constructor(
         return numLocalOffers < 10 && numLocalOffers < categoryModel.value?.noOffers.orZero() && currentPage == 0
     }
 
+    // TODO investigate - seems to be redundant method
     private fun getOffers() {
-        dataApi.getOffers(paginationFilters)
+        dataApi.getOffers(paginationFilters.toMutableMap().apply {
+            put(FiltersEnum.CATEGORIES_KEY.type, categoryId.toString())
+        })
             .subscribeOn(rxSchedulers.network())
             .observeOn(rxSchedulers.background())
             .subscribe({ offersResponse ->
@@ -99,7 +102,7 @@ class CategoryOffersViewModel @Inject constructor(
         })
     }
 
-    fun loadFirstPageAgain() {
+    private fun loadFirstPage() {
         getApiOffers(paginationFilters.toMutableMap().apply {
             put(FiltersEnum.PAGE_KEY.type, "0")
             put(FiltersEnum.CATEGORIES_KEY.type, categoryId.toString())

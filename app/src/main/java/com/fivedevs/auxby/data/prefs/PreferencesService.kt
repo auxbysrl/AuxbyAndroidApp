@@ -69,9 +69,12 @@ class PreferencesService @Inject constructor(@ApplicationContext context: Contex
         encryptedSharedPreferences.edit().remove(USER_ID).apply()
         encryptedSharedPreferences.edit().remove(USER_TOKEN).apply()
         encryptedSharedPreferences.edit().remove(IS_GOOGLE_ACCOUNT).apply()
+        encryptedSharedPreferences.edit().remove(APP_ADS_CODE).apply()
     }
 
     fun isUserLoggedIn() = !getUserToken().isNullOrEmpty()
+
+    fun getUserSeenAdCode() = encryptedSharedPreferences.getString(APP_ADS_CODE, EMPTY).orEmpty()
 
     fun isGoogleAccount() = getBoolean(IS_GOOGLE_ACCOUNT)
 
@@ -99,6 +102,7 @@ class PreferencesService @Inject constructor(@ApplicationContext context: Contex
         const val PUSH_NOTIFICATIONS = "PUSH_NOTIFICATIONS"
         const val TERMS_AND_CONDITIONS = "TERMS_AND_CONDITIONS"
         const val LANGUAGE_APP_SELECTED = "LANGUAGE_APP_SELECTED"
+        const val APP_ADS_CODE = "APP_ADS_CODE"
         const val ENCRYPTED_SHARED_PREFS = "encrypted_shared_prefs"
     }
 }

@@ -3,23 +3,32 @@ package com.fivedevs.auxby.screens.dashboard.offers.categories.categoryOffers
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.ActivityCategoryOffersBinding
 import com.fivedevs.auxby.domain.models.CategoryModel
 import com.fivedevs.auxby.domain.models.OfferModel
 import com.fivedevs.auxby.domain.utils.Constants.SELECTED_OFFER_ID
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.extensions.getName
+import com.fivedevs.auxby.domain.utils.extensions.hide
+import com.fivedevs.auxby.domain.utils.extensions.isNetworkConnected
+import com.fivedevs.auxby.domain.utils.extensions.launchActivity
+import com.fivedevs.auxby.domain.utils.extensions.show
+import com.fivedevs.auxby.domain.utils.extensions.showInternetConnectionDialog
+import com.fivedevs.auxby.domain.utils.pagination.PaginationConstants
 import com.fivedevs.auxby.screens.base.BaseActivity
 import com.fivedevs.auxby.screens.dashboard.offers.adapters.OfferAdapter
+import com.fivedevs.auxby.screens.dashboard.offers.adapters.SmallOfferAdapter
 import com.fivedevs.auxby.screens.dashboard.offers.categories.AllCategoriesActivity
 import com.fivedevs.auxby.screens.dashboard.offers.details.OfferDetailsActivity
+import com.fivedevs.auxby.screens.dashboard.offers.utils.GridSpacingItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CategoryOffersActivity : BaseActivity() {
 
-    private var offerAdapter: OfferAdapter? = null
+    private var offerAdapter: SmallOfferAdapter? = null
     private lateinit var binding: ActivityCategoryOffersBinding
 
     private val viewModel by viewModels<CategoryOffersViewModel>()
@@ -62,6 +71,9 @@ class CategoryOffersActivity : BaseActivity() {
         }
 
         viewModel.offersResponse.observe(this) {
+            viewModel.localUser.value?.let { user ->
+                offerAdapter?.user = user
+            }
             offerAdapter?.addNewOffers(it)
         }
 
@@ -101,18 +113,29 @@ class CategoryOffersActivity : BaseActivity() {
     }
 
     private fun initOffersRv() {
-        offerAdapter = OfferAdapter(
+        offerAdapter = SmallOfferAdapter(
             this,
             mutableListOf(),
             ::onOfferSelected,
             viewModel.shouldSaveOfferPublishSubject,
             viewModel.isUserLoggedIn.value ?: false
         )
-        val layoutManager = LinearLayoutManager(this@CategoryOffersActivity)
+        val layoutManager = GridLayoutManager(this, 2)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (offerAdapter?.getItemViewType(position)) {
+                    PaginationConstants.ITEM -> 1
+                    else -> 2
+                }
+            }
+        }
+
         binding.rvOffers.apply {
             this.layoutManager = layoutManager
             adapter = offerAdapter
         }
+
+        binding.rvOffers.addItemDecoration(GridSpacingItemDecoration(2, 20, false))
 
         binding.rvOffers.itemAnimator = null
         binding.rvOffers.initPagination(layoutManager, ::loadMoreItems)

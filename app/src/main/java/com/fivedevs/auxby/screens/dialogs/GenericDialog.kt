@@ -1,7 +1,11 @@
 package com.fivedevs.auxby.screens.dialogs
 
 import android.os.Bundle
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.fivedevs.auxby.R
@@ -55,34 +59,58 @@ class GenericDialog(
             DialogTypes.DEFAULT -> {
 
             }
+
             DialogTypes.LOG_OUT -> {
                 showLogOutState()
             }
+
             DialogTypes.DELETE_ACCOUNT -> {
                 showDeleteAccountState()
             }
+
             DialogTypes.PUBLISH_OFFER -> {
                 showPublishOfferState(hasCoins = true)
             }
+
             DialogTypes.PUBLISH_OFFER_NO_COINS -> {
                 showPublishOfferState(hasCoins = false)
             }
+
             DialogTypes.CLOSE_AUCTION -> {
                 showCloseAuctionState()
             }
+
             DialogTypes.DELETE_OFFER -> {
                 showDeleteOfferState()
             }
+
             DialogTypes.CONTACT_US -> {
                 showContactUsState()
             }
+
             DialogTypes.ENABLE_OFFER -> {
                 showEnableOfferState()
             }
+
             DialogTypes.DISABLE_OFFER -> {
                 showDisableOfferState()
             }
+
+            DialogTypes.SUCCESSFULLY_PROMOTED -> {
+                showSuccessfullyPromotedState()
+            }
+
+            DialogTypes.RATE_USER_INFO -> {
+                showRateUserState()
+            }
         }
+    }
+
+    private fun showSuccessfullyPromotedState() {
+        binding.btnCancel.hide()
+        binding.tvTittle.hide()
+        binding.tvDescription.text = resources.getString(R.string.offer_successfully_promoted)
+        binding.btnConfirm.text = resources.getString(R.string.ok)
     }
 
     private fun showDisableOfferState() {
@@ -95,7 +123,7 @@ class GenericDialog(
     private fun showEnableOfferState() {
         binding.tvTittle.text = resources.getString(R.string.enable_offer)
         binding.tvDescription.text = resources.getString(R.string.enable_offer_description)
-        binding.tvCoinsBalance.text =  resources.getString(R.string.coins_balance, availableCoins.toString())
+        binding.tvCoinsBalance.text = resources.getString(R.string.coins_balance, availableCoins.toString())
         binding.tvCoinsBalance.show()
     }
 
@@ -103,6 +131,13 @@ class GenericDialog(
         binding.tvTittle.hide()
         binding.btnCancel.hide()
         binding.tvDescription.text = resources.getString(R.string.contact_us_need_help)
+        binding.btnConfirm.text = resources.getString(R.string.ok)
+    }
+
+    private fun showRateUserState() {
+        binding.tvTittle.hide()
+        binding.btnCancel.hide()
+        binding.tvDescription.text = resources.getString(R.string.info_rate_seller)
         binding.btnConfirm.text = resources.getString(R.string.ok)
     }
 
@@ -132,7 +167,7 @@ class GenericDialog(
         binding.tvCoinsBalance.text =
             resources.getString(R.string.coins_balance, availableCoins.toString())
         binding.btnConfirm.text = if (hasCoins) resources.getString(R.string.confirm)
-        else resources.getString(R.string.message)
+        else resources.getString(R.string.buy_coins)
     }
 
     private fun showLogOutState() {
@@ -165,6 +200,7 @@ class GenericDialog(
 
     companion object {
         const val LOGOUT_DIALOG_TAG = "LOGOUT_DIALOG_TAG"
+        const val DEFAULT_DIALOG_TAG = "DEFAULT_DIALOG_TAG"
         const val CLOSE_AUCTION_DIALOG_TAG = "CLOSE_AUCTION_DIALOG_TAG"
         const val DELETE_ACCOUNT_DIALOG_TAG = "DELETE_ACCOUNT_DIALOG_TAG"
         const val PUBLISH_ACCOUNT_DIALOG_TAG = "PUBLISH_ACCOUNT_DIALOG_TAG"

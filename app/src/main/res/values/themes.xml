@@ -84,6 +84,23 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!-- Warning -->
+    <style name="WarningTitleAppearance">
+        <item name="android:textSize">@dimen/text_16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="WarningSubTitleAppearance">
+        <item name="android:textSize">@dimen/text_12sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="WarningButtonAppearance" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="Widget.App.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="hintTextColor">@color/colorPrimary</item>
         <item name="endIconTint">@color/colorPrimary</item>

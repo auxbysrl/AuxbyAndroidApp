@@ -14,6 +14,7 @@ import com.fivedevs.auxby.domain.utils.Validator
 import com.fivedevs.auxby.domain.utils.buttonAnimator.TransitionButton
 import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
 import com.fivedevs.auxby.domain.utils.extensions.setTint
+import com.fivedevs.auxby.domain.utils.extensions.toast
 import com.fivedevs.auxby.domain.utils.views.AlerterUtils
 import com.fivedevs.auxby.screens.authentification.register.RegisterViewModel
 import com.tapadoo.alerter.Alerter
@@ -67,6 +68,7 @@ class PasswordFragment : Fragment() {
     private fun initListeners() {
         binding.btnSignUp.setOnClickListenerWithDelay {
             binding.btnSignUp.startAnimation()
+            parentViewModel.registerUser()
             parentViewModel.registerUser()
             Alerter.hide()
         }

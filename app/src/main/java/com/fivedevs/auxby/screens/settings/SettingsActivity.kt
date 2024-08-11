@@ -11,10 +11,11 @@ import com.fivedevs.auxby.domain.models.LanguageModel
 import com.fivedevs.auxby.domain.utils.extensions.getDrawableCompat
 import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
 import com.fivedevs.auxby.domain.utils.extensions.show
+import com.fivedevs.auxby.domain.utils.views.AlerterUtils
 import com.fivedevs.auxby.screens.base.BaseActivity
 import com.fivedevs.auxby.screens.settings.adapters.LanguagesAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -55,6 +56,10 @@ class SettingsActivity : BaseActivity() {
         viewModel.user.observe(this) { user ->
             user.avatar?.let { it -> populateUserAvatar(it) }
         }
+
+        viewModel.errorUpdateNewsLetter.observe(this) {
+            AlerterUtils.showErrorAlert(this, resources.getString(R.string.something_went_wrong))
+        }
     }
 
     private fun initListeners() {
@@ -81,6 +86,10 @@ class SettingsActivity : BaseActivity() {
 //            viewModel.changeEditNotificationsVisibility()
 //            binding.inclLanguage.btnEditLanguage.isEnabled = true
 //        }
+
+        binding.inclNewsletter.viewNewsletter.setOnClickListenerWithDelay {
+            viewModel.changeNewsletterStatus()
+        }
     }
 
     private fun populateUserAvatar(avatar: String) {

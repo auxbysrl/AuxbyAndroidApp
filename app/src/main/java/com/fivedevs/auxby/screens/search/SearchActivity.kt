@@ -4,18 +4,27 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.ActivitySearchBinding
 import com.fivedevs.auxby.domain.models.AdvancedFiltersModel
 import com.fivedevs.auxby.domain.models.OfferModel
 import com.fivedevs.auxby.domain.utils.Constants
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.extensions.getName
+import com.fivedevs.auxby.domain.utils.extensions.hideKeyboard
+import com.fivedevs.auxby.domain.utils.extensions.isNetworkConnected
+import com.fivedevs.auxby.domain.utils.extensions.launchActivity
+import com.fivedevs.auxby.domain.utils.extensions.orZero
+import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
+import com.fivedevs.auxby.domain.utils.extensions.showInternetConnectionDialog
+import com.fivedevs.auxby.domain.utils.pagination.PaginationConstants
 import com.fivedevs.auxby.domain.utils.views.AlerterUtils
 import com.fivedevs.auxby.domain.utils.views.LoaderDialog
 import com.fivedevs.auxby.screens.base.BaseActivity
-import com.fivedevs.auxby.screens.dashboard.offers.adapters.OfferAdapter
+import com.fivedevs.auxby.screens.dashboard.offers.adapters.SmallOfferAdapter
 import com.fivedevs.auxby.screens.dashboard.offers.details.OfferDetailsActivity
+import com.fivedevs.auxby.screens.dashboard.offers.utils.GridSpacingItemDecoration
 import com.fivedevs.auxby.screens.filterOffers.FilterOffersDialog
 import com.fivedevs.auxby.screens.search.adapter.SearchSuggestionsAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +37,7 @@ class SearchActivity : BaseActivity() {
 
     private val loaderDialog: LoaderDialog by lazy { LoaderDialog(this) }
     private var searchSuggestionsAdapter: SearchSuggestionsAdapter? = null
-    private var offerAdapter: OfferAdapter? = null
+    private var offerAdapter: SmallOfferAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +69,9 @@ class SearchActivity : BaseActivity() {
             if (it.isEmpty()) {
                 offerAdapter?.removeOffers()
             } else {
+                viewModel.localUser.value?.let { user ->
+                    offerAdapter?.user = user
+                }
                 offerAdapter?.updateOffersList(it)
                 setSearchResultText(it)
             }
@@ -76,6 +88,10 @@ class SearchActivity : BaseActivity() {
                 binding.root.clearFocus()
                 binding.root.hideKeyboard()
             }
+        }
+
+        viewModel.shouldSaveOfferPage.observe(this) {
+            handleSaveOffer(it)
         }
     }
 
@@ -119,17 +135,31 @@ class SearchActivity : BaseActivity() {
     }
 
     private fun initOffersAdapter() {
-        offerAdapter = OfferAdapter(
+        offerAdapter = SmallOfferAdapter(
             this,
             mutableListOf(),
             this::onOfferSelected,
             viewModel.shouldSaveOfferPublishSubject,
             viewModel.isUserLoggedIn.value ?: false
         )
+
+        val layoutManager = GridLayoutManager(this, 2)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (offerAdapter?.getItemViewType(position)) {
+                    PaginationConstants.ITEM -> 1
+                    else -> 2
+                }
+            }
+        }
+
         binding.rvOffers.apply {
-            layoutManager = LinearLayoutManager(this@SearchActivity)
+            this.layoutManager = layoutManager
             adapter = offerAdapter
         }
+
+        binding.rvOffers.addItemDecoration(GridSpacingItemDecoration(2, 20, false))
+
     }
 
     private fun setSearchResultText(offers: List<OfferModel>) {
@@ -141,6 +171,14 @@ class SearchActivity : BaseActivity() {
                 tvNoOffers.text = getString(R.string.n_offers_in, "${offers.size}")
                 tvCategoryTitle.text = viewModel?.selectedCategory?.ifEmpty { getString(R.string.all_categories) }
             }
+        }
+    }
+
+    private fun handleSaveOffer(it: OfferModel) {
+        if (this.isNetworkConnected()) {
+            viewModel.saveOfferToFavorites(it)
+        } else {
+            this.showInternetConnectionDialog(false)
         }
     }
 

@@ -31,8 +31,6 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_12dp"
-                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -42,6 +40,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/space_12dp"
                     android:layout_weight="1"
+                    android:layout_marginTop="@dimen/space_8dp"
+                    android:layout_gravity="center_vertical"
                     android:ellipsize="end"
                     android:lines="2"
                     android:textColor="@color/white"
@@ -53,6 +53,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_ribbon_promoted"
+                    android:elevation="@dimen/space_2dp"
+                    android:gravity="center"
                     android:text="@string/promoted"
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="italic"
@@ -62,6 +64,10 @@
                 <include
                     android:id="@+id/inclOfferStateBadge"
                     layout="@layout/offer_state_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/space_11dp"
+                    android:layout_marginTop="@dimen/space_12dp"
                     android:visibility="gone" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>

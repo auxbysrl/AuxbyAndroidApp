@@ -1,16 +1,15 @@
 package com.fivedevs.auxby.domain.utils
 
+import android.app.ActivityManager
+import android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+import android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.fivedevs.auxby.BuildConfig
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.domain.models.ErrorResponse
 import com.fivedevs.auxby.domain.models.enums.ApiTypeEnum
@@ -67,7 +66,7 @@ object Utils {
     }
 
     fun getFullImageUrl(partUrl: String): String {
-        return partUrl.replace("./", ApiTypeEnum.AUXBY_PLATFORM.url)
+        return partUrl.replace("./", ApiTypeEnum.AUXBY_PLATFORM.url + "/")
     }
 
     fun setCollapsingToolbarTitle(appBarLayout: AppBarLayout, tvToolbar: TextView) {
@@ -100,5 +99,29 @@ object Utils {
         val intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:$phoneNumber")
         context.startActivity(intent)
+    }
+
+    fun isForegrounded(): Boolean {
+        val isForegrounded: Boolean = try {
+            val appProcessInfo = ActivityManager.RunningAppProcessInfo()
+            ActivityManager.getMyMemoryState(appProcessInfo);
+            (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE)
+        } catch (e: Exception) {
+            false
+        }
+        return isForegrounded
+    }
+
+    fun convertMicrosToPrice(priceMicros: Long): Double {
+        return priceMicros.toDouble() / 1000000.0
+    }
+
+    fun shareLink(context: Context, url: String) {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, url)
+            type = "text/plain"
+        }
+        context.startActivity(Intent.createChooser(intent, "Share via"))
     }
 }

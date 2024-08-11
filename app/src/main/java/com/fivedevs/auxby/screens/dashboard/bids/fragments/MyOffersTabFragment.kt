@@ -15,17 +15,20 @@ import com.fivedevs.auxby.domain.utils.Constants.IS_INACTIVE_OFFER
 import com.fivedevs.auxby.domain.utils.Constants.MY_BIDS_TYPE
 import com.fivedevs.auxby.domain.utils.Constants.MY_OFFERS_TYPE
 import com.fivedevs.auxby.domain.utils.Constants.SELECTED_OFFER_ID
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.extensions.hide
+import com.fivedevs.auxby.domain.utils.extensions.isNetworkConnected
+import com.fivedevs.auxby.domain.utils.extensions.launchActivity
+import com.fivedevs.auxby.domain.utils.extensions.show
+import com.fivedevs.auxby.domain.utils.extensions.showInternetConnectionDialog
 import com.fivedevs.auxby.screens.dashboard.bids.MyOffersViewModel
 import com.fivedevs.auxby.screens.dashboard.bids.adapters.MyBidsPagerAdapter.Companion.ACTIVE_OFFERS_TAB_POS
 import com.fivedevs.auxby.screens.dashboard.bids.adapters.MyBidsPagerAdapter.Companion.INACTIVE_OFFERS_TAB_POS
 import com.fivedevs.auxby.screens.dashboard.offers.adapters.OfferAdapter
 import com.fivedevs.auxby.screens.dashboard.offers.details.OfferDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
-class MyOffersTabFragment(private val tabPosition: Int) : Fragment() {
+class MyOffersTabFragment(private val tabPosition: Int = 0) : Fragment() {
 
     private lateinit var binding: FragmentMyOffersBinding
     private val shareViewModel: MyOffersViewModel by viewModels({ requireParentFragment() })
@@ -49,7 +52,7 @@ class MyOffersTabFragment(private val tabPosition: Int) : Fragment() {
 
     private fun removeBottomPadding() {
         if (shareViewModel.fragmentType == MY_OFFERS_TYPE) {
-            binding.rvOffers.setPadding(0,0,0,0)
+            binding.rvOffers.setPadding(0, 0, 0, 0)
         }
     }
 
@@ -111,6 +114,9 @@ class MyOffersTabFragment(private val tabPosition: Int) : Fragment() {
         } else {
             binding.inclEmptyListView.root.hide()
             binding.rvOffers.show()
+            shareViewModel.localUser.value?.let {
+                offerAdapter?.user = it
+            }
             offerAdapter?.updateOffersList(offersList)
         }
     }

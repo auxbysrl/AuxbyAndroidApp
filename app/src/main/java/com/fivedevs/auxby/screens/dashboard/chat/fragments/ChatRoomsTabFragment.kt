@@ -11,24 +11,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.data.database.entities.ChatRoom
 import com.fivedevs.auxby.databinding.BuySellFragmentBinding
+import com.fivedevs.auxby.domain.utils.Constants.TAB_POSITION_KEY
 import com.fivedevs.auxby.domain.utils.extensions.hide
 import com.fivedevs.auxby.domain.utils.extensions.launchActivity
 import com.fivedevs.auxby.domain.utils.extensions.show
 import com.fivedevs.auxby.screens.dashboard.chat.ChatViewModel
-import com.fivedevs.auxby.screens.dashboard.chat.adapters.ChatRoomsAdapter
 import com.fivedevs.auxby.screens.dashboard.chat.adapters.ChatPagerAdapter.Companion.BUY_TAB_POSITION
 import com.fivedevs.auxby.screens.dashboard.chat.adapters.ChatPagerAdapter.Companion.SELL_TAB_POSITION
+import com.fivedevs.auxby.screens.dashboard.chat.adapters.ChatRoomsAdapter
 import com.fivedevs.auxby.screens.dashboard.chat.chatMessages.ChatMessagesActivity
 import com.fivedevs.auxby.screens.dashboard.chat.chatMessages.ChatMessagesActivity.Companion.CHAT_ROOM_DETAILS
 import com.fivedevs.auxby.screens.dashboard.chat.chatMessages.ChatMessagesActivity.Companion.CHAT_ROOM_TYPE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ChatRoomsTabFragment(private val tabPosition: Int) : Fragment() {
+class ChatRoomsTabFragment() : Fragment() {
 
     private lateinit var binding: BuySellFragmentBinding
     private val sharedViewModel: ChatViewModel by viewModels({ requireParentFragment() })
     private var chatRoomsAdapter: ChatRoomsAdapter? = null
+    private var tabPosition: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -37,10 +39,19 @@ class ChatRoomsTabFragment(private val tabPosition: Int) : Fragment() {
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retrieveBundleData()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initOffersAdapter()
         initObservers()
+    }
+
+    private fun retrieveBundleData() {
+        tabPosition = arguments?.getInt(TAB_POSITION_KEY) ?: 0
     }
 
     private fun initObservers() {
@@ -106,7 +117,12 @@ class ChatRoomsTabFragment(private val tabPosition: Int) : Fragment() {
     }
 
     companion object {
-        fun newInstance(tabPosition: Int) =
-            ChatRoomsTabFragment(tabPosition)
+        fun newInstance(tabPosition: Int = BUY_TAB_POSITION): Fragment {
+            val chatRoomsTabFragment = ChatRoomsTabFragment()
+            val args = Bundle()
+            args.putInt(TAB_POSITION_KEY, tabPosition)
+            chatRoomsTabFragment.arguments = args
+            return chatRoomsTabFragment
+        }
     }
 }

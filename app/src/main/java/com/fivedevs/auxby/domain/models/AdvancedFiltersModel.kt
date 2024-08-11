@@ -46,7 +46,7 @@ data class AdvancedFiltersModel(
 data class PriceFilter(
     var highestPrice: Int = Int.MAX_VALUE,
     var lowestPrice: Int = 0,
-    var currencyType: String? = null
+    var currencyType: String? = CurrencyEnum.RON.currencyType
 )
 
 data class SortDetails(

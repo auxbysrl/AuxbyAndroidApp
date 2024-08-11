@@ -57,8 +57,9 @@ class MyOffersViewModel @Inject constructor(
         offersRepository.getBids()
             .subscribeOn(rxSchedulers.background())
             .observeOn(rxSchedulers.androidUI())
+            .distinctUntilChanged()
+            .doOnError { Timber.e(it) }
             .subscribe({ offers ->
-                Timber.i("getLocalMyBids")
                 myBidOffers.value = offers
             }, {
                 myBidOffers.value = mutableListOf()
@@ -70,7 +71,6 @@ class MyOffersViewModel @Inject constructor(
             .subscribeOn(rxSchedulers.background())
             .observeOn(rxSchedulers.androidUI())
             .subscribe({ offers ->
-                Timber.i("getLocalMyOffers")
                 myOffers.value = offers
             }, {
                 myOffers.value = mutableListOf()

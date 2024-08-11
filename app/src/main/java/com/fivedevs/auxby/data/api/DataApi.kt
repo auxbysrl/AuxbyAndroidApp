@@ -1,12 +1,12 @@
 package com.fivedevs.auxby.data.api
 
 import com.fivedevs.auxby.data.api.response.BidActionResponse
+import com.fivedevs.auxby.data.api.response.DeepLink
 import com.fivedevs.auxby.data.database.entities.Category
 import com.fivedevs.auxby.data.database.entities.CategoryDetails
 import com.fivedevs.auxby.domain.models.*
 import com.fivedevs.auxby.domain.models.enums.ApiTypeEnum
 import com.fivedevs.auxby.domain.utils.Api
-import com.fivedevs.auxby.domain.utils.NoTokenNeed
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import okhttp3.MultipartBody
@@ -25,14 +25,13 @@ interface DataApi {
         @QueryMap filters: Map<String, String>
     ): Observable<OffersResponse>
 
+    @GET("/api/v1/product/promoted")
+    @Api(ApiTypeEnum.AUXBY_OFFER_MANAGEMENT)
+    fun getPromotedOffers(): Observable<List<OfferModel>>
+
     @GET("/api/v1/category/details")
     @Api(ApiTypeEnum.AUXBY_PLATFORM)
     fun getCategoriesDetails(): Observable<List<CategoryDetails>>
-
-    @NoTokenNeed
-    @GET("/api/v1/bundle")
-    @Api(ApiTypeEnum.AUXBY_PLATFORM)
-    fun getBundles(): Observable<MutableList<CoinBundle>>
 
     @GET("/api/v1/product/{id}")
     @Api(ApiTypeEnum.AUXBY_OFFER_MANAGEMENT)
@@ -54,6 +53,10 @@ interface DataApi {
     @Api(ApiTypeEnum.AUXBY_OFFER_MANAGEMENT)
     fun getSearchSuggestions(@Query("offerTitle") searchText: String): Observable<CategoryResult>
 
+    @GET("/api/v1/application/currencies")
+    @Api(ApiTypeEnum.AUXBY_PLATFORM)
+    fun getAllCurrencies(): Observable<List<CurrencyModel>>
+
     // POST routes
     @POST("/api/v1/product")
     @Api(ApiTypeEnum.AUXBY_OFFER_MANAGEMENT)
@@ -72,15 +75,13 @@ interface DataApi {
         @Path("offerId") id: Long, @Body offerModel: OfferModel
     ): Observable<Any>
 
-    @POST("/api/v1/product/{offerId}/report")
-    @Api(ApiTypeEnum.AUXBY_OFFER_MANAGEMENT)
-    fun reportOffer(
-        @Path("offerId") offerId: Long, @Body reportOfferModel: ReportOfferModel
-    ): Observable<Any>
-
     @POST("/api/v1/product/search")
     @Api(ApiTypeEnum.AUXBY_OFFER_MANAGEMENT)
     fun getSearchOffers(@Body searchOffersModel: AdvancedFiltersModel): Observable<List<OfferModel>>
+
+    @POST("/api/v1/product/{offerId}/promote")
+    @Api(ApiTypeEnum.AUXBY_OFFER_MANAGEMENT)
+    fun promoteCurrentOffer(@Path("offerId") offerId: Long, @Body offerPromoteOfferRequest: PromoteOfferRequest): Observable<Any>
 
     // PUT routes
     @PUT("/api/v1/product/{id}")
@@ -91,8 +92,10 @@ interface DataApi {
 
     @PUT("/api/v1/product/{offerId}/changeStatus")
     @Api(ApiTypeEnum.AUXBY_OFFER_MANAGEMENT)
-    fun changeOfferStatus(@Path("offerId") offerId: Long,
-                          @Body requiredCoinsModel: RequiredCoinsModel): Observable<Any>
+    fun changeOfferStatus(
+        @Path("offerId") offerId: Long,
+        @Body requiredCoinsModel: RequiredCoinsModel
+    ): Observable<Any>
 
     // DELETE routes
     @DELETE("/api/v1/product/{id}")
@@ -107,4 +110,13 @@ interface DataApi {
     @POST("/api/v1/product/bid")
     @Api(ApiTypeEnum.AUXBY_OFFER_MANAGEMENT)
     fun placeBid(@Body placeBidModel: PlaceBidModel): Observable<BidActionResponse>
+
+    @GET("/api/v1/product/generate-deep-link/{id}")
+    @Api(ApiTypeEnum.AUXBY_OFFER_MANAGEMENT)
+    fun getOfferDeepLink(@Path("id") offerId: Long): Observable<DeepLink>
+
+    @GET("/api/v1/ads")
+    @Api(ApiTypeEnum.AUXBY_PLATFORM)
+    fun getAppAds(): Observable<List<AdsModel>>
+
 }

@@ -2,13 +2,14 @@ package com.fivedevs.auxby.screens.settings
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.fivedevs.auxby.data.api.UserApi
 import com.fivedevs.auxby.data.database.entities.User
 import com.fivedevs.auxby.data.database.repositories.UserRepository
 import com.fivedevs.auxby.data.prefs.PreferencesService
 import com.fivedevs.auxby.data.prefs.PreferencesService.Companion.LANGUAGE_APP_SELECTED
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.models.LanguageModel
 import com.fivedevs.auxby.domain.models.enums.LanguagesCodeEnum
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
+    private val userApi: UserApi,
     private val rxSchedulers: RxSchedulers,
     private val userRepository: UserRepository,
     private val preferencesService: PreferencesService,
@@ -27,17 +29,19 @@ class SettingsViewModel @Inject constructor(
 
     val languageApp = MutableLiveData<String>()
     val languageChanged = SingleLiveEvent<Any>()
+    val errorUpdateNewsLetter = SingleLiveEvent<Any>()
     val languagesList = MutableLiveData<List<LanguageModel>>()
     val languageCodeSelected = MutableLiveData<LanguageModel>()
     val user = MutableLiveData<User>().apply { value = User() }
     val showEditLanguage = MutableLiveData<Boolean>().apply { value = false }
     val showEditNotifications = MutableLiveData<Boolean>().apply { value = false }
+    val newsletterStatus = MutableLiveData<Boolean>().apply { value = true }
 
     val languageSelectedPublishSubject: PublishSubject<LanguageModel> = PublishSubject.create()
 
     init {
         onLanguageClicked()
-        getUserFromDB()
+        getUser()
     }
 
     fun changeEditLanguageVisibility() {
@@ -76,14 +80,32 @@ class SettingsViewModel @Inject constructor(
         this.languageCodeSelected.value = languages.first { it.isSelected }
     }
 
-    private fun getUserFromDB() {
-        userRepository.getCurrentUser()
+    fun changeNewsletterStatus() {
+        userApi.changeNewsletterStatus()
+            .subscribeOn(rxSchedulers.network())
+            .observeOn(rxSchedulers.androidUI())
+            .subscribe({
+                newsletterStatus.value != newsletterStatus.value
+            }, {
+                errorUpdateNewsLetter.call()
+                Timber.e(it)
+            })
+            .disposeBy(compositeDisposable)
+    }
+
+    fun getUser() {
+        userApi.getUser()
+            .subscribeOn(rxSchedulers.network())
+            .observeOn(rxSchedulers.background())
+            .doOnNext { userRepository.insertUser(it) }
             .observeOn(rxSchedulers.androidUI())
             .subscribe({
                 user.value = it
+                newsletterStatus.value = it.isSubscribedToNewsletter
             }, {
                 Timber.e(it)
-            }).disposeBy(compositeDisposable)
+            })
+            .disposeBy(compositeDisposable)
     }
 
     private fun getRightSelectedLanguage(deviceLanguageCode: String): String {

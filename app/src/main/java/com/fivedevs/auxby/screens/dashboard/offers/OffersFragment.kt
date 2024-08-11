@@ -11,22 +11,31 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.FragmentOffersBinding
 import com.fivedevs.auxby.domain.models.CategoryModel
 import com.fivedevs.auxby.domain.models.OfferModel
 import com.fivedevs.auxby.domain.utils.Constants.SELECTED_OFFER_ID
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.extensions.autoScroll
+import com.fivedevs.auxby.domain.utils.extensions.isNetworkConnected
+import com.fivedevs.auxby.domain.utils.extensions.launchActivity
+import com.fivedevs.auxby.domain.utils.extensions.orZero
+import com.fivedevs.auxby.domain.utils.extensions.showInternetConnectionDialog
+import com.fivedevs.auxby.domain.utils.pagination.PaginationConstants
 import com.fivedevs.auxby.screens.dashboard.DashboardActivity.Companion.showGuestModeBottomSheet
 import com.fivedevs.auxby.screens.dashboard.DashboardViewModel
 import com.fivedevs.auxby.screens.dashboard.offers.adapters.CategoryAdapter
-import com.fivedevs.auxby.screens.dashboard.offers.adapters.OfferAdapter
 import com.fivedevs.auxby.screens.dashboard.offers.adapters.PromotedOffersAdapter
+import com.fivedevs.auxby.screens.dashboard.offers.adapters.SmallOfferAdapter
 import com.fivedevs.auxby.screens.dashboard.offers.categories.AllCategoriesActivity
 import com.fivedevs.auxby.screens.dashboard.offers.categories.categoryOffers.CategoryOffersActivity
 import com.fivedevs.auxby.screens.dashboard.offers.details.OfferDetailsActivity
+import com.fivedevs.auxby.screens.dashboard.offers.utils.CarouselPageTransformer
+import com.fivedevs.auxby.screens.dashboard.offers.utils.GridSpacingItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class OffersFragment : Fragment() {
@@ -35,7 +44,7 @@ class OffersFragment : Fragment() {
     private val viewModel by viewModels<OffersViewModel>()
     private val parentViewModel: DashboardViewModel by activityViewModels()
 
-    private var offerAdapter: OfferAdapter? = null
+    private var offerAdapter: SmallOfferAdapter? = null
     private var categoryAdapter: CategoryAdapter? = null
     private var promotedOffersAdapter: PromotedOffersAdapter? = null
     private val carouselHandler = Handler(Looper.getMainLooper())
@@ -51,10 +60,11 @@ class OffersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.nestedScroll.recyclerView = binding.rvOffers
         initPullToRefreshPage()
         initCategoryRv()
-        initOffersRv()
         initObservers()
+        initOffersRv()
         viewModel.onViewCreated()
     }
 
@@ -64,12 +74,19 @@ class OffersFragment : Fragment() {
                 requireContext(), R.color.colorPrimary
             )
         )
+
         binding.pullToRefreshLayout.setOnRefreshListener {
-            parentViewModel.clearOffers()
-            binding.pullToRefreshLayout.isEnabled = requireContext().isNetworkConnected()
-            resetPagination()
-            parentViewModel.getData()
+            refreshData()
         }
+    }
+
+    private fun refreshData() {
+        viewModel.showShimmerAnimation.value = true
+//        parentViewModel.clearOffers()
+        binding.pullToRefreshLayout.isEnabled = requireContext().isNetworkConnected()
+        resetPagination()
+        parentViewModel.getData()
+        parentViewModel.getUser()
     }
 
     private fun initObservers() {
@@ -83,7 +100,9 @@ class OffersFragment : Fragment() {
 
         viewModel.offersResponse.observe(viewLifecycleOwner) { offers ->
             hidePullRefreshLayout()
-            handleOfferResponse(offers)
+            if (offers.isNotEmpty()) {
+                handleOfferResponse(offers)
+            }
         }
 
         viewModel.paginationOffersResponse.observe(viewLifecycleOwner) {
@@ -115,10 +134,20 @@ class OffersFragment : Fragment() {
                 putExtra(SELECTED_OFFER_ID, offerId)
             }
         }
+
+        parentViewModel.refreshDataEvent.observe(viewLifecycleOwner) {
+            refreshData()
+        }
     }
 
     private fun handleOfferResponse(offers: List<OfferModel>) {
-        offerAdapter?.addNewOffers(offers, true)
+        parentViewModel.localUser.value?.let {
+            offerAdapter?.user = it
+        }
+        if (offers.isNotEmpty()) {
+            offerAdapter?.updateOffersList(offers)
+            //offerAdapter?.addNewOffers(offers, true)
+        }
     }
 
     private fun hidePullRefreshLayout() {
@@ -152,37 +181,59 @@ class OffersFragment : Fragment() {
             this::onOfferSelected,
         )
         binding.carouselViewPager.adapter = promotedOffersAdapter
-        binding.carouselViewPager.currentItem = 0
+        binding.carouselViewPager.setPageTransformer(CarouselPageTransformer())
+        binding.carouselViewPager.currentItem = 1
+        binding.carouselViewPager.offscreenPageLimit = 3
         binding.carouselViewPager.autoScroll(carouselHandler)
     }
 
     private fun initOffersRv() {
-        offerAdapter = OfferAdapter(
+        offerAdapter = SmallOfferAdapter(
             requireContext(),
             mutableListOf(),
             this::onOfferSelected,
             viewModel.shouldSaveOfferPublishSubject,
             viewModel.isUserLoggedIn.value ?: false
         )
-        val layoutManager = LinearLayoutManager(requireContext())
+        val layoutManager = GridLayoutManager(requireContext(), 2)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (offerAdapter?.getItemViewType(position)) {
+                    PaginationConstants.ITEM -> 1
+                    else -> 2
+                }
+            }
+        }
+
         binding.rvOffers.apply {
             this.layoutManager = layoutManager
             adapter = offerAdapter
         }
+
+        binding.rvOffers.addItemDecoration(GridSpacingItemDecoration(2, 20, false))
 
         binding.rvOffers.itemAnimator = null
         binding.nestedScroll.initPagination(layoutManager, ::loadMoreItems)
     }
 
     private fun loadMoreItems() {
-        binding.nestedScroll.isLoading = true
-        offerAdapter?.addLoadingFooter()
-        viewModel.loadMoreOffers()
+        viewModel.currentPage += 1
+        if (viewModel.currentPage < viewModel.totalPagesCall || viewModel.totalPagesCall == 0) {
+            binding.nestedScroll.isLoading = true
+            offerAdapter?.addLoadingFooter()
+            viewModel.loadMoreOffers()
+        } else {
+            Timber.d("Reached the end of the pages")
+        }
     }
 
     private fun updatePaginationAdapter(offers: List<OfferModel>) {
         offerAdapter?.removeLoadingFooter()
-        offerAdapter?.addNewOffers(offers)
+
+        if (offers.isNotEmpty()) {
+            offerAdapter?.addNewOffers(offers)
+        }
+
         if (viewModel.currentPage == viewModel.totalPagesCall) {
             binding.nestedScroll.isLastPage = true
         }
@@ -196,9 +247,11 @@ class OffersFragment : Fragment() {
                     putExtra(AllCategoriesActivity.SELECTED_CATEGORY_ID, it.id)
                 }
             }
+
             it.noOffers.orZero() == 1 -> {
                 viewModel.getFilteredCategory(it)
             }
+
             else -> {}
         }
     }

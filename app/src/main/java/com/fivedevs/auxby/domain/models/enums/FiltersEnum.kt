@@ -7,6 +7,7 @@ enum class FiltersEnum(val type: String) {
     SORT_ORDER_KEY("DESC"),
     TITLE_KEY("title"),
     CATEGORIES_KEY("categories"),
+    USER_OFFERS_KEY("userName"),
     IS_ACTION_KEY("isOnAuction"),
     IS_PROMOTED_KEY("isPromotedOnly"),
     SORT_BY_PUBLISH_DATE_KEY("publishDate"),

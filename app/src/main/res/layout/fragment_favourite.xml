@@ -24,7 +24,7 @@
             android:clipToPadding="false"
             android:paddingStart="@dimen/space_16dp"
             android:paddingEnd="@dimen/space_16dp"
-            android:paddingBottom="@dimen/space_100dp"
+            android:paddingBottom="@dimen/space_110dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <include

@@ -7,11 +7,11 @@ import com.fivedevs.auxby.data.database.repositories.CategoryRepository
 import com.fivedevs.auxby.data.database.repositories.OffersRepository
 import com.fivedevs.auxby.data.database.repositories.UserRepository
 import com.fivedevs.auxby.data.prefs.PreferencesService
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.models.AdvancedFiltersModel
 import com.fivedevs.auxby.domain.models.CategoryDetailsModel
 import com.fivedevs.auxby.domain.models.CategoryModel
 import com.fivedevs.auxby.domain.models.OfferRequestModel
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
 import com.fivedevs.auxby.screens.dashboard.offers.baseViewModel.BaseOffersViewModel
@@ -37,7 +37,8 @@ class FilterOffersViewModel @Inject constructor(
     offersRepository, preferencesService, compositeDisposable
 ) {
 
-    val categoryDetailsResponse: SingleLiveEvent<CategoryDetailsModel> = SingleLiveEvent()
+    val categoryDetailsResponse: SingleLiveEvent<CategoryDetailsModel> =
+        SingleLiveEvent()
 
     val selectedCategory: MutableLiveData<CategoryModel> = MutableLiveData()
     val selectedSubcategory: MutableLiveData<CategoryDetailsModel> = MutableLiveData()

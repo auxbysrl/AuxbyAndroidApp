@@ -3,12 +3,13 @@ package com.fivedevs.auxby.screens.authentification.base
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fivedevs.auxby.data.api.UserApi
+import com.fivedevs.auxby.data.database.entities.User
 import com.fivedevs.auxby.data.database.repositories.UserRepository
 import com.fivedevs.auxby.data.prefs.PreferencesService
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.models.UserLoginRequest
 import com.fivedevs.auxby.domain.models.UserRegisterRequest
 import com.fivedevs.auxby.domain.utils.Constants
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -32,6 +33,12 @@ abstract class BaseUserViewModel(
 
     fun checkIfUserLoggedIn() {
         isUserLoggedIn.value = preferencesService.isUserLoggedIn()
+    }
+
+    val localUser = MutableLiveData<User>().apply { value = User() }
+
+    init {
+        getUserFromDB()
     }
 
     fun checkConfirmationEmail() {
@@ -74,11 +81,41 @@ abstract class BaseUserViewModel(
                 .doOnNext { userRepository.insertUser(it) }
                 .observeOn(rxSchedulers.androidUI())
                 .doOnError { handleDoOnError(it) }
-                .subscribe({ }, {
+                .subscribe({
+                    localUser.value = it
+                }, {
                     handleDoOnError(it)
                 })
                 .disposeBy(compositeDisposable)
         }
+    }
+
+    fun getUserOnLoginEvent() {
+        userApi.getUser()
+            .subscribeOn(rxSchedulers.network())
+            .observeOn(rxSchedulers.background())
+            .doOnNext { userRepository.insertUser(it) }
+            .observeOn(rxSchedulers.androidUI())
+            .doOnError { handleDoOnError(it) }
+            .subscribe({
+                localUser.value = it
+            }, {
+                handleDoOnError(it)
+            })
+            .disposeBy(compositeDisposable)
+    }
+
+    fun getUserFromDB() {
+        userRepository.getCurrentUser()
+            .subscribeOn(rxSchedulers.background())
+            .observeOn(rxSchedulers.androidUI())
+            .doOnError { handleDoOnError(it) }
+            .subscribe({
+                localUser.value = it
+            }, {
+                getUser()
+                handleDoOnError(it)
+            }).disposeBy(compositeDisposable)
     }
 
     private fun handleDoOnError(it: Throwable) {

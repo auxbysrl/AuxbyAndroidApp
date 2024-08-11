@@ -103,6 +103,7 @@
                     app:viewModel="@{viewModel}" />
 
             </FrameLayout>
+
         </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

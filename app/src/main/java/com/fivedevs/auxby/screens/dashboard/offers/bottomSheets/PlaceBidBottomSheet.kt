@@ -1,5 +1,6 @@
 package com.fivedevs.auxby.screens.dashboard.offers.bottomSheets
 
+import android.content.DialogInterface
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.databinding.ViewDataBinding
@@ -11,18 +12,25 @@ import com.fivedevs.auxby.domain.models.OfferModel
 import com.fivedevs.auxby.domain.models.PlaceBidModel
 import com.fivedevs.auxby.domain.utils.Formatters.priceDecimalFormat
 import com.fivedevs.auxby.domain.utils.OfferUtils.getCurrency
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.Utils
+import com.fivedevs.auxby.domain.utils.extensions.invisible
+import com.fivedevs.auxby.domain.utils.extensions.orZero
+import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
+import com.fivedevs.auxby.domain.utils.extensions.show
+import com.fivedevs.auxby.domain.utils.extensions.toDecimalsOnly
 import com.fivedevs.auxby.screens.base.BaseBottomSheetDialog
+import com.tapadoo.alerter.Alerter
 
 class PlaceBidBottomSheet(
     private val user: MutableLiveData<User>,
     private val offer: MutableLiveData<OfferModel>,
     private val placeBidCost: Int,
     private val placeBidCallback: (PlaceBidModel) -> Unit
-) :
-    BaseBottomSheetDialog(R.layout.view_place_bid_button_expanded, false) {
+) : BaseBottomSheetDialog(R.layout.view_place_bid_button_expanded, true) {
 
     private lateinit var root: ViewPlaceBidButtonExpandedBinding
+
+    override fun getTheme(): Int = R.style.BottomSheetDialogTransparentTheme
 
     override fun getContentView(binding: ViewDataBinding) {
         root = binding as ViewPlaceBidButtonExpandedBinding
@@ -58,6 +66,13 @@ class PlaceBidBottomSheet(
     }
 
     private fun initListeners() {
+        root.tvTermsAndConditions.setOnClickListenerWithDelay {
+            Utils.redirectToBrowserLink(
+                requireActivity(),
+                resources.getString(R.string.link_terms_conditions)
+            )
+        }
+
         root.btnCancel.setOnClickListenerWithDelay {
             dismiss()
         }
@@ -152,5 +167,10 @@ class PlaceBidBottomSheet(
             offer.value?.id ?: 0,
             root.etBidValue.text.toString().toDecimalsOnly().toInt()
         )
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        Alerter.hide()
     }
 }

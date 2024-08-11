@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.FragmentOffersListBinding
 import com.fivedevs.auxby.domain.utils.Constants.MY_BIDS_TYPE
+import com.fivedevs.auxby.domain.utils.Constants.MY_BIDS_TYPE_KEY
 import com.fivedevs.auxby.domain.utils.Constants.MY_OFFERS_TYPE
 import com.fivedevs.auxby.domain.utils.extensions.launchActivityWithFinish
 import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
@@ -19,13 +20,13 @@ import com.fivedevs.auxby.screens.dashboard.bids.adapters.MyBidsPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
-class MyOffersFragment(private val fragmentType: Int) : Fragment() {
+class MyOffersFragment : Fragment() {
 
     private lateinit var binding: FragmentOffersListBinding
     private val viewModel by viewModels<MyOffersViewModel>()
+    private var fragmentType: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +38,11 @@ class MyOffersFragment(private val fragmentType: Int) : Fragment() {
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retrieveBundleData()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initTabLayout()
@@ -45,16 +51,18 @@ class MyOffersFragment(private val fragmentType: Int) : Fragment() {
         getMyBids()
     }
 
+    private fun retrieveBundleData() {
+        fragmentType = arguments?.getInt(MY_BIDS_TYPE_KEY) ?: 0
+    }
+
     private fun initObservers() {
         when (fragmentType) {
             MY_OFFERS_TYPE -> {
                 viewModel.myOffers.observe(viewLifecycleOwner) { offers ->
-                    Timber.i("initObservers MY_OFFERS_TYPE")
                     viewModel.filterOffers(offers)
                 }
             }
             else -> {
-                Timber.i("initObservers MY_BIDS_TYPE")
                 viewModel.myBidOffers.observe(viewLifecycleOwner) { offers ->
                     viewModel.filterOffers(offers)
                 }
@@ -108,6 +116,12 @@ class MyOffersFragment(private val fragmentType: Int) : Fragment() {
     }
 
     companion object {
-        fun newInstance(type: Int = MY_BIDS_TYPE) = MyOffersFragment(type)
+        fun newInstance(type: Int = MY_BIDS_TYPE): Fragment {
+            val myOffersFragment = MyOffersFragment()
+            val args = Bundle()
+            args.putInt(MY_BIDS_TYPE_KEY, type)
+            myOffersFragment.arguments = args
+            return myOffersFragment
+        }
     }
 }

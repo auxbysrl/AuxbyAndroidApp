@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/space_4dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_3dp"
+        android:elevation="@dimen/space_1dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/space_8dp"
+        app:cardElevation="@dimen/space_1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/flOffer"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="4:2.8"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivOffer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:foreground="@color/gray_disabled_transparent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_placeholder_large" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvOfferTitle"
+                        style="@style/TextMontserratSemiBold16sp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginHorizontal="@dimen/space_6dp"
+                        android:layout_marginTop="@dimen/space_6dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:lines="2"
+                        android:padding="@dimen/space_1dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_10sp"
+                        tools:text="OnePlus Watch" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/ivRibbon"
+                        style="@style/TextMontserratSemiBold14sp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_ribbon_promoted"
+                        android:elevation="@dimen/space_2dp"
+                        android:gravity="center"
+                        android:layout_weight="0.75"
+                        android:textSize="@dimen/space_10dp"
+                        android:text="@string/promoted"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="italic"
+                        android:translationX="@dimen/space_2dp"
+                        android:visibility="visible" />
+
+                    <include
+                        android:id="@+id/inclOfferStateBadge"
+                        layout="@layout/offer_state_badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_12dp"
+                        android:layout_marginEnd="@dimen/space_11dp"
+                        android:visibility="gone" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </FrameLayout>
+
+            <!--            <FrameLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@+id/flOffer"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/flOffer"-->
+            <!--                app:layout_constraintVertical_bias="1">-->
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivFavorite"
+                android:layout_width="@dimen/space_40dp"
+                android:layout_height="@dimen/space_40dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/space_10dp"
+                android:elevation="@dimen/space_10dp"
+                android:padding="@dimen/space_5dp"
+                android:src="@drawable/ic_favorite_saved"
+                app:layout_constraintBottom_toTopOf="@+id/view4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/view4" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@drawable/bg_rounded_bottom_sheet"
+                android:backgroundTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/flOffer" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:elevation="@dimen/space_0dp"
+                app:cardElevation="@dimen/space_0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/flOffer">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:paddingHorizontal="@dimen/space_6dp"
+                    android:paddingVertical="@dimen/space_8dp">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvLocation"
+                        style="@style/TextMontserratMedium12sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/space_20dp"
+                        android:drawablePadding="@dimen/space_2dp"
+                        android:textSize="@dimen/text_10sp"
+                        android:gravity="center_vertical"
+                        app:drawableStartCompat="@drawable/ic_map_pin"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="OnePlus Watch" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvDate"
+                        style="@style/TextMontserratMedium12sp"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/space_20dp"
+                        android:layout_marginEnd="@dimen/space_16dp"
+                        android:drawablePadding="@dimen/space_2dp"
+                        android:textSize="@dimen/text_10sp"
+                        android:gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        app:drawableStartCompat="@drawable/ic_calendar"
+                        app:layout_constraintEnd_toStartOf="@+id/linearLayoutCompat2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvLocation"
+                        tools:text="4d 07h | Monday, 4:45am" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvDescription"
+                        style="@style/TextMontserratMedium12sp"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/space_20dp"
+                        android:layout_marginEnd="@dimen/space_16dp"
+                        android:drawablePadding="@dimen/space_2dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:gravity="center_vertical"
+                        android:textSize="@dimen/text_10sp"
+                        android:visibility="visible"
+                        app:drawableStartCompat="@drawable/ic_description"
+                        app:layout_constraintEnd_toStartOf="@+id/linearLayoutCompat2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvDate"
+                        tools:text="short description" />
+
+                    <include
+                        android:id="@+id/inclBiddersAndMore"
+                        layout="@layout/view_bidders_and_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_4dp"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/linearLayoutCompat2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tvLocation">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvPrice"
+                            style="@style/TextMontserratSemiBold12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:textSize="@dimen/text_10sp"
+                            tools:text="Price currrent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvPriceValue"
+                            style="@style/TextMontserratBold14spPrimary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:textSize="@dimen/text_10sp"
+                            tools:text="69lei" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+            <!--            </FrameLayout>-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</FrameLayout>

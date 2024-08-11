@@ -29,17 +29,18 @@ import com.fivedevs.auxby.domain.utils.Constants.IS_INACTIVE_OFFER
 import com.fivedevs.auxby.domain.utils.Constants.OFFER_ID
 import com.fivedevs.auxby.domain.utils.Constants.SELECTED_OFFER_ID
 import com.fivedevs.auxby.domain.utils.Constants.TIKTOK_PAGE
-import com.fivedevs.auxby.domain.utils.DateUtils.Companion.FORMAT_DD_MMM_YYYY
 import com.fivedevs.auxby.domain.utils.OfferUtils.getFullOwnerName
 import com.fivedevs.auxby.domain.utils.OfferUtils.getFullUsername
 import com.fivedevs.auxby.domain.utils.OfferUtils.getHighestBidWithCurrency
 import com.fivedevs.auxby.domain.utils.OfferUtils.getOfferDate
 import com.fivedevs.auxby.domain.utils.OfferUtils.getOfferDetailsFavoriteIconByState
 import com.fivedevs.auxby.domain.utils.OfferUtils.getOfferDetailsPrice
+import com.fivedevs.auxby.domain.utils.OfferUtils.getUserLastSeenTime
 import com.fivedevs.auxby.domain.utils.OfferUtils.getYourBid
 import com.fivedevs.auxby.domain.utils.OfferUtils.getYourBidWithCurrency
 import com.fivedevs.auxby.domain.utils.Utils.redirectToBrowserLink
 import com.fivedevs.auxby.domain.utils.Utils.setCollapsingToolbarTitle
+import com.fivedevs.auxby.domain.utils.Utils.shareLink
 import com.fivedevs.auxby.domain.utils.Utils.showPhoneDialer
 import com.fivedevs.auxby.domain.utils.extensions.*
 import com.fivedevs.auxby.domain.utils.views.AlerterUtils
@@ -49,14 +50,16 @@ import com.fivedevs.auxby.screens.addOffer.fragments.PromoteOfferFragment
 import com.fivedevs.auxby.screens.addOffer.fragments.adapters.AdapterOfferTags
 import com.fivedevs.auxby.screens.addOffer.fragments.adapters.DotIndicatorPager2Adapter
 import com.fivedevs.auxby.screens.base.BaseActivity
+import com.fivedevs.auxby.screens.buyCoins.BuyCoinsActivity
 import com.fivedevs.auxby.screens.dashboard.DashboardActivity.Companion.showGuestModeBottomSheet
 import com.fivedevs.auxby.screens.dashboard.chat.chatMessages.ChatMessagesActivity
 import com.fivedevs.auxby.screens.dashboard.offers.bottomSheets.BidHistoryBottomSheet
 import com.fivedevs.auxby.screens.dashboard.offers.bottomSheets.PlaceBidBottomSheet
 import com.fivedevs.auxby.screens.dashboard.offers.bottomSheets.ReportOfferBottomSheet
-import com.fivedevs.auxby.screens.dashboard.offers.bottomSheets.SellerRatingBottomSheet
 import com.fivedevs.auxby.screens.dashboard.offers.imageViewer.ImageViewerActivity
+import com.fivedevs.auxby.screens.dashboard.offers.userOffers.ViewUserOffersActivity
 import com.fivedevs.auxby.screens.dialogs.GenericDialog
+import com.fivedevs.auxby.screens.yourOffers.YourOffersActivity
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import qiu.niorgai.StatusBarCompat
@@ -106,7 +109,7 @@ class OfferDetailsActivity : BaseActivity() {
         PlaceBidBottomSheet(
             viewModel.user,
             viewModel.offerDetailsModel,
-            viewModel.categoryDetailsModel.addOfferCost,
+            viewModel.categoryDetailsModel.placeBidCost,
             ::onPlaceBidClicked
         )
     }
@@ -123,6 +126,7 @@ class OfferDetailsActivity : BaseActivity() {
     private val bidHistoryBottomSheet: BidHistoryBottomSheet by lazy {
         BidHistoryBottomSheet(viewModel.offerDetailsModel)
     }
+    private var offerID: Long = 0
     private var isInactiveOffer = false
     var lastCarouselImagePosition = 0
     private var offerImagesAdapter: DotIndicatorPager2Adapter? = null
@@ -164,6 +168,7 @@ class OfferDetailsActivity : BaseActivity() {
         } else {
             isInactiveOffer = intent.getBooleanExtra(IS_INACTIVE_OFFER, false)
             viewModel.getLocalOffer(offerId)
+            offerID = offerId
         }
     }
 
@@ -251,6 +256,7 @@ class OfferDetailsActivity : BaseActivity() {
                 // show Call / Message button when offer is ACTIVE
                 binding.inclCallMessageView.root.show()
             }
+
             UserTypeEnum.NORMAL_AUCTION_OFFER -> {
                 if (viewModel.offerDetailsModel.value?.status.equals(
                         OfferStateEnum.INTERRUPTED.getStatusName(), true
@@ -261,6 +267,7 @@ class OfferDetailsActivity : BaseActivity() {
                         OfferStateEnum.FINISHED.getStatusName(), true
                     )
                 ) {
+                    binding.inclPlaceBidView.root.hide()
                     viewModel.offerDetailsModel.value?.let {
                         if (isBidWinner(it)) {
                             showContactTheSellerWinnerView(getOfferWinnerDetails(it, false))
@@ -270,6 +277,7 @@ class OfferDetailsActivity : BaseActivity() {
                     binding.inclPlaceBidView.root.show()
                 }
             }
+
             UserTypeEnum.OWNER_FIX_PRICE_OFFER -> {
                 if (viewModel.offerDetailsModel.value?.status.equals(
                         OfferStateEnum.INACTIVE.getStatusName(),
@@ -287,6 +295,7 @@ class OfferDetailsActivity : BaseActivity() {
                     binding.inclEditOfferView.btnEnable.hide()
                 }
             }
+
             UserTypeEnum.OWNER_AUCTION_OFFER -> {
                 when (viewModel.offerDetailsModel.value?.status) {
                     OfferStateEnum.FINISHED.getStatusName() -> {
@@ -296,9 +305,11 @@ class OfferDetailsActivity : BaseActivity() {
                             }
                         }
                     }
+
                     OfferStateEnum.INTERRUPTED.getStatusName() -> {
                         binding.inclCloseAuctionView.root.hide()
                     }
+
                     else -> {
                         binding.inclCloseAuctionView.root.show()
                     }
@@ -351,7 +362,7 @@ class OfferDetailsActivity : BaseActivity() {
     }
 
     private fun onBuyMoreClicked() {
-        redirectToBrowserLink(this, resources.getString(R.string.auxby_ro))
+        launchActivity<BuyCoinsActivity>()
         noCoinsBalanceDialog.dismiss()
         placeBidBottomSheet.dismiss()
     }
@@ -369,22 +380,25 @@ class OfferDetailsActivity : BaseActivity() {
 
     private fun populateOfferDetails(offer: OfferModel) {
         populateStaticFields(offer)
-        initTagsRv(offer)
+        Handler(Looper.getMainLooper()).postDelayed({
+            initTagsRv(offer)
+        }, 100)
         showOfferDeleteIcon(offer)
         populateAuctionDetails(offer)
         setFavoriteIconState(offer.isUserFavorite)
         addDescriptionAnimation()
         updateOfferPhotos(offer.photos.toMutableList())
         showOfferStateHeader(offer)
-        handlePromoteButton()
-        //showPromoteIcon(offer)
+        handleReportButton()
+        showPromoteIcon(offer)
     }
 
     private fun populateStaticFields(offer: OfferModel) {
         binding.apply {
             offerPrice.tvPrice.text = getOfferDetailsPrice(this@OfferDetailsActivity, offer)
             tvOfferDate.text = DateUtils().getFormattedDateForOffer(offer.publishDate.orEmpty())
-            tvUserActiveTime.text = getUserLastSeenTime(offer.owner)
+            sellerRatingBar.rating = offer.owner?.rating ?: 5f
+            tvUserActiveTime.text = getUserLastSeenTime(this@OfferDetailsActivity, offer.owner?.lastSeen.orEmpty())
             offer.owner?.let {
                 ivUserAvatar.loadImage(
                     it.avatarUrl.toString(),
@@ -402,36 +416,12 @@ class OfferDetailsActivity : BaseActivity() {
                 } else if (offer.bids.isNullOrEmpty() || isOwner()) {
                     viewCurrentYourBid.tvCurrentBidTitle.text = resources.getString(R.string.start_price)
                     viewCurrentYourBid.tvYourBidTitle.text = resources.getString(R.string.current_bid)
-                } else if (isOwner()) {
-                    viewCurrentYourBid.tvCurrentBidTitle.text = resources.getString(R.string.start_price)
-                    viewCurrentYourBid.tvYourBidTitle.text = resources.getString(R.string.current_bid)
                 } else {
                     viewCurrentYourBid.tvCurrentBidTitle.text = resources.getString(R.string.current_bid)
                     viewCurrentYourBid.tvYourBidTitle.text = resources.getString(R.string.your_bid)
                 }
             }
         }
-    }
-
-    private fun getUserLastSeenTime(owner: OfferOwner?): String {
-        return owner?.lastSeen?.let { lastSeen ->
-            if (DateUtils().isToday(DateUtils().getFormattedDateYearMonthDayFromServer(lastSeen))) {
-                getString(
-                    R.string.active_today_at,
-                    DateUtils().getFormattedDateForUserActive(lastSeen)
-                )
-            } else if (DateUtils().isYesterday(DateUtils().getFormattedDateYearMonthDayFromServer(lastSeen))) {
-                getString(
-                    R.string.active_yesterday_at,
-                    DateUtils().getFormattedDateForUserActive(lastSeen)
-                )
-            } else {
-                getString(
-                    R.string.active_at,
-                    DateUtils().getFormattedDateForUserActive(lastSeen, FORMAT_DD_MMM_YYYY)
-                )
-            }
-        } ?: Constants.EMPTY
     }
 
     private fun showOfferDeleteIcon(offer: OfferModel) {
@@ -443,7 +433,7 @@ class OfferDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun handlePromoteButton() {
+    private fun handleReportButton() {
         if (isOwner()) {
             binding.tvReportOffer.hide()
         }
@@ -482,6 +472,7 @@ class OfferDetailsActivity : BaseActivity() {
     }
 
     private fun showContactTheSellerWinnerView(offerWinnerModel: OfferWinnerModel) {
+        if (offerWinnerModel.userName.isEmpty() || offerWinnerModel.contactSellerWinner.isEmpty()) return
         with(binding.inclContactSellerView) {
             root.show()
             tvContactTheSeller.text = offerWinnerModel.contactSellerWinner
@@ -515,11 +506,15 @@ class OfferDetailsActivity : BaseActivity() {
                     Formatters.priceDecimalFormat.format(offer.price) + OfferUtils.getCurrency(offer.currencyType)
                 viewCurrentYourBid.tvYourBidValue.text = getHighestBidWithCurrency(offer)
             } else {
-                viewCurrentYourBid.tvCurrentBidValue.text = getHighestBidWithCurrency(offer)
-                viewCurrentYourBid.tvYourBidValue.text =
-                    getYourBidWithCurrency(offer, viewModel?.user?.value)
-                if (viewCurrentYourBid.tvYourBidValue.text != "-") {
-                    viewCurrentYourBid.tvYourBidValue.setTextColor(getYourBidColor(offer))
+                if (isOwner()) {
+                    viewCurrentYourBid.tvCurrentBidValue.text = getOfferDetailsPrice(this@OfferDetailsActivity, offer)
+                    viewCurrentYourBid.tvYourBidValue.text = getHighestBidWithCurrency(offer)
+                } else {
+                    viewCurrentYourBid.tvCurrentBidValue.text = getHighestBidWithCurrency(offer)
+                    viewCurrentYourBid.tvYourBidValue.text = getYourBidWithCurrency(offer, viewModel?.user?.value)
+                    if (viewCurrentYourBid.tvYourBidValue.text != "-") {
+                        viewCurrentYourBid.tvYourBidValue.setTextColor(getYourBidColor(offer))
+                    }
                 }
             }
 
@@ -546,10 +541,12 @@ class OfferDetailsActivity : BaseActivity() {
                     binding.viewBiddersAndMore.ivBidder1.show()
                     populateBidderAvatar(bid, binding.viewBiddersAndMore.ivBidder1)
                 }
+
                 1 -> {
                     binding.viewBiddersAndMore.ivBidder2.show()
                     populateBidderAvatar(bid, binding.viewBiddersAndMore.ivBidder2)
                 }
+
                 2 -> {
                     binding.viewBiddersAndMore.ivBidder3.show()
                     populateBidderAvatar(bid, binding.viewBiddersAndMore.ivBidder3)
@@ -594,7 +591,9 @@ class OfferDetailsActivity : BaseActivity() {
 
         finalList.forEachIndexed { index, categoryFieldsValue ->
             val translatedKey =
-                categoryTags.firstOrNull { categoryFieldsValue.key.lowercase().equals(it.name.lowercase(), true) }?.label?.firstOrNull { it.language == userSelectedLanguage }?.translation
+                categoryTags.firstOrNull {
+                    categoryFieldsValue.key.lowercase().equals(it.name.lowercase(), true)
+                }?.label?.firstOrNull { it.language.lowercase() == userSelectedLanguage.lowercase() }?.translation
             translatedKey?.let {
                 finalList[index].apply { key = it }
             }
@@ -683,10 +682,6 @@ class OfferDetailsActivity : BaseActivity() {
             handleUserLoggedInAction { showReportOfferBottomSheet() }
         }
 
-        binding.viewRatingBarOverlay.setOnClickListenerWithDelay {
-            //handleUserLoggedInAction { showSellerRatingBottomSheet() }
-        }
-
         binding.cvFavorite.setOnClickListenerWithDelay {
             handleUserLoggedInAction {
                 if (!isOwner()) {
@@ -724,15 +719,25 @@ class OfferDetailsActivity : BaseActivity() {
         binding.inclCallMessageView.btnCall.setOnClickListenerWithDelay {
             callSeller()
         }
+
         binding.inclCallMessageView.btnMessage.setOnClickListenerWithDelay {
             messageSeller()
         }
+
         binding.ivPromoteIcon.setOnClickListenerWithDelay {
-            addBackStack(PromoteOfferFragment(), binding.flContainer.id)
+            viewModel.offerDetailsModel.value?.id?.let { id ->
+                addBackStack(PromoteOfferFragment(offerId = id), binding.flContainer.id)
+            }
         }
+
+        binding.ivShareIcon.setOnClickListenerWithDelay {
+            handleShareOffer()
+        }
+
         binding.ivDeleteIcon.setOnClickListenerWithDelay {
             showOfferDeleteConfirmation()
         }
+
         binding.viewBiddersAndMore.llAuctionOthersContainer.setOnClickListenerWithDelay {
             if (viewModel.offerDetailsModel.value?.bids?.isNotEmpty() == true) {
                 showBidHistory()
@@ -742,15 +747,45 @@ class OfferDetailsActivity : BaseActivity() {
         binding.ivFacebook.setOnClickListenerWithDelay {
             redirectToBrowserLink(this, FACEBOOK_PAGE)
         }
+
         binding.ivInstagram.setOnClickListenerWithDelay {
             redirectToBrowserLink(this, INSTAGRAM_PAGE)
         }
+
         binding.ivTiktok.setOnClickListenerWithDelay {
             redirectToBrowserLink(this, TIKTOK_PAGE)
         }
 
         binding.tvContactUs.setOnClickListenerWithDelay {
             showContactUsInfoPopup()
+        }
+
+        binding.ivUserAvatar.setOnClickListenerWithDelay {
+            openUserOffersActivity()
+        }
+
+        binding.tvUsername.setOnClickListenerWithDelay {
+            openUserOffersActivity()
+        }
+
+        binding.viewRatingBarOverlay.setOnClickListenerWithDelay {
+            openUserOffersActivity()
+        }
+    }
+
+    private fun handleShareOffer() {
+        viewModel.offerDetailsModel.value?.deepLink.orEmpty().let { link ->
+            if (link.isNotEmpty()) {
+                shareLink(this, link)
+            } else {
+                viewModel.getOfferDeepLink(offerID) { newLink ->
+                    if (newLink.isNotEmpty()) {
+                        shareLink(this, newLink)
+                    } else {
+                        AlerterUtils.showErrorAlert(this, resources.getString(R.string.something_went_wrong))
+                    }
+                }
+            }
         }
     }
 
@@ -823,17 +858,8 @@ class OfferDetailsActivity : BaseActivity() {
         viewModel.placeBidEvent.value = placeBidModel
     }
 
-    private fun showSellerRatingBottomSheet() {
-        val sellerRatingBottomSheet = SellerRatingBottomSheet(::sendSellerRating)
-        sellerRatingBottomSheet.show(this.supportFragmentManager, sellerRatingBottomSheet.tag)
-    }
-
     private fun showReportOfferBottomSheet() {
         reportOfferBottomSheet.show(this.supportFragmentManager, reportOfferBottomSheet.tag)
-    }
-
-    private fun sendSellerRating(sellerRatingModel: SellerRatingModel) {
-
     }
 
     private fun sendOfferReport(reportOfferModel: ReportOfferModel) {
@@ -853,6 +879,18 @@ class OfferDetailsActivity : BaseActivity() {
             StatusBarCompat.changeToLightStatusBar(this)
         else
             StatusBarCompat.cancelLightStatusBar(this)
+    }
+
+    private fun openUserOffersActivity() {
+        if (isOwner()) {
+            launchActivity<YourOffersActivity>()
+        } else {
+            launchActivity<ViewUserOffersActivity> {
+                viewModel.offerDetailsModel.value?.owner?.let {
+                    this@launchActivity.putExtra(USER_OFFERS, it)
+                }
+            }
+        }
     }
 
     private fun initAppBarLayoutListener() {
@@ -924,5 +962,6 @@ class OfferDetailsActivity : BaseActivity() {
 
     companion object {
         const val LAST_CAROUSEL_INT_EXTRA = "LAST_CAROUSEL_INT_EXTRA"
+        const val USER_OFFERS = "USER_OFFERS"
     }
 }

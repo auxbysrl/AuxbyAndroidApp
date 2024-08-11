@@ -10,8 +10,7 @@ import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
 import com.fivedevs.auxby.screens.base.BaseBottomSheetDialog
 import com.fivedevs.auxby.screens.dashboard.offers.adapters.BidHistoryAdapter
 
-class BidHistoryBottomSheet(private val offerModel: MutableLiveData<OfferModel>) :
-    BaseBottomSheetDialog(R.layout.view_bid_history_bottom_sheet, false) {
+class BidHistoryBottomSheet(private val offerModel: MutableLiveData<OfferModel>) : BaseBottomSheetDialog(R.layout.view_bid_history_bottom_sheet, false) {
 
     private lateinit var root: ViewBidHistoryBottomSheetBinding
 

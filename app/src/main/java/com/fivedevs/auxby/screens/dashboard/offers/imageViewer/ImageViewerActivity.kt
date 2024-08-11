@@ -3,7 +3,6 @@ package com.fivedevs.auxby.screens.dashboard.offers.imageViewer
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.fivedevs.auxby.R
@@ -12,7 +11,6 @@ import com.fivedevs.auxby.domain.models.OfferPhoto
 import com.fivedevs.auxby.domain.utils.ZoomOutPageTransformer
 import com.fivedevs.auxby.domain.utils.extensions.setDarkStatusBar
 import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
-import com.fivedevs.auxby.domain.utils.extensions.setTransparentStatusBar
 import com.fivedevs.auxby.screens.base.BaseActivity
 import com.fivedevs.auxby.screens.dashboard.offers.adapters.ImageViewerPager2Adapter
 import com.fivedevs.auxby.screens.dashboard.offers.details.OfferDetailsActivity.Companion.LAST_CAROUSEL_INT_EXTRA

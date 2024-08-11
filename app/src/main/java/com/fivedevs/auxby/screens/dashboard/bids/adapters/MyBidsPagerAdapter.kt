@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.fivedevs.auxby.domain.models.OfferModel
 import com.fivedevs.auxby.screens.dashboard.bids.fragments.MyOffersTabFragment
 
 class MyBidsPagerAdapter(

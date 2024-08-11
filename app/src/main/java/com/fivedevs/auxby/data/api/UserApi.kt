@@ -1,5 +1,7 @@
 package com.fivedevs.auxby.data.api
 
+import com.fivedevs.auxby.data.api.response.DeepLink
+import com.fivedevs.auxby.data.api.response.NewsletterStatus
 import com.fivedevs.auxby.data.database.entities.User
 import com.fivedevs.auxby.domain.models.*
 import com.fivedevs.auxby.domain.models.enums.ApiTypeEnum
@@ -26,9 +28,23 @@ interface UserApi {
     @Api(ApiTypeEnum.AUXBY_PLATFORM)
     fun loginUser(@Body userLoginRequest: UserLoginRequest): Observable<LoginResponse>
 
-    @POST("/api/v1/auth/googleAuth")
+    @POST("/api/v1/user/logout")
     @Api(ApiTypeEnum.AUXBY_PLATFORM)
-    fun googleAuth(@Body googleAuthRequest: LoginResponse): Observable<LoginResponse>
+    fun logoutUser(): Completable
+
+    @POST("/api/v1/transaction")
+    @Api(ApiTypeEnum.AUXBY_PLATFORM)
+    fun sendTransaction(@Body transactionModel: TransactionModel): Completable
+
+    @POST("/api/v1/auth/google-authentication")
+    @Api(ApiTypeEnum.AUXBY_PLATFORM)
+    fun googleAuth(@Body googleAuthRequest: GoogleAuthRequest): Observable<LoginResponse>
+
+    @POST("/api/v1/user/{offerId}/report")
+    @Api(ApiTypeEnum.AUXBY_PLATFORM)
+    fun reportOffer(
+        @Path("offerId") offerId: Long, @Body reportOfferModel: ReportOfferModel
+    ): Completable
 
     @POST("/api/v1/auth/register")
     @Api(ApiTypeEnum.AUXBY_PLATFORM)
@@ -40,7 +56,7 @@ interface UserApi {
 
     @POST("/api/v1/auth/send-reset-password")
     @Api(ApiTypeEnum.AUXBY_PLATFORM)
-    fun sendResetLink(@Query("email") email: String): Observable<Boolean>
+    fun sendResetLink(@Query("email") email: String): Completable
 
     @Multipart
     @POST("/api/v1/user/avatar")
@@ -64,4 +80,20 @@ interface UserApi {
     @DELETE("/api/v1/user")
     @Api(ApiTypeEnum.AUXBY_PLATFORM)
     fun deleteUser(): Completable
+
+    @GET("/api/v1/user/referral-link")
+    @Api(ApiTypeEnum.AUXBY_PLATFORM)
+    fun getUserReferralLink(): Observable<DeepLink>
+
+    @GET("/api/v1/user/allow-rating")
+    @Api(ApiTypeEnum.AUXBY_PLATFORM)
+    fun getAllowRatingStatus(@Query("username") sellerEmail: String): Observable<Boolean>
+
+    @POST("/api/v1/user/rate")
+    @Api(ApiTypeEnum.AUXBY_PLATFORM)
+    fun rateSeller(@Body sellerRatingModel: SellerRatingModel): Observable<Any>
+
+    @PUT("/api/v1/user/change-subscription-status")
+    @Api(ApiTypeEnum.AUXBY_PLATFORM)
+    fun changeNewsletterStatus(): Observable<NewsletterStatus>
 }

@@ -63,7 +63,7 @@
     <string name="text_user_already_exists">This email is already used</string>
     <string name="new_mail_has_been_sent">A new email has been sent</string>
     <string name="offers">Offers</string>
-    <string name="favourite">Favourite</string>
+    <string name="favourite">Favorite</string>
     <string name="chat">Chat</string>
     <string name="my_bids">My Bids</string>
     <string name="profile">Profile</string>
@@ -124,6 +124,7 @@
     <string name="profile_changes_error">Unable to save changes. Please try again.</string>
     <string name="delete_account_error">Delete account error. Please try again!</string>
     <string name="text_language">Language</string>
+    <string name="text_newsletter">Newsletter</string>
     <string name="notifications_settings">Notifications Settings</string>
     <string name="add_offer">Add offer</string>
     <string name="select_category">Select category*</string>
@@ -202,6 +203,8 @@
     <string name="maybe_later"><u>Maybe later</u></string>
     <string name="congrats">Congrats</string>
     <string name="how_do_you_rate_this_seller">How do you rate this seller?</string>
+    <string name="info_rate_seller">To evaluate a seller, you must either have exchanged messages with them or not have already given a rating.</string>
+    <string name="rate_seller"><u>Rate seller</u></string>
     <string name="what_do_you_think_about_this_seller">What do you think about this seller?</string>
     <string name="by_making_your_voice_heard">By making your voice heard,\nyou also help others</string>
     <string name="your_explanation">your explanation</string>
@@ -226,7 +229,7 @@
     <string name="contact_the_seller">Contact the seller</string>
     <string name="guest_place_bid">Want to be able to place a bid? Register now!</string>
     <string name="promote_offer_increase_changes">Promote the offer and increase the chances of being seen</string>
-    <string name="promote_for_coins">Promote for</string>
+    <string name="promote_for_coins">Promote for  %1$s</string>
     <string name="continue_without_promote">Continue without promote</string>
     <string name="promote_offer">Promote offer</string>
     <string name="promote_for_24_hours">Promote the offer for 24 hours</string>
@@ -234,8 +237,8 @@
     <string name="promote_for_30_days">Promote the offer for 30 days</string>
     <string name="no_favorite_offers">No favorite offers</string>
     <string name="guest_offer_details">Want to buy or place a bid? Register now!</string>
-    <string name="active_offers">Active offers</string>
-    <string name="innactive_offers">Innactive offers</string>
+    <string name="active_offers">Active</string>
+    <string name="innactive_offers">Inactive</string>
     <string name="no_active_offers">No active offers</string>
     <string name="no_inactive_offers">No inactive offers</string>
     <string name="guest_generic_message">This action requires an authenticated user. Please login or register.</string>
@@ -315,4 +318,12 @@
     <string name="disable_offer_description">Are you sure you want to disable this offer?</string>
     <string name="enable_offer">Enable offer</string>
     <string name="enable_offer_description">Are you sure you want to enable this offer?</string>
+    <string name="wrong_login_credentials_google">There is already an account with this email address.</string>
+    <string name="no_bundle_offers">No offers availbable</string>
+    <string name="offer_successfully_promoted">The offer was successfully promoted!</string>
+    <string name="message_session_expired">Session has expired. Please log in again.</string>
+    <string name="warning_place_bid">The seller may refuse your offer even if you win the auction, and the application does not assume responsibility for this decision</string>
+    <string name="user_details">User details</string>
+    <string name="text_referral_link">Invite friends</string>
+    <string name="text_share">Share</string>
 </resources>

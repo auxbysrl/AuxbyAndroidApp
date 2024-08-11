@@ -32,16 +32,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.domain.utils.Constants
-import com.fivedevs.auxby.domain.utils.DateUtils
 import com.fivedevs.auxby.domain.utils.DateUtils.Companion.FORMAT_DD_MMM_YYYY
 import com.fivedevs.auxby.domain.utils.DateUtils.Companion.currentLocale
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.textfield.TextInputEditText
 import com.tapadoo.alerter.Alerter
-import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachedToRoot: Boolean = false): View = LayoutInflater.from(context).inflate(layoutRes, this, attachedToRoot)
 

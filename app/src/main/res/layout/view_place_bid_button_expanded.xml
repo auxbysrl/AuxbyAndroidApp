@@ -9,182 +9,226 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clPlaceBid"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_rounded_bottom_sheet"
-        android:paddingTop="@dimen/space_9dp">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/btnCancel"
-            style="@style/TextMontserratMedium14sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/space_16dp"
-            android:paddingVertical="@dimen/space_9dp"
-            android:text="@string/cancel"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvHighestBid"
-            style="@style/TextMontserratSemiBold14sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/space_16dp"
-            android:paddingTop="@dimen/space_9dp"
-            android:text="@string/highest_bid_value"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/divider1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/space_1dp"
-            android:layout_marginTop="@dimen/space_9dp"
-            android:background="@color/gray_D0D5DD"
-            app:layout_constraintTop_toBottomOf="@id/btnCancel" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivDecreaseBid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/space_10dp"
-            android:padding="@dimen/space_24dp"
-            app:layout_constraintHorizontal_bias="1"
-            android:src="@drawable/ic_minus_line"
-            app:layout_constraintBottom_toBottomOf="@id/llBidContainer"
-            app:layout_constraintEnd_toStartOf="@id/llBidContainer"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/llBidContainer" />
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        tools:background="@color/gray_606062">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/llBidContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_20dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            app:layout_constraintStart_toEndOf="@+id/ivDecreaseBid"
-            app:layout_constraintEnd_toStartOf="@+id/ivIncreaseBid"
-            app:layout_constraintTop_toBottomOf="@id/divider1">
+            android:background="@color/white"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.cottacush.android.currencyedittext.CurrencyEditText
-                android:id="@+id/etBidValue"
-                style="@style/TextMontserratSemiBold20sp"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/space_16dp"
+                android:paddingVertical="@dimen/space_16dp"
+                android:text="@string/warning_place_bid"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_14sp" />
+
+            <TextView
+                android:id="@+id/tvTermsAndConditions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:textSize="@dimen/text_40sp"
-                app:autoSizeMaxTextSize="@dimen/text_40sp"
-                app:autoSizeMinTextSize="@dimen/text_20sp"
-                app:autoSizeStepGranularity="1sp"
-                app:autoSizeTextType="uniform"
-                android:maxLength="9"
-                android:minWidth="@dimen/space_30dp"
-                android:inputType="numberDecimal"
-                tools:text="2,334,434" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvCurrency"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                style="@style/TextMontserratRegular16sp"
-                tools:text="$" />
+                android:layout_gravity="end"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/space_16dp"
+                android:paddingVertical="@dimen/space_16dp"
+                android:text="@string/terms_and_conditions"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_14sp"
+                android:textStyle="bold" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivIncreaseBid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_10dp"
-            android:padding="@dimen/space_24dp"
-            android:src="@drawable/ic_plus_sign"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintBottom_toBottomOf="@id/llBidContainer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/llBidContainer"
-            app:layout_constraintTop_toTopOf="@id/llBidContainer" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvBidErrorMessage"
-            style="@style/TextMontserratSemiBold14sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/red"
-            android:paddingTop="@dimen/space_6dp"
-            android:visibility="gone"
-            android:text="@string/bid_cannot_be_lower_than"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llBidContainer" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvBidConversionValue"
-            style="@style/TextMontserratMedium14sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/space_6dp"
-            tools:text="Bid value: 1000 lei"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llBidContainer" />
-
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/space_1dp"
-            android:layout_marginTop="@dimen/space_20dp"
-            android:background="@color/gray_D0D5DD"
-            app:layout_constraintTop_toBottomOf="@id/tvBidConversionValue" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvBidCost"
-            style="@style/TextMontserratSemiBold16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_16dp"
-            android:layout_marginTop="@dimen/space_24dp"
-            android:drawableEnd="@drawable/ic_auxby_coin"
-            android:drawablePadding="@dimen/space_8dp"
-            tools:text="@string/bid_cost_value"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider2" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvCoinsBalance"
-            style="@style/TextMontserratSemiBold16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_16dp"
-            android:layout_marginTop="@dimen/space_10dp"
-            android:drawableEnd="@drawable/ic_auxby_coin"
-            android:drawablePadding="@dimen/space_8dp"
-            tools:text="@string/coins_balance_value"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvBidCost" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPlaceBid"
-            style="@style/primaryButton"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clPlaceBid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/space_16dp"
-            android:layout_marginTop="@dimen/space_40dp"
-            android:layout_marginBottom="@dimen/space_16dp"
-            android:drawablePadding="@dimen/space_12dp"
-            android:text="@string/place_bid"
-            app:icon="@drawable/ic_auction"
-            app:iconGravity="textStart"
-            app:iconTint="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvCoinsBalance"
-            app:loaderColor="@android:color/white" />
+            android:background="@drawable/bg_dialog_rounded_bottom_sheet"
+            android:paddingTop="@dimen/space_9dp"
+            app:layout_constraintBottom_toBottomOf="parent">
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/btnCancel"
+                style="@style/TextMontserratMedium14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/space_16dp"
+                android:paddingVertical="@dimen/space_9dp"
+                android:text="@string/cancel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvHighestBid"
+                style="@style/TextMontserratSemiBold14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/space_16dp"
+                android:paddingTop="@dimen/space_9dp"
+                android:text="@string/highest_bid_value"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_1dp"
+                android:layout_marginTop="@dimen/space_9dp"
+                android:background="@color/gray_D0D5DD"
+                app:layout_constraintTop_toBottomOf="@id/btnCancel" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivDecreaseBid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/space_10dp"
+                android:padding="@dimen/space_24dp"
+                android:src="@drawable/ic_minus_line"
+                app:layout_constraintBottom_toBottomOf="@id/llBidContainer"
+                app:layout_constraintEnd_toStartOf="@id/llBidContainer"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/llBidContainer" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llBidContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_20dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toStartOf="@+id/ivIncreaseBid"
+                app:layout_constraintStart_toEndOf="@+id/ivDecreaseBid"
+                app:layout_constraintTop_toBottomOf="@id/divider1">
+
+                <com.cottacush.android.currencyedittext.CurrencyEditText
+                    android:id="@+id/etBidValue"
+                    style="@style/TextMontserratSemiBold20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:inputType="numberDecimal"
+                    android:maxLength="9"
+                    android:minWidth="@dimen/space_30dp"
+                    android:textSize="@dimen/text_40sp"
+                    app:autoSizeMaxTextSize="@dimen/text_40sp"
+                    app:autoSizeMinTextSize="@dimen/text_20sp"
+                    app:autoSizeStepGranularity="1sp"
+                    app:autoSizeTextType="uniform"
+                    tools:text="2,334,434" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvCurrency"
+                    style="@style/TextMontserratRegular16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    tools:text="$" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivIncreaseBid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_10dp"
+                android:padding="@dimen/space_24dp"
+                android:src="@drawable/ic_plus_sign"
+                app:layout_constraintBottom_toBottomOf="@id/llBidContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/llBidContainer"
+                app:layout_constraintTop_toTopOf="@id/llBidContainer" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvBidErrorMessage"
+                style="@style/TextMontserratSemiBold14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/space_6dp"
+                android:text="@string/bid_cannot_be_lower_than"
+                android:textColor="@color/red"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llBidContainer" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvBidConversionValue"
+                style="@style/TextMontserratMedium14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/space_6dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llBidContainer"
+                tools:text="Bid value: 1000 lei" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_1dp"
+                android:layout_marginTop="@dimen/space_20dp"
+                android:background="@color/gray_D0D5DD"
+                app:layout_constraintTop_toBottomOf="@id/tvBidConversionValue" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvBidCost"
+                style="@style/TextMontserratSemiBold16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_16dp"
+                android:layout_marginTop="@dimen/space_24dp"
+                android:drawableEnd="@drawable/ic_auxby_coin"
+                android:drawablePadding="@dimen/space_8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider2"
+                tools:text="@string/bid_cost_value" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCoinsBalance"
+                style="@style/TextMontserratSemiBold16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_16dp"
+                android:layout_marginTop="@dimen/space_10dp"
+                android:drawableEnd="@drawable/ic_auxby_coin"
+                android:drawablePadding="@dimen/space_8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvBidCost"
+                tools:text="@string/coins_balance_value" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPlaceBid"
+                style="@style/primaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_16dp"
+                android:layout_marginTop="@dimen/space_40dp"
+                android:layout_marginBottom="@dimen/space_16dp"
+                android:drawablePadding="@dimen/space_12dp"
+                android:text="@string/place_bid"
+                app:icon="@drawable/ic_auction"
+                app:iconGravity="textStart"
+                app:iconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvCoinsBalance"
+                app:loaderColor="@android:color/white" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

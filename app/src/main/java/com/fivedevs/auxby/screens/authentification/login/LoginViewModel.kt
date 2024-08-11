@@ -6,13 +6,14 @@ import com.fivedevs.auxby.data.database.repositories.UserRepository
 import com.fivedevs.auxby.data.prefs.PreferencesService
 import com.fivedevs.auxby.data.prefs.PreferencesService.Companion.IS_GOOGLE_ACCOUNT
 import com.fivedevs.auxby.data.prefs.PreferencesService.Companion.USER_TOKEN
-import com.fivedevs.auxby.domain.SingleLiveEvent
-import com.fivedevs.auxby.domain.models.LoginResponse
+import com.fivedevs.auxby.domain.models.GoogleAuthRequest
 import com.fivedevs.auxby.domain.models.UserLoginRequest
 import com.fivedevs.auxby.domain.utils.Constants.DEFAULT_ERROR_MSG
 import com.fivedevs.auxby.domain.utils.Constants.RESPONSE_CODE_400
+import com.fivedevs.auxby.domain.utils.Constants.RESPONSE_CODE_400_GOOGLE
 import com.fivedevs.auxby.domain.utils.Constants.RESPONSE_CODE_423
 import com.fivedevs.auxby.domain.utils.Constants.RESPONSE_CODE_470
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
 import com.fivedevs.auxby.screens.authentification.base.BaseUserViewModel
@@ -32,6 +33,8 @@ class LoginViewModel @Inject constructor(
     private val preferencesService: PreferencesService,
     private val compositeDisposable: CompositeDisposable
 ) : BaseUserViewModel(userApi, rxSchedulers, userRepository, compositeDisposable, preferencesService) {
+
+    var userReferralId: Int? = null
 
     val loginEvent = SingleLiveEvent<String?>()
     val checkEmailEvent = SingleLiveEvent<Any>()
@@ -65,7 +68,7 @@ class LoginViewModel @Inject constructor(
                 .observeOn(rxSchedulers.background())
                 .doOnNext {
                     preferencesService.setValue(USER_TOKEN, it.token)
-                    getUser()
+                    getUserOnLoginEvent()
                 }
                 .observeOn(rxSchedulers.androidUI())
                 .doOnError { Timber.e(it) }
@@ -78,20 +81,20 @@ class LoginViewModel @Inject constructor(
     }
 
     fun googleAuth(idToken: String) {
-        userApi.googleAuth(LoginResponse(idToken))
+        userApi.googleAuth(GoogleAuthRequest(idToken, userReferralId))
             .subscribeOn(rxSchedulers.network())
             .observeOn(rxSchedulers.background())
             .doOnNext {
                 preferencesService.setValue(USER_TOKEN, it.token)
                 preferencesService.setValue(IS_GOOGLE_ACCOUNT, true)
-                getUser()
+                getUserOnLoginEvent()
             }
             .observeOn(rxSchedulers.androidUI())
             .doOnError { Timber.e(it) }
             .subscribe({
                 loginEvent.call()
             }, {
-                handleLoginError(it)
+                handleGoogleLoginError(it)
             }).disposeBy(compositeDisposable)
     }
 
@@ -101,6 +104,17 @@ class LoginViewModel @Inject constructor(
                 RESPONSE_CODE_423 -> checkEmailEvent.call()
                 RESPONSE_CODE_470 -> loginEvent.value = RESPONSE_CODE_470.toString()
                 RESPONSE_CODE_400 -> loginEvent.value = RESPONSE_CODE_400.toString()
+                else -> loginEvent.value = DEFAULT_ERROR_MSG
+            }
+        } else {
+            loginEvent.value = DEFAULT_ERROR_MSG
+        }
+    }
+
+    private fun handleGoogleLoginError(it: Throwable) {
+        if (it is HttpException) {
+            when (it.code()) {
+                RESPONSE_CODE_400 -> loginEvent.value = RESPONSE_CODE_400_GOOGLE
                 else -> loginEvent.value = DEFAULT_ERROR_MSG
             }
         } else {

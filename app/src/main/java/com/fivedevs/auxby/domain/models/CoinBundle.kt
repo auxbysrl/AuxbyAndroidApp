@@ -1,9 +1,11 @@
 package com.fivedevs.auxby.domain.models
 
 data class CoinBundle(
-    var id: Int = 0,
+    var id: String = "",
     var name: String = "",
     var description: String = "",
-    var coins: Long = 0,
+    var coins: String = "",
+    var price: String = "",
+    var priceInMicros: Long = 0L,
     var isChecked: Boolean = false
 )

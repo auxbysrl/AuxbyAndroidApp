@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.ActivityAddOfferBinding
 import com.fivedevs.auxby.domain.models.toOfferRequestModel
+import com.fivedevs.auxby.domain.utils.Constants.CATEGORY_ID
 import com.fivedevs.auxby.domain.utils.Constants.IS_EDIT_MODE
 import com.fivedevs.auxby.domain.utils.Constants.OFFER_ID
 import com.fivedevs.auxby.domain.utils.extensions.addBackStack
@@ -44,6 +45,13 @@ class AddOfferActivity : BaseActivity() {
     private fun retrieveBundleInformation(savedInstanceState: Bundle?) {
         viewModel.isEditMode = intent.getBooleanExtra(IS_EDIT_MODE, false)
         viewModel.editOfferId = intent.getLongExtra(OFFER_ID, 0L)
+
+        // HANDLE CATEGORY ID FROM ADS
+        val categoryId = intent.getIntExtra(CATEGORY_ID, -1)
+        if (categoryId != -1) {
+            viewModel.selectedCategoryId.value = categoryId
+        }
+
         initEditMode(savedInstanceState)
     }
 
@@ -64,7 +72,7 @@ class AddOfferActivity : BaseActivity() {
     }
 
     private fun initObservers() {
-        viewModel.selectedCategory.observe(this) {
+        viewModel.selectedCategoryId.observe(this) {
             addBackStack(AddOfferFragment(), binding.fragmentContainerView.id)
         }
 
@@ -73,8 +81,8 @@ class AddOfferActivity : BaseActivity() {
             addBackStack(PreviewOfferFragment(), binding.fragmentContainerView.id)
         }
 
-        viewModel.onPromoteOfferFragment.observe(this) {
-            addBackStack(PromoteOfferFragment(isFromAddOffer = true), binding.flContainer.id)
+        viewModel.onPromoteOfferFragment.observe(this) { offerId ->
+            addBackStack(PromoteOfferFragment(isFromAddOffer = true, offerId), binding.flContainer.id)
         }
 
         viewModel.returnToDashboard.observe(this) {

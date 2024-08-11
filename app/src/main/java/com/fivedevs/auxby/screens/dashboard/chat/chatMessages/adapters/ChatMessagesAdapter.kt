@@ -73,18 +73,17 @@ class ChatMessagesAdapter(
         fun bind(chatMessage: ChatMessage) {
             binding.apply {
                 tvMessage.text = chatMessage.messageText
-                tvMessageTime.text = DateUtils().getFormattedDateForUserActive(chatMessage.messageTime)
-//                when (chatMessage.messageTime) {
-//                    TODAY -> {
-//                        tvMessageTime.text = context.resources.getString(R.string.today)
-//                    }
-//                    YESTERDAY -> {
-//                        tvMessageTime.text = context.resources.getString(R.string.yesterday)
-//                    }
-//                    else -> {
-//                        tvMessageTime.text = getFormattedDateForUserActive(chatMessage.messageTime)
-//                    }
-//                }
+                when (chatMessage.messageTime) {
+                    TODAY -> {
+                        tvMessageTime.text = context.resources.getString(R.string.today)
+                    }
+                    YESTERDAY -> {
+                        tvMessageTime.text = context.resources.getString(R.string.yesterday)
+                    }
+                    else -> {
+                        tvMessageTime.text = DateUtils().getFormattedDateForUserActive(chatMessage.messageTime)
+                    }
+                }
             }
         }
     }

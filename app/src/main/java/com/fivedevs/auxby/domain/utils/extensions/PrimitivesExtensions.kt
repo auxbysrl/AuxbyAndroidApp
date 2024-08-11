@@ -2,7 +2,7 @@ package com.fivedevs.auxby.domain.utils.extensions
 
 import java.nio.ByteBuffer
 import java.text.NumberFormat
-import java.util.*
+import java.util.Locale
 
 fun Boolean?.toInt(): Int = if (this == true) 1 else 0
 

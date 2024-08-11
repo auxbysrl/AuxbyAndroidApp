@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.fivedevs.auxby.application.App
 import com.fivedevs.auxby.data.database.repositories.CategoryRepository
 import com.fivedevs.auxby.data.database.repositories.OffersRepository
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.models.CategoryModel
 import com.fivedevs.auxby.domain.utils.Constants.DELAY_SEARCH
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.extensions.getName
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
@@ -37,7 +37,8 @@ class AllCategoriesViewModel @Inject constructor(
     var onSearchViewAction: PublishSubject<String> = PublishSubject.create()
     val onCategorySelected: PublishSubject<CategoryModel> = PublishSubject.create()
 
-    val openOfferDetails: SingleLiveEvent<Long> = SingleLiveEvent()
+    val openOfferDetails: SingleLiveEvent<Long> =
+        SingleLiveEvent()
 
     fun onCreate() {
         onCategorySelectedListener()

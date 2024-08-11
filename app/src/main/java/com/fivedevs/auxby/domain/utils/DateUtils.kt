@@ -5,7 +5,10 @@ import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 class DateUtils {
@@ -163,6 +166,13 @@ class DateUtils {
 
         // Convert milliseconds to days
         return TimeUnit.DAYS.convert(timeDifference, TimeUnit.MILLISECONDS)
+    }
+
+    fun addDaysToDate(currentDate: Date, days: Int): Date {
+        val calendar = Calendar.getInstance()
+        calendar.time = currentDate
+        calendar.add(Calendar.DAY_OF_YEAR, days)
+        return calendar.time
     }
 
     companion object {

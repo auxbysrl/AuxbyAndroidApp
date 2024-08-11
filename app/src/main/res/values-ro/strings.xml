@@ -120,12 +120,13 @@
     <string name="allow_permission_manually">Trebuie să acordați permisiunile necesare manual din Setări.</string>
     <string name="permission_denied_avatar">Permisiune refuzată, imposibil de editat fotografia de profil.</string>
     <string name="unable_to_update_profile_picture">Imposibil de actualizat fotografia de profil. Te rugăm să încerci din nou mai târziu.</string>
-    <string name="choose_offer">Alege anunțul care ți se potrivește cel mai bine</string>
+    <string name="choose_offer">Alege pachetul care ți se potrivește cel mai bine</string>
     <string name="buy">Cumpără</string>
     <string name="profile_changes_saved">Modificările profilului au fost salvate cu succes.</string>
     <string name="profile_changes_error">Imposibil de salvat modificările. Te rugăm să încerci din nou.</string>
     <string name="delete_account_error">Eroare la ștergerea contului. Te rugăm să încerci din nou!</string>
     <string name="text_language">Limba</string>
+    <string name="text_newsletter">Newsletter</string>
     <string name="notifications_settings">Setări notificări</string>
     <string name="add_offer">Adaugă anunț</string>
     <string name="select_category">Selectați categoria*</string>
@@ -204,6 +205,8 @@
     <string name="maybe_later"><u>Poate mai târziu</u></string>
     <string name="congrats">Felicitari!</string>
     <string name="how_do_you_rate_this_seller">Cum evaluezi acest vânzător?</string>
+    <string name="info_rate_seller">Pentru a evalua un vânzător, trebuie fie să fi avut un schimb de mesaje cu acesta, fie să nu fi acordat deja o evaluare.</string>
+    <string name="rate_seller"><u>Evalueză vânzătorul</u></string>
     <string name="what_do_you_think_about_this_seller">Ce părere ai despre acest vânzător?</string>
     <string name="by_making_your_voice_heard">Prin faptul că îți faci auzită vocea,\najuți și pe alții</string>
     <string name="your_explanation">explicația ta</string>
@@ -214,7 +217,7 @@
     <string name="successfully_added_to_favorites">Adăugat cu succes la favorite!</string>
     <string name="unable_to_place_bid">Eroare la trimiterea ofertei. Vă rugăm să încercați din nou.</string>
     <string name="unable_to_add_to_favorites">Imposibil de adăugat ofertă la favorite.\nTe rugăm să încerci din nou!</string>
-    <string name="bid_cost_value">Cost oferă: %1$s</string>
+    <string name="bid_cost_value">Cost ofertă: %1$s</string>
     <string name="coins_balance_value">Sold de coins: %1$s</string>
     <string name="google_auth_error">Eroare GoogleAuth: idToken lipsește.</string>
     <string name="active">Activ</string>
@@ -225,10 +228,10 @@
     <string name="inactive">Inactiv</string>
     <string name="close_auction">Închide licitația</string>
     <string name="close_auction_description">Sunteți sigur că doriți să închideți licitația?\n\n Această licitație nu poate fi redeschisă.</string>
-    <string name="contact_the_seller">Contactați câștigătorul</string>
+    <string name="contact_the_seller">Contactați vânzătorul</string>
     <string name="guest_place_bid">Dorești să plasezi o ofertă? Înregistrează-te acum!</string>
     <string name="promote_offer_increase_changes">Promovează anunțul și crește șansele de a fi vizibil</string>
-    <string name="promote_for_coins">Promovează pentru</string>
+    <string name="promote_for_coins">Promovează pentru %1$s</string>
     <string name="continue_without_promote">Continuă fără a promova</string>
     <string name="promote_offer">Promovează anunțul</string>
     <string name="promote_for_24_hours">Promovează anunțul pentru 24 de ore</string>
@@ -236,8 +239,8 @@
     <string name="promote_for_30_days">Promovează anunțul pentru 30 de zile</string>
     <string name="no_favorite_offers">Niciun anunț în favorite</string>
     <string name="guest_offer_details">Dorești să cumperi sau să plasezi o ofertă? Înregistrează-te acum!</string>
-    <string name="active_offers">Anunțuri active</string>
-    <string name="innactive_offers">Anunțuri inactive</string>
+    <string name="active_offers">Active</string>
+    <string name="innactive_offers">Inactive</string>
     <string name="no_active_offers">Niciun anunț activ</string>§
     <string name="no_inactive_offers">Niciun anunț inactiv</string>
     <string name="guest_generic_message">Această acțiune necesită un utilizator autentificat. Te rugăm să te autentifici sau să te înregistrezi.</string>
@@ -317,4 +320,12 @@
     <string name="disable_offer_description">Ești sigur ca vrei să dezactivezi acest anunț?</string>
     <string name="enable_offer">Activează anunțul</string>
     <string name="enable_offer_description">Ești sigur ca vrei să activezi acest anunț?</string>
+    <string name="wrong_login_credentials_google">Există deja un cont cu această adresă de email.</string>
+    <string name="no_bundle_offers">Niciun pachet disponibil</string>
+    <string name="offer_successfully_promoted">Anunțul a fost promovat cu succes!</string>
+    <string name="message_session_expired">Sesiunea a expirat. Vă rugăm să vă autentificați din nou.</string>
+    <string name="warning_place_bid">Auxby nu poate fi considerată responsabilă pentru neîndeplinirea obligațiilor de către vânzători în cadrul licitațiilor.</string>
+    <string name="user_details">Detalii utilizator</string>
+    <string name="text_referral_link">Invită prieteni</string>
+    <string name="text_share">Distribuie</string>
 </resources>

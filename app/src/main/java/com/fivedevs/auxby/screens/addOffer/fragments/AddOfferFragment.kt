@@ -5,7 +5,11 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
@@ -27,19 +31,29 @@ import com.fivedevs.auxby.domain.models.CategoryField
 import com.fivedevs.auxby.domain.models.CategoryFieldsValue
 import com.fivedevs.auxby.domain.models.OfferPhoto
 import com.fivedevs.auxby.domain.models.enums.ConditionTypeEnum
-import com.fivedevs.auxby.domain.models.enums.CurrencyEnum
 import com.fivedevs.auxby.domain.models.enums.DialogTypes
 import com.fivedevs.auxby.domain.models.enums.OfferTypeEnum
 import com.fivedevs.auxby.domain.utils.Constants.OFFER_MAXIMUM_PHOTOS
+import com.fivedevs.auxby.domain.utils.Currencies
 import com.fivedevs.auxby.domain.utils.OfferUtils.getCurrency
 import com.fivedevs.auxby.domain.utils.Utils
-import com.fivedevs.auxby.domain.utils.Utils.redirectToBrowserLink
 import com.fivedevs.auxby.domain.utils.Validator
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.extensions.disableClick
+import com.fivedevs.auxby.domain.utils.extensions.getDrawableCompat
+import com.fivedevs.auxby.domain.utils.extensions.hide
+import com.fivedevs.auxby.domain.utils.extensions.hideKeyboard
+import com.fivedevs.auxby.domain.utils.extensions.isResumedOrLater
+import com.fivedevs.auxby.domain.utils.extensions.launchActivity
+import com.fivedevs.auxby.domain.utils.extensions.orFalse
+import com.fivedevs.auxby.domain.utils.extensions.parcelableArrayList
+import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
+import com.fivedevs.auxby.domain.utils.extensions.show
+import com.fivedevs.auxby.domain.utils.extensions.transformIntoDatePicker
 import com.fivedevs.auxby.domain.utils.views.CustomArrayAdapter
 import com.fivedevs.auxby.screens.addOffer.AddOfferViewModel
 import com.fivedevs.auxby.screens.addOffer.adapters.OfferPhotoAdapter
 import com.fivedevs.auxby.screens.addOffer.factory.DynamicViewsManager
+import com.fivedevs.auxby.screens.buyCoins.BuyCoinsActivity
 import com.fivedevs.auxby.screens.dashboard.offers.adapters.CategoryAdapter
 import com.fivedevs.auxby.screens.dialogs.GenericDialog
 import com.google.android.material.textfield.TextInputLayout
@@ -242,7 +256,7 @@ class AddOfferFragment : Fragment() {
                 binding.rgCondition.check(R.id.rbConditionNew)
             }
             binding.etOfferLocation.setText(contactInfo.location)
-            binding.etOfferPhone.setText(parentViewModel.user.value?.phone.orEmpty())
+            binding.etOfferPhone.setText(parentViewModel.localUser.value?.phone.orEmpty())
             selectedPhotos = photos
             if (selectedPhotos.isNotEmpty()) {
                 updateOfferPhotoAdapter()
@@ -325,8 +339,10 @@ class AddOfferFragment : Fragment() {
     }
 
     private fun setPhotoAsCover(offerPhoto: OfferPhoto) {
+        selectedPhotos.first { it.isCover }.isCover = false
         selectedPhotos.remove(offerPhoto)
         selectedPhotos.add(0, offerPhoto)
+        selectedPhotos.first().isCover = true
         updateOfferPhotoAdapter()
     }
 
@@ -336,6 +352,7 @@ class AddOfferFragment : Fragment() {
     }
 
     private fun updateOfferPhotoAdapter() {
+        selectedPhotos.map { it.isCover }
         offerPhotoAdapter?.updatePhotosList(selectedPhotos)
         binding.tvOfferPhotos.text = getString(
             R.string.photos, "${selectedPhotos.size}/$OFFER_MAXIMUM_PHOTOS"
@@ -383,7 +400,6 @@ class AddOfferFragment : Fragment() {
 
                 selectedPhotos = data.toMutableList()
                 updateOfferPhotoAdapter()
-
             }
         }
 
@@ -391,7 +407,7 @@ class AddOfferFragment : Fragment() {
         val adapter = ArrayAdapter(
             requireContext(),
             R.layout.item_dropdown,
-            CurrencyEnum.values().map { it.short() })
+            Currencies.currenciesList.map { it.symbol })
         binding.actvPriceCurrency.setAdapter(adapter)
         binding.actvPriceCurrency.setDropDownBackgroundResource(R.color.white)
     }
@@ -408,10 +424,10 @@ class AddOfferFragment : Fragment() {
             binding.spinnerLocation.adapter = adapter
         }
 
-        if (!parentViewModel.user.value?.address?.city.isNullOrEmpty()) {
+        if (!parentViewModel.localUser.value?.address?.city.isNullOrEmpty()) {
             cities
                 .forEachIndexed { index, city ->
-                    if (city.equals(parentViewModel.user.value?.address?.city, true)) {
+                    if (city.equals(parentViewModel.localUser.value?.address?.city, true)) {
                         binding.spinnerLocation.setSelection(index.dec())
                         return
                     }
@@ -508,7 +524,7 @@ class AddOfferFragment : Fragment() {
     }
 
     private fun checkForCoins() {
-        val availableCoins = parentViewModel.user.value?.availableCoins ?: 0
+        val availableCoins = parentViewModel.localUser.value?.availableCoins ?: 0
         if (availableCoins == 0 || availableCoins < (parentViewModel.categoryDetailsResponse.value?.addOfferCost
                 ?: 0)
         ) {
@@ -536,7 +552,7 @@ class AddOfferFragment : Fragment() {
         noCoinsBalanceDialog = GenericDialog(::onBuyMoreClicked, DialogTypes.PUBLISH_OFFER_NO_COINS)
         confirmOfferPublishDialog = GenericDialog(::onConfirmClicked, DialogTypes.PUBLISH_OFFER)
 
-        parentViewModel.user.value?.availableCoins?.let {
+        parentViewModel.localUser.value?.availableCoins?.let {
             val offerCost = parentViewModel.categoryDetailsResponse.value?.addOfferCost ?: 0
             noCoinsBalanceDialog?.setCoinsAmount(it, offerCost)
             confirmOfferPublishDialog?.setCoinsAmount(it, offerCost)
@@ -544,7 +560,7 @@ class AddOfferFragment : Fragment() {
     }
 
     private fun onBuyMoreClicked() {
-        redirectToBrowserLink(requireContext(), resources.getString(R.string.auxby_ro))
+        requireActivity().launchActivity<BuyCoinsActivity>()
         noCoinsBalanceDialog?.dismiss()
     }
 
@@ -628,7 +644,7 @@ class AddOfferFragment : Fragment() {
     }
 
     private fun populatePhoneNumberField() {
-        parentViewModel.user.value?.let { user ->
+        parentViewModel.localUser.value?.let { user ->
             parentViewModel.offerRequestModel.contactInfo.phoneNumber = user.phone.trim()
         }
     }

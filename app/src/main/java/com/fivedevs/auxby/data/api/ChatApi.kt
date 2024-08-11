@@ -1,8 +1,8 @@
 package com.fivedevs.auxby.data.api
 
+import com.fivedevs.auxby.data.database.entities.ChatRoom
 import com.fivedevs.auxby.domain.models.ChatMessage
 import com.fivedevs.auxby.domain.models.ChatMessageRequest
-import com.fivedevs.auxby.data.database.entities.ChatRoom
 import com.fivedevs.auxby.domain.models.ChatRoomIdRequest
 import com.fivedevs.auxby.domain.models.enums.ApiTypeEnum
 import com.fivedevs.auxby.domain.utils.Api

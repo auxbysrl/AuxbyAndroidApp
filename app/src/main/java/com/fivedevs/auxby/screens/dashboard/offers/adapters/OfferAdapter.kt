@@ -13,12 +13,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.fivedevs.auxby.R
+import com.fivedevs.auxby.data.database.entities.User
 import com.fivedevs.auxby.databinding.ItemOfferBinding
 import com.fivedevs.auxby.databinding.ViewBiddersAndMoreBinding
 import com.fivedevs.auxby.domain.models.OfferBid
 import com.fivedevs.auxby.domain.models.OfferModel
 import com.fivedevs.auxby.domain.models.enums.*
-import com.fivedevs.auxby.domain.utils.DateUtils
+import com.fivedevs.auxby.domain.utils.Currencies
 import com.fivedevs.auxby.domain.utils.Formatters.priceDecimalFormat
 import com.fivedevs.auxby.domain.utils.OfferUtils.getFavoriteIconByState
 import com.fivedevs.auxby.domain.utils.OfferUtils.getOfferDate
@@ -32,11 +33,13 @@ class OfferAdapter(
     var offers: MutableList<OfferModel>,
     var selectedOfferPublishSubject: KFunction1<Long, Unit>,
     private val saveOfferPublishSubject: PublishSubject<OfferModel>,
-    private val userLoggedIn: Boolean
+    private val userLoggedIn: Boolean,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    var user = User()
     var isInactiveTab = false
     var isMyOffersActivity = false
+
     private var isLoadingAdded = false
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -49,6 +52,7 @@ class OfferAdapter(
                 )
                 ViewHolder(binding)
             }
+
             else -> {
                 val inflater = LayoutInflater.from(context)
                 val viewLoading = inflater.inflate(R.layout.item_progress, viewGroup, false)
@@ -62,6 +66,7 @@ class OfferAdapter(
             PaginationConstants.ITEM -> {
                 (holder as ViewHolder).bind(offers[position])
             }
+
             PaginationConstants.LOADING -> {
                 (holder as LoadingViewHolder).progressBar.visibility = View.VISIBLE
             }
@@ -118,6 +123,9 @@ class OfferAdapter(
 
         private fun ItemOfferBinding.populateViews(offer: OfferModel) {
             setOfferImage(offer)
+            setPriceColor(offer)
+            setPromotedIcon(offer)
+
             tvOfferTitle.text = offer.title
             tvLocation.text = offer.location.toString().ifEmpty { "-" }
             tvPrice.text = getPriceBidTitle(offer)
@@ -128,6 +136,27 @@ class OfferAdapter(
                 else R.drawable.ic_calendar, 0, 0, 0
             )
             setFavoriteIcon()
+        }
+
+        private fun ItemOfferBinding.setPromotedIcon(offer: OfferModel) {
+            if (offer.isPromoted && offer.status.equals(OfferStateEnum.ACTIVE.name, true)) {
+                ivRibbon.show()
+            } else {
+                ivRibbon.hide()
+            }
+        }
+
+        private fun ItemOfferBinding.setPriceColor(offer: OfferModel) {
+            if (offer.isOnAuction && !offer.bids.isNullOrEmpty()) {
+                val filteredBidsByValue = offer.bids?.filterNotNull()?.sortedByDescending { it.bidValue }
+                if (filteredBidsByValue?.first()?.email.equals(user.email, true)) {
+                    tvPriceValue.setTextColorRes(R.color.green)
+                } else if (filteredBidsByValue?.any { it.email == user.email } == true) {
+                    tvPriceValue.setTextColorRes(R.color.red)
+                } else {
+                    tvPriceValue.setTextColorRes(R.color.colorPrimary)
+                }
+            }
         }
 
         private fun ItemOfferBinding.setOfferImage(offer: OfferModel) {
@@ -144,9 +173,7 @@ class OfferAdapter(
             R.string.offer_price_value,
             if (offer.highestBid.orElse(0f) > 0) priceDecimalFormat.format(offer.highestBid) else priceDecimalFormat.format(offer.price),
             offer.currencyType?.let { type ->
-                CurrencyEnum.values()
-                    .firstOrNull { it.currencyType.equals(type, ignoreCase = true) }?.short()
-                    .orEmpty()
+                Currencies.currenciesList.firstOrNull { it.name.equals(type, true) }?.symbol ?: CurrencyEnum.RON.symbol()
             }
         )
 
@@ -222,10 +249,12 @@ class OfferAdapter(
                         inclBiddersAndMore.ivBidder1.show()
                         populateBidderAvatar(bid, inclBiddersAndMore.ivBidder1)
                     }
+
                     1 -> {
                         inclBiddersAndMore.ivBidder2.show()
                         populateBidderAvatar(bid, inclBiddersAndMore.ivBidder2)
                     }
+
                     2 -> {
                         inclBiddersAndMore.ivBidder3.show()
                         populateBidderAvatar(bid, inclBiddersAndMore.ivBidder3)
@@ -280,13 +309,14 @@ class OfferAdapter(
     fun addNewOffers(offers: List<OfferModel>, isUpdate: Boolean = false) {
         if (isUpdate) {
             updateOffers(offers)
-        }
-        offers.forEach { newOffer ->
-            val indexOfOffer = this.offers.indexOfFirst { it.id == newOffer.id }
-            if (indexOfOffer != -1) {
-                updateOffer(indexOfOffer, newOffer)
-            } else {
-                add(newOffer)
+        } else {
+            offers.forEach { newOffer ->
+                val indexOfOffer = this.offers.indexOfFirst { it.id == newOffer.id }
+                if (indexOfOffer != -1) {
+                    updateOffer(indexOfOffer, newOffer)
+                } else {
+                    add(newOffer)
+                }
             }
         }
     }
@@ -310,17 +340,15 @@ class OfferAdapter(
     }
 
     private fun add(offer: OfferModel) {
-        val position = getPositionOrder(
-            offer.publishDate.orEmpty(),
-            offers.lastOrNull()?.publishDate.orEmpty()
-        )
+        val position = offers.size
         offers.add(position, offer)
         notifyItemInserted(position)
     }
 
     private fun getPositionOrder(newOfferDate: String, oldOfferDate: String): Int {
-        if (newOfferDate.isEmpty() || oldOfferDate.isEmpty()) return offers.size
-        return if (DateUtils().isNewer(newOfferDate, oldOfferDate)) 0 else offers.size
+        return if (newOfferDate.isEmpty() && oldOfferDate.isNotEmpty()) offers.size
+        else if (newOfferDate.isNotEmpty() && oldOfferDate.isEmpty()) offers.size - 1
+        else offers.size
     }
 
     private fun updateOffer(indexOfOffer: Int, newOffer: OfferModel) {
@@ -348,7 +376,7 @@ class OfferAdapter(
         override fun getNewListSize(): Int = newList.size
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition].isUserFavorite == newList[newItemPosition].isUserFavorite
+            return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }
 

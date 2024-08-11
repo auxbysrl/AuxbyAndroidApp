@@ -4,18 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import com.fivedevs.auxby.application.App
 import com.fivedevs.auxby.data.api.DataApi
 import com.fivedevs.auxby.data.api.UserApi
-import com.fivedevs.auxby.data.database.entities.User
 import com.fivedevs.auxby.data.database.repositories.CategoryRepository
 import com.fivedevs.auxby.data.database.repositories.OffersRepository
 import com.fivedevs.auxby.data.database.repositories.UserRepository
 import com.fivedevs.auxby.data.prefs.PreferencesService
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.models.CategoryDetailsModel
 import com.fivedevs.auxby.domain.models.CategoryModel
 import com.fivedevs.auxby.domain.models.OfferPhoto
 import com.fivedevs.auxby.domain.models.OfferRequestModel
 import com.fivedevs.auxby.domain.utils.Constants
 import com.fivedevs.auxby.domain.utils.OfferUtils.getMultipartOfferPhotos
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
 import com.fivedevs.auxby.screens.dashboard.offers.baseViewModel.BaseOffersViewModel
@@ -25,7 +24,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import okhttp3.MultipartBody
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,9 +47,8 @@ class AddOfferViewModel @Inject constructor(
     compositeDisposable
 ) {
 
-    val user: MutableLiveData<User> = MutableLiveData()
     val selectedPosPhoto: MutableLiveData<OfferPhoto> = MutableLiveData()
-    val selectedCategory: MutableLiveData<CategoryModel> = MutableLiveData()
+    val selectedCategoryId: MutableLiveData<Int> = MutableLiveData()
     val selectedSubcategory: MutableLiveData<CategoryDetailsModel> = MutableLiveData()
     val appCategoriesResponse: MutableLiveData<List<CategoryModel>> = MutableLiveData()
     var isLightStatusBar: MutableLiveData<Boolean> =
@@ -59,15 +56,24 @@ class AddOfferViewModel @Inject constructor(
     val shouldShowToolbar: MutableLiveData<Boolean> =
         MutableLiveData<Boolean>().apply { value = true }
 
-    val returnToDashboard = SingleLiveEvent<Boolean>()
-    val errorUploadingImagesEvent = SingleLiveEvent<Any>()
-    val shouldShowWholeDescription = SingleLiveEvent<Any>()
-    val automaticallyPopulateDetails = SingleLiveEvent<Any>()
-    val onPreviewFragment: SingleLiveEvent<Any> = SingleLiveEvent()
-    val onOfferUpdateEvent: SingleLiveEvent<Any> = SingleLiveEvent()
-    val onPromoteOfferFragment: SingleLiveEvent<Any> = SingleLiveEvent()
-    val multipartImages: SingleLiveEvent<Array<MultipartBody.Part>> = SingleLiveEvent()
-    val categoryDetailsResponse: SingleLiveEvent<CategoryDetailsModel> = SingleLiveEvent()
+    val returnToDashboard =
+        SingleLiveEvent<Boolean>()
+    val errorUploadingImagesEvent =
+        SingleLiveEvent<Any>()
+    val shouldShowWholeDescription =
+        SingleLiveEvent<Any>()
+    val automaticallyPopulateDetails =
+        SingleLiveEvent<Any>()
+    val onPreviewFragment: SingleLiveEvent<Any> =
+        SingleLiveEvent()
+    val onOfferUpdateEvent: SingleLiveEvent<Any> =
+        SingleLiveEvent()
+    val onPromoteOfferFragment: SingleLiveEvent<Long> =
+        SingleLiveEvent()
+    val multipartImages: SingleLiveEvent<Array<MultipartBody.Part>> =
+        SingleLiveEvent()
+    val categoryDetailsResponse: SingleLiveEvent<CategoryDetailsModel> =
+        SingleLiveEvent()
 
     val onOfferPhotoSelected: PublishSubject<OfferPhoto> = PublishSubject.create()
     val onCategorySelected: PublishSubject<CategoryModel> = PublishSubject.create()
@@ -81,7 +87,7 @@ class AddOfferViewModel @Inject constructor(
 
     init {
         shouldShowLoader.value = true
-        getCurrentUserFromDB()
+        getUserFromDB()
         onCategorySelectedListener()
         onOfferPhotoSelectedListener()
         onSubcategorySelectedListener()
@@ -91,23 +97,12 @@ class AddOfferViewModel @Inject constructor(
         getAppCategories()
     }
 
-    private fun getCurrentUserFromDB() {
-        userRepository.getCurrentUser()
-            .subscribeOn(rxSchedulers.background())
-            .observeOn(rxSchedulers.androidUI())
-            .subscribe({
-                user.value = it
-            }, {
-                handleDoOnError(it)
-            }).disposeBy(compositeDisposable)
-    }
-
     private fun onCategorySelectedListener() {
         onCategorySelected
             .observeOn(rxSchedulers.androidUI())
             .subscribe({ category ->
                 offerRequestModel.categoryId = category.id
-                selectedCategory.value = category
+                selectedCategoryId.value = category.id
             }, {
                 handleDoOnError(it)
             })
@@ -153,11 +148,11 @@ class AddOfferViewModel @Inject constructor(
     }
 
     fun getCategoryDetails() {
-        selectedCategory.value?.let {
-            categoryRepository.getCategoryDetailsById(it.id)
+        selectedCategoryId.value?.let {
+            categoryRepository.getCategoryDetailsById(it)
                 .observeOn(rxSchedulers.androidUI())
-                .subscribe({
-                    categoryDetailsResponse.value = it
+                .subscribe({ categoryDetails ->
+                    categoryDetailsResponse.value = categoryDetails
                 }, {
                     handleDoOnError(it)
                 })
@@ -187,7 +182,7 @@ class AddOfferViewModel @Inject constructor(
                 photos?.let { images ->
                     if (images.isEmpty()) return@flatMap Observable.just(Constants.EMPTY)
                     dataApi.uploadOfferPhotos(it.id.toString(), images)
-                        .doOnError { error ->
+                        .doOnError { _ ->
                             errorUploadingImagesEvent.call()
                         }
                 } ?: kotlin.run { Observable.just(Constants.EMPTY) }
@@ -201,8 +196,8 @@ class AddOfferViewModel @Inject constructor(
             .observeOn(rxSchedulers.androidUI())
             .doOnError { handleDoOnError(it) }
             .subscribe({
-                returnToDashboard.value = true
-                //onPromoteOfferFragment.call()
+                //returnToDashboard.value = true
+                onPromoteOfferFragment.value = offerId
                 shouldShowLoader.value = false
             }, {
                 handleDoOnError(it)

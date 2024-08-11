@@ -3,7 +3,11 @@ package com.fivedevs.auxby.data.database.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.fivedevs.auxby.data.database.converters.*
+import com.fivedevs.auxby.data.database.converters.CategoryFieldsValueConverter
+import com.fivedevs.auxby.data.database.converters.ListPhotosConverter
+import com.fivedevs.auxby.data.database.converters.ListStringConverter
+import com.fivedevs.auxby.data.database.converters.OfferBidValueConverter
+import com.fivedevs.auxby.data.database.converters.OfferOwnerConverter
 import com.fivedevs.auxby.domain.models.CategoryFieldsValue
 import com.fivedevs.auxby.domain.models.OfferBid
 import com.fivedevs.auxby.domain.models.OfferOwner
@@ -32,6 +36,7 @@ data class Offer(
     var bids: List<OfferBid?>,
     var price: Float?,
     var currencyType: String?,
+    var currencySymbol: String?,
     var owner: OfferOwner?,
     var highestBid: Float?,
     var photos: List<OfferPhoto>,
@@ -43,5 +48,6 @@ data class Offer(
     var isPromoted: Boolean = false,
     var autoExtend: Boolean = false,
     var condition: String?,
-    var phoneNumbers: String
+    var phoneNumbers: String,
+    var deepLink: String
 )

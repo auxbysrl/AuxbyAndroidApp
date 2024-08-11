@@ -3,17 +3,23 @@ package com.fivedevs.auxby.screens.dashboard.offers.details
 import androidx.lifecycle.MutableLiveData
 import com.fivedevs.auxby.data.api.DataApi
 import com.fivedevs.auxby.data.api.UserApi
+import com.fivedevs.auxby.data.database.entities.NotificationItem
 import com.fivedevs.auxby.data.database.entities.User
 import com.fivedevs.auxby.data.database.repositories.CategoryRepository
 import com.fivedevs.auxby.data.database.repositories.OffersRepository
 import com.fivedevs.auxby.data.database.repositories.UserRepository
 import com.fivedevs.auxby.data.prefs.PreferencesService
-import com.fivedevs.auxby.domain.SingleLiveEvent
-import com.fivedevs.auxby.domain.models.*
+import com.fivedevs.auxby.domain.models.CategoryDetailsModel
+import com.fivedevs.auxby.domain.models.OfferModel
+import com.fivedevs.auxby.domain.models.PlaceBidModel
+import com.fivedevs.auxby.domain.models.ReportOfferModel
+import com.fivedevs.auxby.domain.models.RequiredCoinsModel
 import com.fivedevs.auxby.domain.models.enums.ErrorTypesEnum
 import com.fivedevs.auxby.domain.models.enums.OfferStateEnum
 import com.fivedevs.auxby.domain.models.enums.UserTypeEnum
 import com.fivedevs.auxby.domain.utils.Constants
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
+import com.fivedevs.auxby.domain.utils.rx.RxBus
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
 import com.fivedevs.auxby.screens.dashboard.offers.baseViewModel.BaseOffersViewModel
@@ -34,7 +40,8 @@ class OfferDetailsViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository,
     private val offersRepository: OffersRepository,
     private val preferencesService: PreferencesService,
-    private val compositeDisposable: CompositeDisposable
+    private val compositeDisposable: CompositeDisposable,
+    private val rxBus: RxBus
 ) : BaseOffersViewModel(
     userApi,
     dataApi,
@@ -47,17 +54,27 @@ class OfferDetailsViewModel @Inject constructor(
 
     val reportOfferEvent = SingleLiveEvent<Any>()
     val offerDeleteEvent = SingleLiveEvent<Any>()
-    var somethingWentWrongEvent = SingleLiveEvent<Any>()
-    val offerNotAvailableEvent = SingleLiveEvent<Any>()
-    val placeBidEvent = SingleLiveEvent<PlaceBidModel>()
-    val placeBidSuccessEvent = SingleLiveEvent<Boolean>()
-    val favoriteOfferCallEvent = SingleLiveEvent<Boolean>()
-    val shouldShowWholeDescription = SingleLiveEvent<Any>()
-    val wasBidAccepted = SingleLiveEvent<Boolean>()
+    var somethingWentWrongEvent =
+        SingleLiveEvent<Any>()
+    val offerNotAvailableEvent =
+        SingleLiveEvent<Any>()
+    val placeBidEvent =
+        SingleLiveEvent<PlaceBidModel>()
+    val placeBidSuccessEvent =
+        SingleLiveEvent<Boolean>()
+    val favoriteOfferCallEvent =
+        SingleLiveEvent<Boolean>()
+    val shouldShowWholeDescription =
+        SingleLiveEvent<Any>()
+    val wasBidAccepted =
+        SingleLiveEvent<Boolean>()
+    var refreshOfferForBidExceededNotification =
+        SingleLiveEvent<Any>()
 
     val user = MutableLiveData<User>().apply { value = User() }
     var isLightStatusBar = MutableLiveData<Boolean>().apply { value = false }
-    val notEnoughCoinsEvent = SingleLiveEvent<Boolean>().apply { value = false }
+    val notEnoughCoinsEvent = SingleLiveEvent<Boolean>()
+        .apply { value = false }
     var userType = MutableLiveData<UserTypeEnum>().apply { UserTypeEnum.NORMAL_FIX_PRICE_OFFER }
 
     private var canIncreaseViewsNumber = true
@@ -72,6 +89,17 @@ class OfferDetailsViewModel @Inject constructor(
         }
     }
 
+    private fun listenForBidExceededNotification() {
+        rxBus.toObservable()
+            .observeOn(rxSchedulers.androidUI())
+            .filter { it is NotificationItem }
+            .map { it as NotificationItem }
+            .subscribe {
+                refreshOfferForBidExceededNotification.call()
+            }
+            .disposeBy(compositeDisposable)
+    }
+
     private fun getCurrentUser() {
         userRepository.getCurrentUser()
             .subscribeOn(rxSchedulers.background())
@@ -80,7 +108,8 @@ class OfferDetailsViewModel @Inject constructor(
                 user.value = it
             }, {
                 handleDoOnError(it)
-            }).disposeBy(compositeDisposable)
+            })
+            .disposeBy(compositeDisposable)
     }
 
     private fun getCategoryDetails(categoryId: Int) {
@@ -118,6 +147,19 @@ class OfferDetailsViewModel @Inject constructor(
             }, {
                 offerNotAvailableEvent.call()
                 handleDoOnError(it)
+            })
+            .disposeBy(compositeDisposable)
+    }
+
+    fun getOfferDeepLink(offerId: Long, callback: (link: String) -> Unit) {
+        dataApi.getOfferDeepLink(offerId)
+            .subscribeOn(rxSchedulers.network())
+            .observeOn(rxSchedulers.background())
+            .subscribe({
+                callback(it.url)
+            }, {
+                callback("")
+                Timber.e(it)
             })
             .disposeBy(compositeDisposable)
     }
@@ -226,7 +268,7 @@ class OfferDetailsViewModel @Inject constructor(
     fun sendOfferReport(reportOfferModel: ReportOfferModel) {
         offerDetailsModel.value?.let { offer ->
             shouldShowLoader.value = true
-            dataApi.reportOffer(offer.id, reportOfferModel)
+            userApi.reportOffer(offer.id, reportOfferModel)
                 .subscribeOn(rxSchedulers.network())
                 .observeOn(rxSchedulers.androidUI())
                 .subscribe({

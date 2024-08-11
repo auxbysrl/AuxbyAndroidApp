@@ -20,8 +20,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/icBid"
-            android:layout_width="@dimen/space_25dp"
-            android:layout_height="@dimen/space_25dp"
+            android:layout_width="@dimen/space_20dp"
+            android:layout_height="@dimen/space_20dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_bid_thin" />
 
@@ -38,8 +38,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivBidder1"
-            android:layout_width="@dimen/space_25dp"
-            android:layout_height="@dimen/space_25dp"
+            android:layout_width="@dimen/space_20dp"
+            android:layout_height="@dimen/space_20dp"
             android:layout_gravity="end"
             android:layout_marginStart="@dimen/space_5dp"
             android:adjustViewBounds="true"
@@ -49,8 +49,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivBidder2"
-            android:layout_width="@dimen/space_25dp"
-            android:layout_height="@dimen/space_25dp"
+            android:layout_width="@dimen/space_20dp"
+            android:layout_height="@dimen/space_20dp"
             android:layout_gravity="end"
             android:adjustViewBounds="true"
             android:translationX="-6dp"
@@ -60,8 +60,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivBidder3"
-            android:layout_width="@dimen/space_25dp"
-            android:layout_height="@dimen/space_25dp"
+            android:layout_width="@dimen/space_20dp"
+            android:layout_height="@dimen/space_20dp"
             android:layout_gravity="end"
             android:adjustViewBounds="true"
             android:translationX="-12dp"

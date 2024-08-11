@@ -3,8 +3,9 @@ package com.fivedevs.auxby.data.api.interceptor
 import com.fivedevs.auxby.application.App
 import com.fivedevs.auxby.data.prefs.PreferencesService
 import com.fivedevs.auxby.domain.utils.Api
-import com.fivedevs.auxby.domain.utils.Constants
 import com.fivedevs.auxby.domain.utils.Constants.RESPONSE_CODE_401
+import com.fivedevs.auxby.domain.utils.Constants.RESPONSE_CODE_403
+import com.fivedevs.auxby.domain.utils.Constants.TOKEN_EXPIRED
 import com.fivedevs.auxby.domain.utils.EnvironmentManager
 import com.fivedevs.auxby.domain.utils.extensions.isTokenNeed
 import com.fivedevs.auxby.domain.utils.extensions.launchActivityNewTask
@@ -55,27 +56,28 @@ class TokenInterceptor @Inject constructor(
             .build()
 
         return chain.proceed(newRequest).apply {
-            if (invalidTokenCondition(code, token)) {
+            if (invalidTokenCondition(code)) {
                 // Check if a logout action is already in progress
                 if (!isLogoutInProgress && (application.currentActivity?.localClassName?.contains(LoginActivity::class.java.simpleName) == false &&
                             application.currentActivity?.localClassName?.contains(RegisterActivity::class.java.simpleName) == false)) {
                     // Set the flag to indicate that a logout action is in progress
-                    isLogoutInProgress = true
                     logoutCurrentUser()
                 }
             }
         }
     }
 
-    private fun invalidTokenCondition(code: Int, token: String?): Boolean {
-        return (code == RESPONSE_CODE_401 || (token.isNullOrEmpty() && code !in (200..299)))
+    private fun invalidTokenCondition(code: Int): Boolean {
+        return (code == RESPONSE_CODE_403 || code == RESPONSE_CODE_401)
     }
 
     private fun logoutCurrentUser() {
         // Ensure the flag is reset after the logout process is complete
         preferencesService.clearUserDetails()
         if (application.currentActivity !is LoginActivity) {
-            application.launchActivityNewTask<LoginActivity>()
+            application.launchActivityNewTask<LoginActivity>(){
+                putExtra(TOKEN_EXPIRED, true)
+            }
         }
     }
 }

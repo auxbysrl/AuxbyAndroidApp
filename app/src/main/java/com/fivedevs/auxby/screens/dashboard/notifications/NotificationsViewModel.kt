@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fivedevs.auxby.data.api.NotificationsApi
 import com.fivedevs.auxby.data.database.entities.NotificationItem
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.Constants
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +29,8 @@ class NotificationsViewModel @Inject constructor(
     val deleteNotificationPublishSubject: PublishSubject<NotificationItem> = PublishSubject.create()
     val notificationSelectorPublishSubject: PublishSubject<NotificationItem> = PublishSubject.create()
 
-    val onNotificationClickEvent: SingleLiveEvent<NotificationItem> = SingleLiveEvent()
+    val onNotificationClickEvent: SingleLiveEvent<NotificationItem> =
+        SingleLiveEvent()
 
     init {
         onNotificationClicked()

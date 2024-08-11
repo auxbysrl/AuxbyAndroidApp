@@ -43,6 +43,5 @@ fun RecyclerView.LayoutManager.checkForPaginationLoadingVisibility(
         ) {
             loadMoreItems.invoke()
         }
-
     }
 }

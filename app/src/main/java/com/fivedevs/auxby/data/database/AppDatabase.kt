@@ -6,13 +6,20 @@ import com.fivedevs.auxby.data.database.dao.CategoryDao
 import com.fivedevs.auxby.data.database.dao.ChatDao
 import com.fivedevs.auxby.data.database.dao.NotificationsDao
 import com.fivedevs.auxby.data.database.dao.UserDao
-import com.fivedevs.auxby.data.database.dao.offer.*
-import com.fivedevs.auxby.data.database.entities.*
+import com.fivedevs.auxby.data.database.dao.offer.OfferTypeStoredDao
+import com.fivedevs.auxby.data.database.dao.offer.OffersDao
+import com.fivedevs.auxby.data.database.entities.Category
+import com.fivedevs.auxby.data.database.entities.CategoryDetails
+import com.fivedevs.auxby.data.database.entities.ChatRoom
+import com.fivedevs.auxby.data.database.entities.NotificationItem
+import com.fivedevs.auxby.data.database.entities.Offer
+import com.fivedevs.auxby.data.database.entities.OfferTypeStored
+import com.fivedevs.auxby.data.database.entities.User
 
 @Database(
     entities = [User::class, Offer::class, OfferTypeStored::class, Category::class, CategoryDetails::class, ChatRoom::class,
                NotificationItem::class],
-    version = 2,
+    version = 5,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

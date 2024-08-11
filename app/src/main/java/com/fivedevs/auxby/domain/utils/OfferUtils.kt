@@ -21,11 +21,10 @@ import java.io.File
 object OfferUtils {
 
     fun getOfferPreviewPrice(context: Context, offerRequestModel: OfferRequestModel): String {
+        val currencySymbol = Currencies.currenciesList.firstOrNull { it.name.equals(offerRequestModel.currencyType, true) }?.symbol ?: CurrencyEnum.RON.symbol()
         return context.getString(
             R.string.offer_price_value, priceDecimalFormat.format(offerRequestModel.price),
-            CurrencyEnum.valueOf(offerRequestModel.currencyType.ifEmpty {
-                CurrencyEnum.RON.currencyType
-            }.uppercase()).short()
+            currencySymbol
         )
     }
 
@@ -33,7 +32,9 @@ object OfferUtils {
         return context.getString(R.string.offer_price_value,
             priceDecimalFormat.format(offerModel.price).toString(),
             offerModel.currencyType?.ifEmpty { CurrencyEnum.RON.currencyType }?.uppercase()
-                ?.let { CurrencyEnum.valueOf(it).short() }
+                ?.let {
+                    Currencies.currenciesList.firstOrNull { currencyModel -> currencyModel.name.equals(it, true) }?.symbol ?: CurrencyEnum.RON.symbol()
+                }
         )
     }
 
@@ -41,12 +42,14 @@ object OfferUtils {
         return context.getString(R.string.offer_price_value,
             priceDecimalFormat.format(bidValue).toString(),
             currency?.ifEmpty { CurrencyEnum.RON.currencyType }?.uppercase()
-                ?.let { CurrencyEnum.valueOf(it).short() }
+                ?.let {
+                    Currencies.currenciesList.firstOrNull { currencyModel -> currencyModel.name.equals(it, true) }?.symbol ?: CurrencyEnum.RON.symbol()
+                }
         )
     }
 
     fun getCurrency(currency: String?): String {
-        return CurrencyEnum.valueOf(currency ?: CurrencyEnum.RON.currencyType).short()
+        return Currencies.currenciesList.firstOrNull { it.name.equals(currency, true) }?.symbol ?: CurrencyEnum.RON.symbol()
     }
 
     fun getHighestBidWithCurrency(offerModel: OfferModel): String {
@@ -127,4 +130,25 @@ object OfferUtils {
     }
 
     private const val NO_BID_LINE = "-"
+
+    fun getUserLastSeenTime(context: Context, lastSeen: String): String {
+        if (lastSeen.isEmpty()) return Constants.EMPTY
+        return if (DateUtils().isToday(DateUtils().getFormattedDateYearMonthDayFromServer(lastSeen))) {
+            context.getString(
+                R.string.active_today_at,
+                DateUtils().getFormattedDateForUserActive(lastSeen)
+            )
+        } else if (DateUtils().isYesterday(DateUtils().getFormattedDateYearMonthDayFromServer(lastSeen))) {
+            context.getString(
+                R.string.active_yesterday_at,
+                DateUtils().getFormattedDateForUserActive(lastSeen)
+            )
+        } else {
+            context.getString(
+                R.string.active_at,
+                DateUtils().getFormattedDateForUserActive(lastSeen, DateUtils.FORMAT_DD_MMM_YYYY)
+            )
+        }
+    }
+
 }

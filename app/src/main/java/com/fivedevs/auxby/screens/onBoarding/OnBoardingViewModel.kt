@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.data.prefs.PreferencesService
 import com.fivedevs.auxby.data.prefs.PreferencesService.Companion.ON_BOARDING_KEY
-import com.fivedevs.auxby.domain.SingleLiveEvent
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.screens.onBoarding.onBoardingView.model.OnBoardingElement
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,7 +14,8 @@ class OnBoardingViewModel @Inject constructor(
     private val preferencesService: PreferencesService
 ) : ViewModel() {
 
-    val shouldShowJoinBt = SingleLiveEvent<Boolean>().apply { value = false }
+    val shouldShowJoinBt = SingleLiveEvent<Boolean>()
+        .apply { value = false }
 
     fun getOnBoardingElements(): MutableList<OnBoardingElement> {
         return mutableListOf<OnBoardingElement>().apply {

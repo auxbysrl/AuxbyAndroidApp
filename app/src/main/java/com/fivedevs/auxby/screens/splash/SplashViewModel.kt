@@ -2,18 +2,26 @@ package com.fivedevs.auxby.screens.splash
 
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.ViewModel
+import com.fivedevs.auxby.data.api.UserApi
+import com.fivedevs.auxby.data.database.repositories.UserRepository
 import com.fivedevs.auxby.data.prefs.PreferencesService
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.DateUtils
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
+import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
+import com.fivedevs.auxby.screens.authentification.base.BaseUserViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.*
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val preferencesService: PreferencesService
-) : ViewModel() {
+    private val preferencesService: PreferencesService,
+    compositeDisposable: CompositeDisposable,
+    userApi: UserApi,
+    userRepository: UserRepository,
+    rxSchedulers: RxSchedulers
+) : BaseUserViewModel(userApi, rxSchedulers, userRepository, compositeDisposable, preferencesService) {
 
     val onDashboardNavigation = SingleLiveEvent<Any>()
     val onOnBoardingNavigation = SingleLiveEvent<Any>()
@@ -21,6 +29,7 @@ class SplashViewModel @Inject constructor(
     private var handler: Handler = Handler(Looper.getMainLooper())
 
     init {
+        getUser()
         getOnBoardingStatus()
         setCurrentLocale()
     }
@@ -37,7 +46,8 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun setCurrentLocale() {
-        DateUtils.currentLocale = Locale(preferencesService.getSelectedLanguageApp().lowercase(), preferencesService.getSelectedLanguageApp().uppercase())
+        DateUtils.currentLocale =
+            Locale(preferencesService.getSelectedLanguageApp().lowercase(), preferencesService.getSelectedLanguageApp().uppercase())
     }
 
     override fun onCleared() {

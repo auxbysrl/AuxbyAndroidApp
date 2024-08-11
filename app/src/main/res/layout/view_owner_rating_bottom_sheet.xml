@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clPlaceBid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_rounded_bottom_sheet"
         android:paddingTop="@dimen/space_9dp">
 
@@ -34,8 +35,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider1">
 
@@ -68,6 +69,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_15dp"
+                android:layout_marginBottom="@dimen/space_45dp"
+                app:layout_constraintBottom_toTopOf="@id/btnSend"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvRateOfferQuestion"
@@ -94,6 +97,7 @@
                 android:layout_marginTop="@dimen/space_60dp"
                 android:paddingTop="@dimen/space_6dp"
                 android:text="@string/what_do_you_think_about_this_seller"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sellerRatingBar" />
@@ -106,6 +110,7 @@
                 android:layout_marginHorizontal="@dimen/space_16dp"
                 android:layout_marginTop="@dimen/space_16dp"
                 android:layout_marginBottom="@dimen/space_40dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/btnSend"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -117,10 +122,10 @@
                     style="@style/TextInputEditTextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textMultiLine"
                     android:gravity="top"
                     android:hint="@string/your_feedback"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
                     android:lines="4"
                     android:textColorHint="@color/light_text" />
 
@@ -135,7 +140,7 @@
                 android:layout_marginBottom="@dimen/space_16dp"
                 android:drawablePadding="@dimen/space_12dp"
                 android:text="@string/publish"
-                app:layout_constraintBottom_toTopOf="@+id/tvMaybeLater"
+                app:layout_constraintBottom_toTopOf="@id/tvMaybeLater"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:loaderColor="@android:color/white" />
@@ -154,15 +159,15 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
-            layout="@layout/incl_congrats"
             android:id="@+id/inclCongrats"
+            layout="@layout/incl_congrats"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/space_0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider1"
-            android:visibility="gone"/>
+            app:layout_constraintTop_toBottomOf="@id/divider1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

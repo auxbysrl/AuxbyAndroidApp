@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -37,21 +38,25 @@
             <TextView
                 android:id="@+id/tvBundleTitle"
                 style="@style/TextMontserratSemiBold34spWhite"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/space_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_22dp"
                 android:layout_marginTop="@dimen/space_20dp"
                 android:text="@{bundleModel.name}"
+                tools:text="asdasdasdsadadsddd"
+                android:layout_marginEnd="@dimen/space_8dp"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bundleCheckBox"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/bundleCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_9dp"
+                android:layout_marginTop="@dimen/space_20dp"
                 android:layout_marginEnd="@dimen/space_10dp"
                 android:src="@drawable/ic_uncheck"
+                app:layout_constraintStart_toEndOf="@+id/tvBundleTitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_22dp"
                 android:layout_marginTop="@dimen/space_20dp"
-                android:text="@{@string/coins_amount(Long.toString(bundleModel.coins))}"
+                tools:text="100"
                 app:layout_constraintBottom_toTopOf="@+id/ivAuxbyBundleLogo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvBundleTitle" />
@@ -83,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_16dp"
-                android:text="35 lei"
+                android:text="@{bundleModel.price}"
                 app:layout_constraintBottom_toBottomOf="@+id/ivAuxbyBundleLogo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/ivAuxbyBundleLogo" />

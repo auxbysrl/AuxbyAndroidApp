@@ -93,4 +93,7 @@
 
     <dimen name="space_220dp">220dp</dimen>
     <dimen name="offer_backdrop_height">370dp</dimen>
+
+    <dimen name="pageMargin">30dp</dimen>
+    <dimen name="offset">10dp</dimen>
 </resources>

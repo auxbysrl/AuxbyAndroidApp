@@ -6,7 +6,6 @@ import com.fivedevs.auxby.databinding.DialogGuestModeBinding
 import com.fivedevs.auxby.domain.utils.extensions.launchActivity
 import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
 import com.fivedevs.auxby.screens.authentification.login.LoginActivity
-import com.fivedevs.auxby.screens.authentification.register.RegisterActivity
 import com.fivedevs.auxby.screens.base.BaseBottomSheetDialog
 
 class GuestModeDialog(

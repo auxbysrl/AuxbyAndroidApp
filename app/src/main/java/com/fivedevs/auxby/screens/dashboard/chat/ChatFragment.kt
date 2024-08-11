@@ -51,7 +51,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun initObservers() {
-        parentViewModel.user.observe(viewLifecycleOwner) { user ->
+        parentViewModel.localUser.observe(viewLifecycleOwner) { user ->
             getChatsRooms(user)
         }
 

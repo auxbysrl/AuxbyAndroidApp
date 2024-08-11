@@ -29,6 +29,7 @@
                 android:id="@+id/ivUserAvatar"
                 android:layout_width="@dimen/space_40dp"
                 android:layout_height="@dimen/space_40dp"
+                android:onDelayClick="@{viewModel::onUserOptionsClicked}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tvUsername"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +41,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_10dp"
-                android:text="@{@string/first_and_last_name(viewModel.user.firstName, viewModel.user.lastName)}"
+                android:onDelayClick="@{viewModel::onUserOptionsClicked}"
+                android:text="@{@string/first_and_last_name(viewModel.localUser.firstName, viewModel.localUser.lastName)}"
                 app:layout_constraintBottom_toTopOf="@+id/tvUserEmail"
                 app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
                 app:layout_constraintTop_toTopOf="@id/ivUserAvatar" />
@@ -51,7 +53,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_10dp"
-                android:text="@{viewModel.user.email}"
+                android:onDelayClick="@{viewModel::onUserOptionsClicked}"
+                android:text="@{viewModel.localUser.email}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
                 app:layout_constraintTop_toBottomOf="@id/tvUsername" />
@@ -90,8 +93,8 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_8dp"
                 android:layout_gravity="end|center"
+                android:layout_marginStart="@dimen/space_8dp"
                 android:src="@drawable/ic_auxby_coin" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -103,21 +106,6 @@
             app:drawableStartCompat="@drawable/ic_profile" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvNotifications"
-            style="@style/DrawerTextViewItemStyle"
-            android:onDelayClick="@{viewModel::onNotificationsClicked}"
-            android:text="@string/notifications"
-            app:drawableStartCompat="@drawable/ic_notifications"
-            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
-
-<!--        <androidx.appcompat.widget.AppCompatTextView-->
-<!--            android:id="@+id/tvBuyCoins"-->
-<!--            style="@style/DrawerTextViewItemStyle"-->
-<!--            android:onDelayClick="@{viewModel::onBuyCoinsClicked}"-->
-<!--            android:text="@string/buy_coins"-->
-<!--            app:drawableStartCompat="@drawable/ic_buy_coins" />-->
-
-        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvYourOffers"
             style="@style/DrawerTextViewItemStyle"
             android:onDelayClick="@{viewModel::onYourOffersClicked}"
@@ -125,11 +113,34 @@
             app:drawableStartCompat="@drawable/ic_your_offers" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNotifications"
+            style="@style/DrawerTextViewItemStyle"
+            android:onDelayClick="@{viewModel::onNotificationsClicked}"
+            android:text="@string/notifications"
+            android:visibility="gone"
+            app:drawableStartCompat="@drawable/ic_notifications"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBuyCoins"
+            style="@style/DrawerTextViewItemStyle"
+            android:onDelayClick="@{viewModel::onBuyCoinsClicked}"
+            android:text="@string/buy_coins"
+            app:drawableStartCompat="@drawable/ic_buy_coins" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSettings"
             style="@style/DrawerTextViewItemStyle"
             android:onDelayClick="@{viewModel::onSettingsClicked}"
             android:text="@string/settings"
             app:drawableStartCompat="@drawable/ic_settings" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAddOffer"
+            style="@style/DrawerTextViewItemStyle"
+            android:onDelayClick="@{viewModel::onAddOfferClicked}"
+            android:text="@string/add_offer"
+            app:drawableStartCompat="@drawable/ic_plus" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvContactUs"

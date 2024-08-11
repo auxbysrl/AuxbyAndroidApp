@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_white"
+        android:orientation="vertical"
+        tools:context=".screens.dashboard.offers.categories.categoryOffers.CategoryOffersActivity">
+
+        <include
+            android:id="@+id/inclToolbar"
+            app:title="@{@string/user_details}"
+            layout="@layout/toolbar_filters" />
+
+        <include
+            android:id="@+id/inclShimmerCategoryOffers"
+            layout="@layout/shimmer_category_offers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="gone" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/space_16dp"
+                android:paddingVertical="@dimen/space_16dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivUserAvatar"
+                    android:layout_width="@dimen/space_45dp"
+                    android:layout_height="@dimen/space_45dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_placeholder" />
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    style="@style/TextMontserratMedium17sp"
+                    android:layout_width="@dimen/space_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_6dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    app:layout_constraintEnd_toStartOf="@+id/sellerRatingBar"
+                    app:layout_constraintStart_toEndOf="@+id/ivUserAvatar"
+                    app:layout_constraintTop_toTopOf="@+id/ivUserAvatar"
+                    tools:text="Username" />
+
+                <TextView
+                    android:id="@+id/tvUserActiveTime"
+                    style="@style/TextMontserratRegular12sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_6dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivUserAvatar"
+                    app:layout_constraintStart_toEndOf="@+id/ivUserAvatar"
+                    tools:text="Active today at 12:34" />
+
+                <com.willy.ratingbar.BaseRatingBar
+                    android:id="@+id/sellerRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@id/ivUserAvatar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ivUserAvatar"
+                    app:srb_clearRatingEnabled="true"
+                    app:srb_clickable="false"
+                    app:srb_drawableEmpty="@drawable/ic_star_empty"
+                    app:srb_drawableFilled="@drawable/ic_star_selected"
+                    app:srb_isIndicator="false"
+                    app:srb_minimumStars="0"
+                    app:srb_numStars="5"
+                    app:srb_rating="5"
+                    app:srb_scrollable="false"
+                    app:srb_starHeight="@dimen/space_18dp"
+                    app:srb_starPadding="@dimen/space_3dp"
+                    app:srb_starWidth="@dimen/space_18dp"
+                    app:srb_stepSize="1" />
+
+                <View
+                    android:id="@+id/viewRatingBarOverlay"
+                    android:layout_width="@dimen/space_0dp"
+                    android:layout_height="@dimen/space_0dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintBottom_toBottomOf="@id/sellerRatingBar"
+                    app:layout_constraintEnd_toEndOf="@id/sellerRatingBar"
+                    app:layout_constraintStart_toStartOf="@id/sellerRatingBar"
+                    app:layout_constraintTop_toTopOf="@+id/sellerRatingBar" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivRateInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_16dp"
+                    android:src="@drawable/ic_info_border"
+                    app:layout_constraintEnd_toStartOf="@+id/tvRateSeller"
+                    app:layout_constraintTop_toBottomOf="@+id/sellerRatingBar" />
+
+                <TextView
+                    android:id="@+id/tvRateSeller"
+                    style="@style/TextMontserratSemiBold16spPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_16dp"
+                    android:text="@string/rate_seller"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/viewRatingBarOverlay"
+                    app:layout_constraintTop_toBottomOf="@+id/viewRatingBarOverlay" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.fivedevs.auxby.domain.utils.pagination.PaginationRecyclerView
+                android:id="@+id/rvOffers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_9dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingStart="@dimen/space_16dp"
+                android:paddingEnd="@dimen/space_16dp"
+                android:paddingBottom="@dimen/space_24dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="4"
+                tools:listitem="@layout/item_offer" />
+
+            <androidx.legacy.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_30dp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

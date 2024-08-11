@@ -16,7 +16,6 @@ import com.fivedevs.auxby.domain.utils.extensions.launchActivity
 import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
 import com.fivedevs.auxby.domain.utils.views.AlerterUtils
 import com.fivedevs.auxby.screens.authentification.base.BaseUserViewModel.Companion.CHECK_CONFIRMATION_EMAIL
-import com.fivedevs.auxby.screens.authentification.login.LoginActivity
 import com.fivedevs.auxby.screens.dashboard.DashboardActivity
 
 
@@ -61,6 +60,7 @@ class CheckEmailFragment(viewModel: BaseUserViewModel) : Fragment() {
     private fun initObservers() {
         parentViewModel.emailCheckEvent.observe(viewLifecycleOwner) { isEmailChecked ->
             if (isEmailChecked) {
+                parentViewModel.getUser()
                 requireActivity().launchActivity<DashboardActivity> { }
                 requireActivity().finishAffinity()
             } else {

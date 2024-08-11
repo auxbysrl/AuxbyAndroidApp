@@ -4,9 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import com.fivedevs.auxby.data.api.UserApi
 import com.fivedevs.auxby.data.database.repositories.UserRepository
 import com.fivedevs.auxby.data.prefs.PreferencesService
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.Constants
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.Utils.handleApiError
+import com.fivedevs.auxby.domain.utils.extensions.toast
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
 import com.fivedevs.auxby.screens.authentification.base.BaseUserViewModel
@@ -28,7 +29,8 @@ class RegisterViewModel @Inject constructor(
     val backClickEvent = SingleLiveEvent<Any>()
     val userExistsEvent = SingleLiveEvent<Any>()
     val signUpEvent = SingleLiveEvent<String?>()
-    val showCheckEmailScreenEvent = SingleLiveEvent<Any>()
+    val showCheckEmailScreenEvent =
+        SingleLiveEvent<Any>()
 
     val nextScreenEvent = MutableLiveData<String?>()
     val enableNextBtn = MutableLiveData<Boolean>().apply { value = false }

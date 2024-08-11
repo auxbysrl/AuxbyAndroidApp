@@ -23,23 +23,23 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.ActivityProfileBinding
-import com.fivedevs.auxby.domain.models.enums.DialogTypes
-import com.fivedevs.auxby.domain.utils.Constants
 import com.fivedevs.auxby.domain.utils.Constants.PERMISSION_CAMERA
 import com.fivedevs.auxby.domain.utils.Constants.PERMISSION_STORAGE
 import com.fivedevs.auxby.domain.utils.DateUtils
 import com.fivedevs.auxby.domain.utils.FileUtils.getRealPathFromURI
 import com.fivedevs.auxby.domain.utils.PermissionUtils.getMediaRequiredPermissions
-import com.fivedevs.auxby.domain.utils.buttonAnimator.TransitionButton
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.Utils
+import com.fivedevs.auxby.domain.utils.extensions.getDrawableCompat
+import com.fivedevs.auxby.domain.utils.extensions.hide
+import com.fivedevs.auxby.domain.utils.extensions.invisible
+import com.fivedevs.auxby.domain.utils.extensions.launchActivity
+import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
+import com.fivedevs.auxby.domain.utils.extensions.show
 import com.fivedevs.auxby.domain.utils.views.AlerterUtils
-import com.fivedevs.auxby.domain.utils.views.LoaderDialog
 import com.fivedevs.auxby.screens.base.BaseActivity
 import com.fivedevs.auxby.screens.changePassword.ChangePasswordActivity
-import com.fivedevs.auxby.screens.dashboard.DashboardActivity
 import com.fivedevs.auxby.screens.dialogs.GenericDialog
-import com.fivedevs.auxby.screens.dialogs.GenericDialog.Companion.DELETE_ACCOUNT_DIALOG_TAG
-import com.fivedevs.auxby.screens.dialogs.GenericDialog.Companion.LOGOUT_DIALOG_TAG
+import com.fivedevs.auxby.screens.profile.userActions.UserActionsDialog
 import com.permissionx.guolindev.PermissionX
 import com.sangcomz.fishbun.permission.PermissionCheck
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +51,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 @AndroidEntryPoint
 class ProfileActivity : BaseActivity() {
@@ -59,7 +60,6 @@ class ProfileActivity : BaseActivity() {
     private lateinit var binding: ActivityProfileBinding
     private val viewModel by viewModels<ProfileViewModel>()
     private var currentPhotoPath: String = ""
-    private val loaderDialog: LoaderDialog by lazy { LoaderDialog(this) }
     private val permissionCheck: PermissionCheck by lazy { PermissionCheck(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,15 +115,6 @@ class ProfileActivity : BaseActivity() {
                 AlerterUtils.showErrorAlert(this, getString(R.string.profile_changes_error))
             }
         }
-
-        viewModel.accountDeletedEvent.observe(this) {
-            loaderDialog.dismissDialog()
-            logoutUser()
-        }
-
-        viewModel.somethingWentWrongEvent.observe(this) {
-            showErrorMessage()
-        }
     }
 
     private fun initListeners() {
@@ -135,24 +126,10 @@ class ProfileActivity : BaseActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
+
         binding.inclToolbar.ivProfileMenu.setOnClickListener {
-            viewModel.showMenuPopup.value = viewModel.showMenuPopup.value?.not()
-        }
-
-        binding.inclProfileMenu.btnLogout.setOnClickListenerWithDelay {
-            viewModel.showMenuPopup.value = viewModel.showMenuPopup.value?.not()
-            val logoutDialog = GenericDialog(::logoutUser, DialogTypes.LOG_OUT)
-            logoutDialog.show(supportFragmentManager, LOGOUT_DIALOG_TAG)
-        }
-
-        binding.inclProfileMenu.btnDeleteAccount.setOnClickListenerWithDelay {
-            viewModel.showMenuPopup.value = viewModel.showMenuPopup.value?.not()
-            val deleteAccountDialog = GenericDialog(::onDeleteAccountClicked, DialogTypes.DELETE_ACCOUNT)
-            deleteAccountDialog.show(supportFragmentManager, DELETE_ACCOUNT_DIALOG_TAG)
-        }
-
-        binding.flBgView.setOnClickListener {
-            viewModel.showMenuPopup.value = false
+            val dialog = UserActionsDialog()
+            dialog.show(supportFragmentManager, GenericDialog.LOGOUT_DIALOG_TAG)
         }
 
         binding.inclFullName.btnEditFullName.setOnClickListener {
@@ -250,6 +227,20 @@ class ProfileActivity : BaseActivity() {
                 viewModel.showEditAddress.value = !it
             }
         }
+
+        binding.inclReferral.btnShare.setOnClickListenerWithDelay {
+            handleReferralLink()
+        }
+    }
+
+    private fun handleReferralLink() {
+        viewModel.getReferralLink { link ->
+            if (link.isNotEmpty()) {
+                Utils.shareLink(this, link)
+            } else {
+                AlerterUtils.showErrorAlert(this, resources.getString(R.string.something_went_wrong))
+            }
+        }
     }
 
     private fun cancelChanges() {
@@ -322,23 +313,6 @@ class ProfileActivity : BaseActivity() {
             .skipMemoryCache(true)
             .circleCrop()
             .into(binding.ivAvatar)
-    }
-
-    private fun logoutUser() {
-        viewModel.googleAuthClient.signOut()
-        viewModel.logoutUser()
-        launchActivity<DashboardActivity>()
-        finishAffinity()
-    }
-
-    private fun onDeleteAccountClicked() {
-        loaderDialog.showDialog()
-        viewModel.deleteUserAccount()
-    }
-
-    private fun showErrorMessage() {
-        loaderDialog.dismissDialog()
-        AlerterUtils.showErrorAlert(this, resources.getString(R.string.something_went_wrong))
     }
 
     private fun checkForPermissions() {

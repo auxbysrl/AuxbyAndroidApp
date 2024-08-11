@@ -6,18 +6,19 @@ import com.fivedevs.auxby.data.api.DataApi
 import com.fivedevs.auxby.data.api.NotificationsApi
 import com.fivedevs.auxby.data.api.UserApi
 import com.fivedevs.auxby.data.database.entities.NotificationItem
-import com.fivedevs.auxby.data.database.entities.User
 import com.fivedevs.auxby.data.database.repositories.CategoryRepository
 import com.fivedevs.auxby.data.database.repositories.OffersRepository
 import com.fivedevs.auxby.data.database.repositories.UserRepository
 import com.fivedevs.auxby.data.prefs.PreferencesService
 import com.fivedevs.auxby.data.services.firebase.FirebaseMessagingService
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.managers.OffersUpdateManager
+import com.fivedevs.auxby.domain.models.AdsModel
 import com.fivedevs.auxby.domain.models.PushNotificationsSubscribe
 import com.fivedevs.auxby.domain.models.TokenFcmEvent
 import com.fivedevs.auxby.domain.utils.Constants
 import com.fivedevs.auxby.domain.utils.Constants.REFRESH_DATA_AFTER_INTERNET_CONNECTION
+import com.fivedevs.auxby.domain.utils.Currencies.currenciesList
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.network.NetworkConnection
 import com.fivedevs.auxby.domain.utils.pagination.PaginationConstants.paginationFilters
 import com.fivedevs.auxby.domain.utils.rx.RxBus
@@ -30,6 +31,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,14 +47,13 @@ class DashboardViewModel @Inject constructor(
     private val preferencesService: PreferencesService,
     private val compositeDisposable: CompositeDisposable,
     networkConnection: NetworkConnection,
-    offersUpdateManager: OffersUpdateManager
+    private val offersUpdateManager: OffersUpdateManager
 ) : BaseOffersViewModel(
     userApi, dataApi, rxSchedulers, userRepository,
     offersRepository, preferencesService, compositeDisposable
 ) {
 
     val toolbarTitle = MutableLiveData<String>().apply { value = "" }
-    val user = MutableLiveData<User>().apply { value = User() }
     val hasNotifications = MutableLiveData<Boolean>().apply { value = false }
     val networkConnectionState: LiveData<Boolean> = networkConnection
 
@@ -66,16 +67,59 @@ class DashboardViewModel @Inject constructor(
     var termsConditionsEvent = SingleLiveEvent<Any>()
     var yourOffersClickEvent = SingleLiveEvent<Any>()
     var closeDrawerClickEvent = SingleLiveEvent<Any>()
+    var userOptionsClickEvent = SingleLiveEvent<Any>()
     var notificationsClickEvent = SingleLiveEvent<Any>()
     var refreshChatFromNotificationEvent = SingleLiveEvent<Any>()
 
-    init {
-        getCurrentUser()
-        clearOffers()
+    var buyCoinsClickEvent = SingleLiveEvent<Any>()
+    var refreshDataEvent = SingleLiveEvent<Any>()
+    var appAdsEvent = SingleLiveEvent<AdsModel>()
+
+    fun getOneTimeData() {
+        getData()
+        getAppAds()
+        getAppCurrencies()
+        getCategoriesDetails()
         listenForNewFcmToken()
         listenForNewChatMessages()
         refreshDataAfterConnectionLost()
         offersUpdateManager.initOffersUpdateManager()
+    }
+
+    fun getData() {
+        getOffers()
+        getCategories()
+    }
+
+    private fun getAppCurrencies() {
+        dataApi.getAllCurrencies()
+            .subscribeOn(rxSchedulers.network())
+            .observeOn(rxSchedulers.background())
+            .subscribe({ currencies ->
+                currenciesList = currencies
+            }, {
+                handleDoOnError(it)
+            }).disposeBy(compositeDisposable)
+    }
+
+    private fun getAppAds() {
+        dataApi.getAppAds()
+            .subscribeOn(rxSchedulers.network())
+            .delay(5000L, TimeUnit.MILLISECONDS)
+            .observeOn(rxSchedulers.androidUI())
+            .subscribe({ ads ->
+                ads.firstOrNull()?.let {
+                    if (preferencesService.getUserSeenAdCode() != it.code) {
+                        appAdsEvent.value = it
+                    }
+                }
+            }, {
+                handleDoOnError(it)
+            }).disposeBy(compositeDisposable)
+    }
+
+    fun saveUserAdCode(code: String) {
+        preferencesService.setValue(PreferencesService.APP_ADS_CODE, code)
     }
 
     fun getNotifications() {
@@ -91,29 +135,8 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
-    fun clearOffers() {
+    private fun clearOffers() {
         offersRepository.clearOffers()
-    }
-
-    fun getData() {
-        getCategories()
-        getOffers()
-        getCategoriesDetails()
-        getApiSavedOffers()
-        getMyBids()
-        getMyOffers()
-    }
-
-    private fun getCurrentUser() {
-        getUser()
-        userRepository.getCurrentUser()
-            .subscribeOn(rxSchedulers.background())
-            .observeOn(rxSchedulers.androidUI())
-            .subscribe({
-                user.value = it
-            }, {
-                handleDoOnError(it)
-            }).disposeBy(compositeDisposable)
     }
 
     fun getCategories() {
@@ -128,17 +151,33 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun getOffers() {
-        dataApi.getOffers(paginationFilters)
+        dataApi.getOffers(paginationFilters.toMap())
             .subscribeOn(rxSchedulers.network())
             .observeOn(rxSchedulers.background())
             .subscribe({ offersResponse ->
+                clearOffers()
                 offersRepository.insertOffers(offersResponse.content)
+                getPromotedOffers()
+                getApiSavedOffers()
+                getMyBids()
+                getMyOffers()
             }, {
                 handleDoOnError(it)
             })
             .disposeBy(compositeDisposable)
     }
 
+    private fun getPromotedOffers() {
+        dataApi.getPromotedOffers()
+            .subscribeOn(rxSchedulers.network())
+            .observeOn(rxSchedulers.background())
+            .subscribe({ promotedOffers ->
+                offersRepository.insertPromotedOffers(promotedOffers)
+            }, {
+                handleDoOnError(it)
+            })
+            .disposeBy(compositeDisposable)
+    }
 
     private fun getCategoriesDetails() {
         dataApi.getCategoriesDetails().subscribeOn(rxSchedulers.network())
@@ -246,6 +285,10 @@ class DashboardViewModel @Inject constructor(
         closeDrawerClickEvent.call()
     }
 
+    fun onUserOptionsClicked() {
+        userOptionsClickEvent.call()
+    }
+
     fun onProfileClicked() {
         profileClickEvent.call()
     }
@@ -260,6 +303,10 @@ class DashboardViewModel @Inject constructor(
 
     fun onSettingsClicked() {
         settingsClickEvent.call()
+    }
+
+    fun onBuyCoinsClicked() {
+        buyCoinsClickEvent.call()
     }
 
     fun onContactUsClicked() {
@@ -278,7 +325,7 @@ class DashboardViewModel @Inject constructor(
         Timber.e(it)
     }
 
-    fun canReceiveNotifications(): Boolean {
+    private fun canReceiveNotifications(): Boolean {
         return preferencesService.canReceiveNotifications()
     }
 

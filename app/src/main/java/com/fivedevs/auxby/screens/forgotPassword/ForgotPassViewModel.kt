@@ -3,8 +3,8 @@ package com.fivedevs.auxby.screens.forgotPassword
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fivedevs.auxby.data.api.UserApi
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.Constants
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,10 +20,13 @@ class ForgotPassViewModel @Inject constructor(
     private val userApi: UserApi
 ) : ViewModel() {
 
-    val onCloseToOffersEvent = SingleLiveEvent<Any>()
+    val onCloseToOffersEvent =
+        SingleLiveEvent<Any>()
     val backToLoginEvent = SingleLiveEvent<Any>()
-    val sendResetLinkEvent = SingleLiveEvent<Any>()
-    val resetLinkResponse = SingleLiveEvent<String>()
+    val sendResetLinkEvent =
+        SingleLiveEvent<Any>()
+    val resetLinkResponse =
+        SingleLiveEvent<String>()
 
     val enableResetLink = MutableLiveData<Boolean>().apply { value = false }
 

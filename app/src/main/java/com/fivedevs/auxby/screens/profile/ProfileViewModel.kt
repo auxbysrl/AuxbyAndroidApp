@@ -6,10 +6,9 @@ import com.fivedevs.auxby.data.api.UserApi
 import com.fivedevs.auxby.data.database.entities.User
 import com.fivedevs.auxby.data.database.repositories.UserRepository
 import com.fivedevs.auxby.data.prefs.PreferencesService
-import com.fivedevs.auxby.domain.SingleLiveEvent
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import okhttp3.MultipartBody
@@ -19,7 +18,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    val googleAuthClient: GoogleSignInClient,
     val preferencesService: PreferencesService,
     private val userApi: UserApi,
     private val rxSchedulers: RxSchedulers,
@@ -28,14 +26,12 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
 
     val uploadedAvatarImage = MutableLiveData<String>()
-    val showMenuPopup = MutableLiveData<Boolean>().apply { value = false }
     val showEditProfile = MutableLiveData<Boolean>().apply { value = false }
     val showEditAddress = MutableLiveData<Boolean>().apply { value = false }
     val showEditPassword = MutableLiveData<Boolean>().apply { value = false }
     val showEditPhoneNumber = MutableLiveData<Boolean>().apply { value = false }
 
-    var somethingWentWrongEvent = SingleLiveEvent<Any>()
-    val accountDeletedEvent: SingleLiveEvent<Any> = SingleLiveEvent()
+
     val userUpdateEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
     val user = MutableLiveData<User>().apply { value = User() }
@@ -43,18 +39,6 @@ class ProfileViewModel @Inject constructor(
 
     init {
         getUserFromDB()
-    }
-
-    private fun getUserFromDB() {
-        userRepository.getCurrentUser()
-            .subscribeOn(rxSchedulers.background())
-            .observeOn(rxSchedulers.androidUI())
-            .subscribe({
-                initialUser.value = it.copy()
-                user.value = it
-            }, {
-                handleDoOnError(it)
-            }).disposeBy(compositeDisposable)
     }
 
     fun uploadUserAvatar(avatarImage: MultipartBody.Part) {
@@ -76,23 +60,6 @@ class ProfileViewModel @Inject constructor(
             .disposeBy(compositeDisposable)
     }
 
-    fun deleteUserAccount() {
-        userApi.deleteUser()
-            .subscribeOn(rxSchedulers.network())
-            .observeOn(rxSchedulers.androidUI())
-            .subscribe({
-                accountDeletedEvent.call()
-            }, {
-                somethingWentWrongEvent.call()
-                Timber.e(it)
-            }).disposeBy(compositeDisposable)
-    }
-
-    fun logoutUser() {
-        preferencesService.clearUserDetails()
-        userRepository.clearUserData()
-    }
-
     fun updateUser() {
         user.value?.let { currentUser ->
             userApi.updateUser(currentUser)
@@ -109,12 +76,36 @@ class ProfileViewModel @Inject constructor(
                     userUpdateEvent.value = false
                     cancelUserDetailsChanges()
                     handleDoOnError(it)
-                })
+                }).disposeBy(compositeDisposable)
         }
+    }
+
+    fun getReferralLink(callback: (link: String) -> Unit) {
+        userApi.getUserReferralLink()
+            .subscribeOn(rxSchedulers.network())
+            .observeOn(rxSchedulers.androidUI())
+            .subscribe({
+                callback(it.url)
+            }, {
+                callback("")
+            })
+            .disposeBy(compositeDisposable)
     }
 
     fun cancelUserDetailsChanges() {
         user.value = initialUser.value
+    }
+
+    private fun getUserFromDB() {
+        userRepository.getCurrentUser()
+            .subscribeOn(rxSchedulers.background())
+            .observeOn(rxSchedulers.androidUI())
+            .subscribe({
+                initialUser.value = it.copy()
+                user.value = it
+            }, {
+                handleDoOnError(it)
+            }).disposeBy(compositeDisposable)
     }
 
     private fun handleDoOnError(it: Throwable) {

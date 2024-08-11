@@ -8,7 +8,6 @@ import androidx.appcompat.widget.AppCompatTextView
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.domain.models.CategoryField
 import com.fivedevs.auxby.domain.models.CategoryFieldsValue
-import com.fivedevs.auxby.domain.utils.OfferUtils
 import com.fivedevs.auxby.domain.utils.extensions.getName
 import com.fivedevs.auxby.domain.utils.extensions.hide
 import com.fivedevs.auxby.domain.utils.extensions.show

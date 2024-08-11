@@ -12,7 +12,13 @@ import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.FragmentFavouriteBinding
 import com.fivedevs.auxby.domain.models.OfferModel
 import com.fivedevs.auxby.domain.utils.Constants.SELECTED_OFFER_ID
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.extensions.hide
+import com.fivedevs.auxby.domain.utils.extensions.isNetworkConnected
+import com.fivedevs.auxby.domain.utils.extensions.launchActivity
+import com.fivedevs.auxby.domain.utils.extensions.launchActivityWithFinish
+import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
+import com.fivedevs.auxby.domain.utils.extensions.show
+import com.fivedevs.auxby.domain.utils.extensions.showInternetConnectionDialog
 import com.fivedevs.auxby.screens.authentification.login.LoginActivity
 import com.fivedevs.auxby.screens.dashboard.offers.adapters.OfferAdapter
 import com.fivedevs.auxby.screens.dashboard.offers.details.OfferDetailsActivity
@@ -91,6 +97,9 @@ class FavouriteFragment : Fragment() {
             showNoOffersMessage()
         } else {
             hideNoOffersMessage()
+            viewModel.localUser.value?.let {
+                offerAdapter?.user = it
+            }
             offerAdapter?.updateOffersList(offers)
         }
     }

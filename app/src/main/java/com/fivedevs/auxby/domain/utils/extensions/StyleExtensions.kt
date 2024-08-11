@@ -2,6 +2,7 @@ package com.fivedevs.auxby.domain.utils.extensions
 
 import android.app.Activity
 import android.graphics.Color
+import androidx.annotation.ColorInt
 import qiu.niorgai.StatusBarCompat
 
 fun Activity.setDarkStatusBar() {
@@ -15,4 +16,10 @@ fun Activity.setTransparentStatusBar() {
 fun Activity.setWhiteStatusBar() {
     StatusBarCompat.setStatusBarColor(this, Color.WHITE)
     StatusBarCompat.changeToLightStatusBar(this)
+}
+
+fun Activity.setStatusBarColor(@ColorInt color: Int, switchToLightStatusBar: Boolean = true) {
+    StatusBarCompat.setStatusBarColor(this, color)
+    if (switchToLightStatusBar)
+        StatusBarCompat.changeToLightStatusBar(this)
 }

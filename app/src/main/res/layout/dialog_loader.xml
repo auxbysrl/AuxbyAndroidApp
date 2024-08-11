@@ -16,13 +16,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <com.wang.avi.AVLoadingIndicatorView
+        <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="@dimen/space_20dp"
-            app:indicatorColor="@color/colorAccent"
-            app:indicatorName="BallSpinFadeLoaderIndicator"
+            android:indeterminateTint="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

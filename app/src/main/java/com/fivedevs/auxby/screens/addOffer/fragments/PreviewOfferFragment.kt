@@ -22,13 +22,18 @@ import com.fivedevs.auxby.domain.utils.Constants
 import com.fivedevs.auxby.domain.utils.DateUtils
 import com.fivedevs.auxby.domain.utils.OfferUtils.getMultipartOfferPhotos
 import com.fivedevs.auxby.domain.utils.OfferUtils.getOfferPreviewPrice
-import com.fivedevs.auxby.domain.utils.Utils.redirectToBrowserLink
 import com.fivedevs.auxby.domain.utils.Utils.setCollapsingToolbarTitle
 import com.fivedevs.auxby.domain.utils.ZoomOutPageTransformer
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.extensions.hide
+import com.fivedevs.auxby.domain.utils.extensions.isTextEllipsized
+import com.fivedevs.auxby.domain.utils.extensions.launchActivity
+import com.fivedevs.auxby.domain.utils.extensions.loadImage
+import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
+import com.fivedevs.auxby.domain.utils.extensions.show
 import com.fivedevs.auxby.screens.addOffer.AddOfferViewModel
 import com.fivedevs.auxby.screens.addOffer.fragments.adapters.AdapterOfferTags
 import com.fivedevs.auxby.screens.addOffer.fragments.adapters.DotIndicatorPager2Adapter
+import com.fivedevs.auxby.screens.buyCoins.BuyCoinsActivity
 import com.fivedevs.auxby.screens.dialogs.GenericDialog
 import com.fivedevs.auxby.screens.dialogs.GenericDialog.Companion.PUBLISH_ACCOUNT_DIALOG_TAG
 import com.fivedevs.auxby.screens.dialogs.GenericDialog.Companion.PUBLISH_ACCOUNT_NO_COINS_DIALOG_TAG
@@ -119,7 +124,7 @@ class PreviewOfferFragment : Fragment() {
         binding.tvOfferDate.text =
             DateUtils().getFormattedDateForPreview(parentViewModel.offerRequestModel.publishDate)
         binding.ivUserAvatar.loadImage(
-            parentViewModel.user.value?.avatar ?: Constants.EMPTY,
+            parentViewModel.localUser.value?.avatar ?: Constants.EMPTY,
             R.drawable.ic_profile_placeholder,
             circleCrop = true
         )
@@ -226,7 +231,7 @@ class PreviewOfferFragment : Fragment() {
         noCoinsBalanceDialog = GenericDialog(::onBuyMoreClicked, DialogTypes.PUBLISH_OFFER_NO_COINS)
         confirmOfferPublishDialog = GenericDialog(::onConfirmClicked, DialogTypes.PUBLISH_OFFER)
 
-        parentViewModel.user.value?.availableCoins?.let {
+        parentViewModel.localUser.value?.availableCoins?.let {
             val offerCost = parentViewModel.categoryDetailsResponse.value?.addOfferCost ?: 0
             noCoinsBalanceDialog?.setCoinsAmount(it, offerCost)
             confirmOfferPublishDialog?.setCoinsAmount(it, offerCost)
@@ -234,7 +239,7 @@ class PreviewOfferFragment : Fragment() {
     }
 
     private fun checkForCoins() {
-        val availableCoins = parentViewModel.user.value?.availableCoins ?: 0
+        val availableCoins = parentViewModel.localUser.value?.availableCoins ?: 0
         noCoinsBalanceDialog?.setCoinsAmount(availableCoins, getOfferCost())
         confirmOfferPublishDialog?.setCoinsAmount(availableCoins, getOfferCost())
         if (availableCoins == 0 || availableCoins < getOfferCost()) {
@@ -268,7 +273,7 @@ class PreviewOfferFragment : Fragment() {
     }
 
     private fun onBuyMoreClicked() {
-        redirectToBrowserLink(requireContext(), resources.getString(R.string.auxby_ro))
+        requireActivity().launchActivity<BuyCoinsActivity>()
         noCoinsBalanceDialog?.dismiss()
     }
 

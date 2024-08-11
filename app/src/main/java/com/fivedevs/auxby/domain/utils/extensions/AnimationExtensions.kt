@@ -12,15 +12,15 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewAnimationUtils
 import androidx.core.content.ContextCompat
-import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType
-import br.com.simplepass.loadingbutton.customViews.ProgressButton
 import com.fivedevs.auxby.R
+import com.github.leandroborgesferreira.loadingbutton.animatedDrawables.ProgressType
+import com.github.leandroborgesferreira.loadingbutton.customViews.ProgressButton
 import kotlin.math.hypot
 
 fun ProgressButton.animDone(
     context: Context,
     fillColor: Int = ContextCompat.getColor(context, R.color.colorPrimary),
-    bitmap: Bitmap = BitmapFactory.decodeResource(context.resources, br.com.simplepass.loadingbutton.R.drawable.ic_done_white_48dp)
+    bitmap: Bitmap = BitmapFactory.decodeResource(context.resources, com.github.leandroborgesferreira.loadingbutton.R.drawable.ic_done_white_48dp)
 ) {
     progressType = ProgressType.INDETERMINATE
     doneLoadingAnimation(fillColor, bitmap)
@@ -62,5 +62,5 @@ fun View.revealBundle(): Bundle? {
     val width = this.measuredWidth
     val height = this.measuredHeight
     opts = ActivityOptions.makeClipRevealAnimation(this, left, top, width, height)
-    return  opts?.toBundle()
+    return opts?.toBundle()
 }

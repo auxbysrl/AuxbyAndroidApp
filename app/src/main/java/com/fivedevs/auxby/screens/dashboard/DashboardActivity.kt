@@ -6,13 +6,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.fivedevs.auxby.BuildConfig
@@ -29,29 +29,47 @@ import com.fivedevs.auxby.domain.utils.extensions.getDrawableCompat
 import com.fivedevs.auxby.domain.utils.extensions.launchActivity
 import com.fivedevs.auxby.domain.utils.extensions.launchActivityWithFinish
 import com.fivedevs.auxby.domain.utils.extensions.setCornerRadius
+import com.fivedevs.auxby.domain.utils.extensions.toast
 import com.fivedevs.auxby.domain.utils.views.AlerterUtils
 import com.fivedevs.auxby.screens.addOffer.AddOfferActivity
 import com.fivedevs.auxby.screens.addOffer.AddOfferActivity.Companion.REFRESH_AFTER_ADD_OFFER
 import com.fivedevs.auxby.screens.authentification.login.LoginActivity
 import com.fivedevs.auxby.screens.base.BaseActivity
+import com.fivedevs.auxby.screens.buyCoins.BuyCoinsActivity
 import com.fivedevs.auxby.screens.dashboard.adapter.DashboardPagerAdapter
 import com.fivedevs.auxby.screens.dashboard.adapter.DashboardPagerAdapter.Companion.TAB_BIDS_POSITION
 import com.fivedevs.auxby.screens.dashboard.adapter.DashboardPagerAdapter.Companion.TAB_CHAT_POSITION
 import com.fivedevs.auxby.screens.dashboard.adapter.DashboardPagerAdapter.Companion.TAB_FAVOURITE_POSITION
 import com.fivedevs.auxby.screens.dashboard.adapter.DashboardPagerAdapter.Companion.TAB_OFFERS_POSITION
 import com.fivedevs.auxby.screens.dashboard.adapter.DashboardPagerAdapter.Companion.TAB_PLACEHOLDER_POSITION
+import com.fivedevs.auxby.screens.dashboard.adsDialog.AppAdsDialog
 import com.fivedevs.auxby.screens.dashboard.notifications.NotificationsActivity
 import com.fivedevs.auxby.screens.dashboard.notifications.NotificationsActivity.Companion.NAVIGATE_TO_CHAT_TAB
+import com.fivedevs.auxby.screens.dialogs.GenericDialog
 import com.fivedevs.auxby.screens.profile.ProfileActivity
+import com.fivedevs.auxby.screens.profile.userActions.UserActionsDialog
 import com.fivedevs.auxby.screens.search.SearchActivity
 import com.fivedevs.auxby.screens.settings.SettingsActivity
 import com.fivedevs.auxby.screens.tutorials.guestMode.GuestModeDialog
 import com.fivedevs.auxby.screens.yourOffers.YourOffersActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
+import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.google.firebase.messaging.FirebaseMessaging
 import com.permissionx.guolindev.PermissionX
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class DashboardActivity : BaseActivity() {
@@ -62,22 +80,58 @@ class DashboardActivity : BaseActivity() {
     private val menuSmoothScroll = false
     private var dashboardPagerAdapter: DashboardPagerAdapter? = null
 
+    private lateinit var appUpdateManager: AppUpdateManager
+    private val updateType = AppUpdateType.IMMEDIATE
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getData()
         initBinding()
+        initAppUpdateManager()
+        viewModel.getOneTimeData()
+        checkForAppUpdates()
         initObservers()
         initBottomNavigation()
         initListeners()
         initViewPager()
         initDrawerItems()
         checkNotificationsPermission()
-        //retrieveFcmTokenForTESTING()
+        viewModel.getUser()
+    }
+
+    private fun initAppUpdateManager() {
+        appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
+        if (updateType == AppUpdateType.FLEXIBLE) {
+            appUpdateManager.registerListener(installStateUpdateLIstener)
+        }
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.getNotifications()
+        resumeAppUpdate()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (updateType == AppUpdateType.FLEXIBLE) {
+            appUpdateManager.unregisterListener(installStateUpdateLIstener)
+        }
+    }
+
+    private fun resumeAppUpdate() {
+        if (updateType == AppUpdateType.IMMEDIATE) {
+            appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+                if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                    val appUpdateOptions = AppUpdateOptions.newBuilder(updateType).build()
+                    appUpdateManager.startUpdateFlowForResult(
+                        info,
+                        this,
+                        appUpdateOptions,
+                        IN_APP_UPDATE_RESULT_CODE
+                    )
+                }
+            }
+        }
     }
 
     private fun initBinding() {
@@ -97,7 +151,7 @@ class DashboardActivity : BaseActivity() {
     }
 
     private fun initObservers() {
-        viewModel.user.observe(this) {
+        viewModel.localUser.observe(this) {
             populateUserAvatar(it)
             populateUserDetails(it)
         }
@@ -109,6 +163,7 @@ class DashboardActivity : BaseActivity() {
         viewModel.addOfferClickEvent.observe(this) {
             val intent = Intent(this, AddOfferActivity::class.java)
             activityResultLauncher.launch(intent)
+            closeDrawer()
         }
 
         viewModel.searchClickEvent.observe(this) {
@@ -119,8 +174,18 @@ class DashboardActivity : BaseActivity() {
             closeDrawer()
         }
 
+        viewModel.userOptionsClickEvent.observe(this) {
+            val dialog = UserActionsDialog()
+            dialog.show(supportFragmentManager, GenericDialog.LOGOUT_DIALOG_TAG)
+        }
+
         viewModel.profileClickEvent.observe(this) {
             launchActivity<ProfileActivity>()
+            closeDrawer()
+        }
+
+        viewModel.buyCoinsClickEvent.observe(this) {
+            launchActivity<BuyCoinsActivity>()
             closeDrawer()
         }
 
@@ -146,12 +211,18 @@ class DashboardActivity : BaseActivity() {
         }
 
         viewModel.policiesClickEvent.observe(this) {
-            redirectToBrowserLink(this@DashboardActivity, resources.getString(R.string.link_policies_agreements))
+            redirectToBrowserLink(
+                this@DashboardActivity,
+                resources.getString(R.string.link_policies_agreements)
+            )
             closeDrawer()
         }
 
         viewModel.termsConditionsEvent.observe(this) {
-            redirectToBrowserLink(this@DashboardActivity, resources.getString(R.string.link_terms_conditions))
+            redirectToBrowserLink(
+                this@DashboardActivity,
+                resources.getString(R.string.link_terms_conditions)
+            )
             closeDrawer()
         }
 
@@ -160,6 +231,20 @@ class DashboardActivity : BaseActivity() {
         }
 
         viewModel.networkConnectionState.observe(this, EmptyObserver())
+
+        viewModel.appAdsEvent.observe(this) { addModel ->
+            val adsDialog = AppAdsDialog(addModel) {
+                if (viewModel.isUserLoggedIn.value == false) {
+                    showGuestModeBottomSheet(supportFragmentManager, getString(R.string.guest_add_offer))
+                } else {
+                    viewModel.saveUserAdCode(addModel.code)
+                    val intent = Intent(this, AddOfferActivity::class.java)
+                    intent.putExtra(Constants.CATEGORY_ID, addModel.categoryId)
+                    activityResultLauncher.launch(intent)
+                }
+            }
+            adsDialog.show(supportFragmentManager, adsDialog.tag)
+        }
     }
 
     private val activityResultLauncher =
@@ -170,6 +255,7 @@ class DashboardActivity : BaseActivity() {
                     ?.run {
                         viewModel.getCategories()
                         viewModel.getUser()
+                        viewModel.refreshDataEvent.call()
                     }
 
                 // Navigate to Chat tab after user clicks on New Message notification
@@ -225,6 +311,7 @@ class DashboardActivity : BaseActivity() {
                     viewModel.toolbarTitle.value = EMPTY
                     binding.viewPagerDashboard.setCurrentItem(TAB_OFFERS_POSITION, menuSmoothScroll)
                 }
+
                 R.id.tab_favourite -> {
                     viewModel.toolbarTitle.value = getString(R.string.favourite)
                     binding.viewPagerDashboard.setCurrentItem(
@@ -232,10 +319,12 @@ class DashboardActivity : BaseActivity() {
                         menuSmoothScroll
                     )
                 }
+
                 R.id.tab_chat -> {
                     viewModel.toolbarTitle.value = getString(R.string.messages)
                     binding.viewPagerDashboard.setCurrentItem(TAB_CHAT_POSITION, menuSmoothScroll)
                 }
+
                 R.id.tab_my_bids -> {
                     viewModel.toolbarTitle.value = getString(R.string.my_bids)
                     binding.viewPagerDashboard.setCurrentItem(TAB_BIDS_POSITION, menuSmoothScroll)
@@ -296,22 +385,65 @@ class DashboardActivity : BaseActivity() {
         }
     }
 
-    // TODO -> REMOVE THIS AFTER NOTIFICATION API IMPLEMENTATION
     private fun retrieveFcmTokenForTESTING() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Log.w(
+                Timber.e(
                     this@DashboardActivity.toString(),
                     "Fetching FCM registration token failed",
-                    task.exception
+                    task.exception?.message
                 )
                 return@OnCompleteListener
             }
-            // Get new FCM registration token
             val token = task.result
-            // Log and toast
-            Log.d("Token here:", token)
+            Timber.d("Token here: $token")
         })
+    }
+
+    private fun checkForAppUpdates() {
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            val isUpdateAvailable = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+            val appUpdateOptions = AppUpdateOptions.newBuilder(updateType).build()
+            val isUpdateAllowed = when (updateType) {
+                AppUpdateType.FLEXIBLE -> info.isFlexibleUpdateAllowed
+                AppUpdateType.IMMEDIATE -> info.isImmediateUpdateAllowed
+                else -> false
+            }
+
+            if (isUpdateAvailable && isUpdateAllowed) {
+                appUpdateManager.startUpdateFlowForResult(
+                    info,
+                    this,
+                    appUpdateOptions,
+                    IN_APP_UPDATE_RESULT_CODE
+                )
+            }
+        }.addOnFailureListener {
+
+        }
+    }
+
+    private val installStateUpdateLIstener = InstallStateUpdatedListener { state ->
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            toast("Download successful. Restarting the app...")
+            lifecycleScope.launch {
+                delay(2.seconds)
+                appUpdateManager.completeUpdate()
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IN_APP_UPDATE_RESULT_CODE) {
+            if (resultCode == RESULT_CANCELED) {
+                if (updateType == AppUpdateType.IMMEDIATE) {
+                    finish()
+                }
+            } else if (resultCode != RESULT_OK) {
+                Timber.e("Something went wrong updating the app")
+            }
+        }
     }
 
     companion object {
@@ -319,5 +451,7 @@ class DashboardActivity : BaseActivity() {
             val guestModeBottomSheet = GuestModeDialog(descriptionText)
             guestModeBottomSheet.show(manager, guestModeBottomSheet.tag)
         }
+
+        const val IN_APP_UPDATE_RESULT_CODE = 100123
     }
 }

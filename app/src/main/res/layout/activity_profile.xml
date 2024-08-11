@@ -26,16 +26,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <include
-            android:id="@+id/inclProfileMenu"
-            layout="@layout/profile_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/space_12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inclToolbar"
-            app:viewModel="@{viewModel}" />
-
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_0dp"
@@ -123,19 +113,15 @@
                     android:layout_height="wrap_content"
                     android:visibility="@{viewModel.preferencesService.isGoogleAccount()? View.GONE : View.VISIBLE}"
                     app:viewModel="@{viewModel}" />
+
+                <include
+                    android:id="@+id/inclReferral"
+                    layout="@layout/profile_referral"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:viewModel="@{viewModel}" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.core.widget.NestedScrollView>
-
-        <FrameLayout
-            android:id="@+id/flBgView"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/space_0dp"
-            android:background="@android:color/transparent"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="@{viewModel.showMenuPopup? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

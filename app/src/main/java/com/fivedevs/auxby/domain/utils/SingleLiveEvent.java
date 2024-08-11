@@ -1,4 +1,4 @@
-package com.fivedevs.auxby.domain;
+package com.fivedevs.auxby.domain.utils;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;

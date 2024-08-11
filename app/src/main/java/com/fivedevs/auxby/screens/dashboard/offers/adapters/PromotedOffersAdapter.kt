@@ -10,9 +10,12 @@ import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.ItemPromotedOffersBinding
 import com.fivedevs.auxby.domain.models.OfferModel
 import com.fivedevs.auxby.domain.models.enums.CurrencyEnum
+import com.fivedevs.auxby.domain.utils.Currencies
 import com.fivedevs.auxby.domain.utils.Formatters
 import com.fivedevs.auxby.domain.utils.extensions.getDrawableCompat
+import com.fivedevs.auxby.domain.utils.extensions.hide
 import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
+import com.fivedevs.auxby.domain.utils.extensions.show
 import kotlin.reflect.KFunction1
 
 class PromotedOffersAdapter(
@@ -64,8 +67,15 @@ class PromotedOffersAdapter(
         binding.tvPriceValue.text = context.getString(
             R.string.offer_price_value,
             Formatters.priceDecimalFormat.format(getOfferPrice(offer)),
-            offer.currencyType?.let { CurrencyEnum.valueOf(it).short() }
+            offer.currencyType?.let {
+                Currencies.currenciesList.firstOrNull { currencyModel -> currencyModel.name.equals(it, true) }?.symbol ?: CurrencyEnum.RON.symbol()
+            }
         )
+        if (offer.isPromoted) {
+            binding.ivRibbon.show()
+        } else {
+            binding.ivRibbon.hide()
+        }
 
         Glide.with(context)
             .load(offer.photos.firstOrNull()?.url.orEmpty())

@@ -3,6 +3,7 @@ package com.fivedevs.auxby.domain.models
 import com.fivedevs.auxby.domain.models.enums.ConditionTypeEnum
 import com.fivedevs.auxby.domain.models.enums.CurrencyEnum
 import com.fivedevs.auxby.domain.models.enums.OfferTypeEnum
+import com.fivedevs.auxby.domain.utils.Currencies
 import com.fivedevs.auxby.domain.utils.DateUtils
 import com.fivedevs.auxby.domain.utils.extensions.capitalizeFirst
 import com.fivedevs.auxby.domain.utils.extensions.orElse
@@ -27,7 +28,6 @@ data class OfferRequestModel(
 
     fun setOfferTypeValue(offerTypeTag: String) {
         this.offerType = offerTypeTag
-
     }
 
     fun setConditionTypeValue(conditionTypeTag: String) {
@@ -35,9 +35,9 @@ data class OfferRequestModel(
     }
 
     fun setCurrencyTypeValue(text: String) {
-        val conditionTypeEnum = CurrencyEnum.values().firstOrNull { it.short().equals(text, true) }
+        val conditionTypeEnum = Currencies.currenciesList.firstOrNull { it.symbol.equals(text, true) }
         if (conditionTypeEnum != null) {
-            this.currencyType = conditionTypeEnum.currencyType
+            this.currencyType = conditionTypeEnum.name
         }
     }
 

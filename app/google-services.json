@@ -14,27 +14,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "156615882044-7ulni2q0thl3fegjsd2u03vn2a0h8sn9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fivedevs.auxby",
-            "certificate_hash": "08bc4295b9e9fde1f36fcd53308ec02dd82b39b7"
-          }
-        },
-        {
-          "client_id": "156615882044-oasnmmjqnc2alor0ve3c7i4vm7sr1q74.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fivedevs.auxby",
-            "certificate_hash": "abf2cdca334cd78a8829913ba1901aaef603f3bc"
-          }
-        },
-        {
-          "client_id": "156615882044-ttm3n08gnhc14ksuaob4jjks9ost0vfo.apps.googleusercontent.com",
+          "client_id": "156615882044-9qg30d7lsst2mqprfskse3c5d7l02ifm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.fivedevs.auxby",
             "certificate_hash": "d3d4e1ade2810ee4e3cbaf83b9730701e1f0afd6"
+          }
+        },
+        {
+          "client_id": "156615882044-bllrgif1kqam7bhril73uosbc9j7a10c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fivedevs.auxby",
+            "certificate_hash": "fd605eca339649772a58ee1291cbdcec61629174"
+          }
+        },
+        {
+          "client_id": "156615882044-llktahb8imtdf81tat6hdig2tu83otli.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fivedevs.auxby",
+            "certificate_hash": "abf2cdca334cd78a8829913ba1901aaef603f3bc"
           }
         },
         {
@@ -55,10 +55,10 @@
               "client_type": 3
             },
             {
-              "client_id": "156615882044-mk6ccisj7h3k7v0rtogpn8q2i40rbppu.apps.googleusercontent.com",
+              "client_id": "156615882044-10jbtfrl99pu15srk2d7r27neu4bvkhb.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.5devs.Auxby"
+                "bundle_id": "com.auxby"
               }
             }
           ]

@@ -10,8 +10,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.fivedevs.auxby.R
 import com.fivedevs.auxby.databinding.ItemCategoryAllBinding
 import com.fivedevs.auxby.domain.models.CategoryModel
-import com.fivedevs.auxby.domain.utils.Utils
-import com.fivedevs.auxby.domain.utils.extensions.*
+import com.fivedevs.auxby.domain.utils.extensions.getDrawableCompat
+import com.fivedevs.auxby.domain.utils.extensions.getName
+import com.fivedevs.auxby.domain.utils.extensions.orZero
+import com.fivedevs.auxby.domain.utils.extensions.setOnClickListenerWithDelay
+import com.fivedevs.auxby.domain.utils.extensions.show
 import io.reactivex.rxjava3.subjects.PublishSubject
 
 class AllCategoriesAdapter(

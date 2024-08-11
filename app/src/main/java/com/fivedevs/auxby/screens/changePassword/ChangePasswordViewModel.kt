@@ -3,8 +3,8 @@ package com.fivedevs.auxby.screens.changePassword
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fivedevs.auxby.data.api.UserApi
-import com.fivedevs.auxby.domain.SingleLiveEvent
 import com.fivedevs.auxby.domain.models.ChangePasswordRequest
+import com.fivedevs.auxby.domain.utils.SingleLiveEvent
 import com.fivedevs.auxby.domain.utils.rx.RxSchedulers
 import com.fivedevs.auxby.domain.utils.rx.disposeBy
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,8 +19,10 @@ class ChangePasswordViewModel @Inject constructor(
     private val userApi: UserApi
 ) : ViewModel() {
 
-    val onBackPressed = SingleLiveEvent<Boolean>()
-    val returnToProfile = SingleLiveEvent<Boolean>()
+    val onBackPressed =
+        SingleLiveEvent<Boolean>()
+    val returnToProfile =
+        SingleLiveEvent<Boolean>()
 
     val enableConfirmPwdBtn = MutableLiveData<Boolean>().apply { value = false }
     val changePwdRequest = MutableLiveData<ChangePasswordRequest>().apply { value = ChangePasswordRequest() }

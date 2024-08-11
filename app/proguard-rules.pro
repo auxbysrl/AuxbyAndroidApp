@@ -63,3 +63,6 @@
 -keep class com.wang.avi.indicators.** { *; }
 
 -keep class com.google.crypto.tink.** { *; }
+-keep class com.google.android.gms.** { *; }
+-keep class com.huawei.hms.ads.** { *; }
+-keep interface com.huawei.hms.ads.** { *; }

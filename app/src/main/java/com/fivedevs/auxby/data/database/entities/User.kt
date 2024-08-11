@@ -13,7 +13,10 @@ data class User(
     var address: UserAddress? = UserAddress(),
     var phone: String = "",
     var avatar: String? = "",
-    var availableCoins: Int = 0
+    var availableCoins: Int = 0,
+    var isGoogleAccount: Boolean = false,
+    var isSubscribedToNewsletter: Boolean = false,
+    var rating: Float = 0f,
 ) {
     data class UserAddress(
         var city: String = "",

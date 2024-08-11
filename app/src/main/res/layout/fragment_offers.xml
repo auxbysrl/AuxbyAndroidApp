@@ -51,6 +51,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:clipToPadding="false"
+                        android:clipChildren="false"
+                        android:paddingStart="@dimen/space_30dp"
+                        android:paddingEnd="@dimen/space_30dp"
                         android:visibility="visible" />
                 </FrameLayout>
 
@@ -113,8 +116,7 @@
                     android:layout_marginTop="@dimen/space_14dp"
                     android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
-                    android:paddingStart="@dimen/space_16dp"
-                    android:paddingEnd="@dimen/space_16dp"
+                    android:paddingHorizontal="@dimen/space_14dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                 <androidx.legacy.widget.Space

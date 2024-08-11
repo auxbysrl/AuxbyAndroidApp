@@ -119,7 +119,6 @@ class OfferPhotoAdapter(
                 photos.firstOrNull { it.isCover }?.isCover = false
                 photos.first().isCover = true
             }
-
         }
         return newList
     }

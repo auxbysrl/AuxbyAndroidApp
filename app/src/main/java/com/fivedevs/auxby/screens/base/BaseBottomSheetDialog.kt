@@ -15,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 abstract class BaseBottomSheetDialog(
     private val dialogLayout: Int,
-    private val isFullScreen: Boolean
+    private val isFullScreen: Boolean,
 ) : BottomSheetDialogFragment() {
 
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
@@ -37,8 +37,8 @@ abstract class BaseBottomSheetDialog(
         behavior.isHideable = true
         behavior.peekHeight = 0
         setupDragDownDialog(dialog)
-        dialog.window?.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         setFullScreenDialog(binding)
+        dialog.window?.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         getContentView(binding)
     }
 
@@ -47,6 +47,7 @@ abstract class BaseBottomSheetDialog(
             binding.root.layoutParams.height = resources.displayMetrics.heightPixels
         }
     }
+
     private fun setupDragDownDialog(dialog: Dialog) {
         val bottomSheet = dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
         val behavior = BottomSheetBehavior.from(bottomSheet)

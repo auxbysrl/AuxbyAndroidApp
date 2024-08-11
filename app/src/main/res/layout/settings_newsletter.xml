@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.fivedevs.auxby.screens.settings.SettingsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_white"
+        android:paddingTop="@dimen/space_17dp"
+        android:paddingBottom="@dimen/space_14dp"
+        app:layout_constraintTop_toBottomOf="@+id/inclToolbar">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLanguage"
+            style="@style/TextMontserratMedium14spPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_16dp"
+            android:text="@string/text_newsletter"
+            android:visibility="@{viewModel.showEditLanguage? View.GONE : View.VISIBLE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cxNewsletter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_6dp"
+            android:checked="@{viewModel.newsletterStatus}"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/tvLanguage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvLanguage"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/viewNewsletter"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/cxNewsletter"
+            app:layout_constraintEnd_toEndOf="@id/cxNewsletter"
+            app:layout_constraintStart_toStartOf="@id/cxNewsletter"
+            app:layout_constraintTop_toTopOf="@id/cxNewsletter" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

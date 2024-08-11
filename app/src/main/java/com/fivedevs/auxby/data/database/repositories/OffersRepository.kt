@@ -35,8 +35,8 @@ class OffersRepository @Inject constructor(private val appDatabase: AppDatabase)
         return appDatabase.offersDao().getActiveOffers()
     }
 
-    fun getPromotedOffers(): Single<List<OfferModel>> {
-        return appDatabase.offersDao().getPromotedOffers()
+    fun getSingleActiveOffers(): Single<List<OfferModel>> {
+        return appDatabase.offersDao().getSingleActiveOffers()
     }
 
     fun getOffersByCategoryId(categoryId: Int): Flowable<List<OfferModel>> {
@@ -127,5 +127,15 @@ class OffersRepository @Inject constructor(private val appDatabase: AppDatabase)
     fun insertOfferWithType(offer: OfferModel, type: OfferTypeStoredEnum) {
         appDatabase.offersDao().insertOffer(offer.toOffer())
         appDatabase.offerTypeStoredDao().insertOfferWithTypes(OfferTypeStored(offer.id, type))
+    }
+
+    // PROMOTED OFFERS
+    @Transaction
+    fun insertPromotedOffers(offers: List<OfferModel>) {
+        insertOffersWithType(offers, OfferTypeStoredEnum.PROMOTED)
+    }
+
+    fun getPromotedOffers(): Flowable<List<OfferModel>> {
+        return appDatabase.offersDao().getPromotedOffers()
     }
 }
